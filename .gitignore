@@ -23,3 +23,6 @@ coverage/
 
 # Ignore OS generated files
 .DS_Store
+
+# Add extra files to ignore
+app/public/.htaccess
