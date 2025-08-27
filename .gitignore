@@ -25,4 +25,4 @@ coverage/
 .DS_Store
 
 # Add extra files to ignore
-app/public/.htaccess
+public/.htaccess
