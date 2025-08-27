@@ -1,0 +1,25 @@
+# Add environment variables file
+.env
+
+# Add vedor directories
+vendor/
+
+# Add composer.lock file
+composer.lock
+
+# add node modules directory
+node_modules/
+
+# Ignore build files
+build/
+
+# Ignore log files and databases
+*.log
+*.sql
+*.sqlite
+
+# Ignore coverage directory
+coverage/
+
+# Ignore OS generated files
+.DS_Store
