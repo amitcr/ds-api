@@ -6,6 +6,8 @@
   },
   "require": {
     "illuminate/database": "^8.83",
-    "vlucas/phpdotenv": "^5.6"
+    "vlucas/phpdotenv": "^5.6",
+    "illuminate/http": "^8.83",
+    "guzzlehttp/guzzle": "^7.10"
   }
 }

@@ -11,9 +11,14 @@ header('Content-Type: application/json; charset=utf-8');
 // bootstrap (autoload, env)
 require_once __DIR__ . '/../bootstrap.php';
 
+use Dotenv\Dotenv;
 use App\Core\Router;
 use App\Core\Request;
 use App\Core\DB;
+
+// Load .env (only once)
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
+$dotenv->safeLoad();
 
 DB::init();
 // build Request (if you have your Request class, Router will accept it)

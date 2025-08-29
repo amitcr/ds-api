@@ -49,6 +49,7 @@ class Router
     public function post(string $path, $handler, array $middleware = []) { $this->add('POST', $path, $handler, $middleware); }
     public function put(string $path, $handler, array $middleware = []) { $this->add('PUT', $path, $handler, $middleware); }
     public function delete(string $path, $handler, array $middleware = []) { $this->add('DELETE', $path, $handler, $middleware); }
+    public function patch(string $path, $handler, array $middleware = []) { $this->add('PATCH', $path, $handler, $middleware); }
 
     /**
      * Group routes together.

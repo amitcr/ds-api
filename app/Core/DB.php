@@ -2,25 +2,22 @@
 namespace App\Core;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Dotenv\Dotenv;
+use App\Core\Config;
 
 class DB {
-    public static function init() {
-        // Load .env (only once)
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
-        $dotenv->safeLoad();
+    public static function init() {        
 
         $capsule = new Capsule;
 
         $capsule->addConnection([
-            'driver'    => $_ENV['DB_CONNECTION'] ?? 'mysql',
-            'host'      => $_ENV['DB_HOST'] ?? '127.0.0.1',
-            'database'  => $_ENV['DB_DATABASE'] ?? '',
-            'username'  => $_ENV['DB_USERNAME'] ?? '',
-            'password'  => $_ENV['DB_PASSWORD'] ?? '',
-            'charset'   => $_ENV['DB_CHARSET'] ?? 'utf8',
-            'collation' => $_ENV['DB_COLLATION'] ?? 'utf8_unicode_ci',
-            'prefix'    => $_ENV['DB_PREFIX'] ?? '',
+            'driver'    => Config::get('database.connection') ?? 'mysql',
+            'host'      => Config::get('database.host') ?? '127.0.0.1',
+            'database'  => Config::get('database.database') ?? '',
+            'username'  => Config::get('database.username') ?? '',
+            'password'  => Config::get('database.password') ?? '',
+            'charset'   => Config::get('database.charset') ?? 'utf8',
+            'collation' => Config::get('database.collation') ?? 'utf8_unicode_ci',
+            'prefix'    => Config::get('database.prefix') ?? '',
         ]);
 
         $capsule->setAsGlobal();
