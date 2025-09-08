@@ -51,30 +51,35 @@ class BaseHttpService
     protected function get(string $uri, array $query = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
+        Logger::info("GET API Request ", [ 'req' => $req, 'headers' => $headers, 'data' => $query, 'uri' => $uri]);
         return $req->get($uri, $query)->throw()->object();
     }
 
     protected function post(string $uri, array $data = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
+        Logger::info("POST API Request ", [ 'req' => $req, 'headers' => $headers, 'data' => $data, 'uri' => $uri]);
         return $req->post($uri, $data)->throw()->object();
     }
 
     protected function put(string $uri, array $data = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
+        Logger::info("PUT API Request ", [ 'req' => $req, 'headers' => $headers, 'data' => $data, 'uri' => $uri]);
         return $req->put($uri, $data)->throw()->object();
     }
 
     protected function patch(string $uri, array $data = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
+        Logger::info("PATCH API Request ", [ 'req' => $req, 'headers' => $headers, 'data' => $data, 'uri' => $uri]);
         return $req->patch($uri, $data)->throw()->object();
     }
 
     protected function delete(string $uri, array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
+        Logger::info("DELETE API Request ", [ 'req' => $req, 'headers' => $headers, 'uri' => $uri]);
         return $req->delete($uri)->throw()->object();
     }
 
