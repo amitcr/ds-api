@@ -11,14 +11,15 @@ class Kernel extends CronKernel
 {
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(ClearTempUsers::class)->daily();
-        $schedule->command(SendReminderEmails::class)->everyFiveMinutes();
-        $schedule->command(ValidateCoupons::class)->dailyAt('00:00')->timezone('UTC');
+        // $schedule->command(ClearTempUsers::class)->daily();
+        $schedule->command(SendReminderEmails::class)->everyMinute();
+        $schedule->command(ValidateCoupons::class)->everyMinute();
+        // $schedule->command(ValidateCoupons::class)->dailyAt('00:00')->timezone('UTC');
     }
 
     protected function commands()
     {
-        $this->register(ClearTempUsers::class);
+        // $this->register(ClearTempUsers::class);
         $this->register(SendReminderEmails::class);
         $this->register(ValidateCoupons::class);
     }

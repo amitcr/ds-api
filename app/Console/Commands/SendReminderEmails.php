@@ -12,13 +12,15 @@ class SendReminderEmails implements CommandInterface
 
     public function handle($arguments)
     {
-        $users = ParticipantModel::where('status', 'pending')->get();
+        /*$users = ParticipantModel::where('status', 'pending')->get();
         $mailer = new Mailer();
 
         foreach ($users as $user) {
             $mailer->sendReminder($user);
         }
 
-        echo "Sent reminders to {$users->count()} users.\n";
+        echo "Sent reminders to {$users->count()} users.\n";*/
+
+        mail("amit@culture-red.com", "TEST EMAIL", "If you receive this email by mistake, please delete this and don't report us.");
     }
 }
