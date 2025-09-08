@@ -153,7 +153,7 @@ class AssessmentController
         if (empty($assessment))
             return Response::json(['Invalid Request'], 404);
 
-        if($data->action && $data->action == "save_needs_assessment_choices"){
+        if(isset($data->action) && $data->action == "save_needs_assessment_choices"){
             if($assessment->assessment_status == "completed"){
                 return Response::json(['assessment' => $assessment], 200);        
             }else{

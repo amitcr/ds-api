@@ -45,13 +45,14 @@ $router->group(['prefix' => '/v1', 'middleware' => [CorsMiddleware::class]], fun
     // Assessment routes
     // $r->get('/assessments/validate', [AssessmentController::class, 'validateStatus']);
     $r->group(['prefix' => '/assessments', 'controller' => AssessmentController::class ], function($r) {
-        $r->get('', 'index');
-        $r->get('/{id:\d+}', 'show');
-        $r->post('', 'store');
-        $r->put('/{id:\d+}', 'update');
-        $r->delete('/{id:\d+}', 'destroy');
-
         $r->post('/validate', 'validate', [JwtMiddleware::class]);
+        
+        $r->get('', 'index');
+        $r->get('/{id}', 'show');
+        $r->post('', 'store');
+        $r->put('/{id}', 'update');
+        $r->delete('/{id}', 'destroy');
+        
     });
 
     // Participant routes
