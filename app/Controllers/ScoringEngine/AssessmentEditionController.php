@@ -68,7 +68,7 @@ class AssessmentEditionController
     {
         $data = $request->all();
         try {
-            return $this->svc->update($id, $data);
+            return $this->svc->updateById($id, $data);
         } catch (RequestException $e) {
             $status = ($e->response) ? $e->response->getStatusCode() : 500;
             $body   = ($e->response) ? $e->response->json() : null;
@@ -81,7 +81,7 @@ class AssessmentEditionController
     {
         $data = $request->all();
         try {
-            return $this->svc->patch($id, $data);
+            return $this->svc->patchById($id, $data);
         } catch (RequestException $e) {
             $status = ($e->response) ? $e->response->getStatusCode() : 500;
             $body   = ($e->response) ? $e->response->json() : null;
@@ -93,7 +93,7 @@ class AssessmentEditionController
     public function destroy($request, $id)
     {
         try {
-            return $this->svc->delete($id);
+            return $this->svc->deleteById($id);
         } catch (RequestException $e) {
             $status = ($e->response) ? $e->response->getStatusCode() : 500;
             $body   = ($e->response) ? $e->response->json() : null;
