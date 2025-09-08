@@ -51,10 +51,12 @@ abstract class CronKernel
 
         foreach ($schedule->getTasks() as $task) {
             if ($task->isDue()) {
-                $this->runCommand([$task->command]);
+                echo "Running scheduled task: {$task->command}\n";
+                $this->runCommand(['artisan', $task->command]);
             }
         }
     }
+
 
     protected function listCommands()
     {
