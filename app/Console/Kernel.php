@@ -13,7 +13,7 @@ class Kernel extends CronKernel
     {
         $schedule->command(ClearTempUsers::class)->daily();
         $schedule->command(SendReminderEmails::class)->everyFiveMinutes();
-        $schedule->command(ValidateCoupons::class)->everyMinute();
+        $schedule->command(ValidateCoupons::class)->dailyAt('00:00')->timezone('UTC');
     }
 
     protected function commands()
