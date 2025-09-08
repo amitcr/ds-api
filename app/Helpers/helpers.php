@@ -13,6 +13,17 @@ if (!function_exists('dd')) {
     }
 }
 
+if (!function_exists('pr')) {
+    function pr(...$vars) {
+        foreach ($vars as $v) {
+            echo "<pre>";
+            var_dump($v);
+            echo "</pre>";
+        }
+        die(1);
+    }
+}
+
 
 if(!function_exists('get_personal_report_global_price')){
     function get_personal_report_global_price(){
