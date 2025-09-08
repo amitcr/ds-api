@@ -20,7 +20,14 @@ class Kernel extends CronKernel
 
     }
 
-    public function command($command)
+    protected function commands()
+    {
+        // $this->register(ClearTempUsers::class);
+        $this->register(SendReminderEmails::class);
+        $this->register(ValidateCoupons::class);
+    }
+
+    /*public function command($command)
     {
         if (class_exists($command)) {
             $instance = new $command();
@@ -30,5 +37,5 @@ class Kernel extends CronKernel
         $task = new ScheduledTask($command);
         $this->tasks[] = $task;
         return $task;
-    }
+    }*/
 }
