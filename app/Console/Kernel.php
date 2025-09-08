@@ -12,15 +12,23 @@ class Kernel extends CronKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command(ClearTempUsers::class)->daily();
-        $schedule->command(SendReminderEmails::class)->everyMinute();
-        $schedule->command(ValidateCoupons::class)->everyMinute();
+        // $schedule->command(SendReminderEmails::class)->everyMinute();
         // $schedule->command(ValidateCoupons::class)->dailyAt('00:00')->timezone('UTC');
+
+        $schedule->command('emails:send-reminders')->everyMinute();
+        $schedule->command('coupons:expire-status')->everyMinute();
+
     }
 
-    protected function commands()
+    public function command($command)
     {
-        // $this->register(ClearTempUsers::class);
-        $this->register(SendReminderEmails::class);
-        $this->register(ValidateCoupons::class);
+        if (class_exists($command)) {
+            $instance = new $command();
+            $command = $instance->signature;
+        }
+
+        $task = new ScheduledTask($command);
+        $this->tasks[] = $task;
+        return $task;
     }
 }
