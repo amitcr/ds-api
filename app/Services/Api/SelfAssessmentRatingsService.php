@@ -3,9 +3,9 @@ namespace App\Services\Api;
 
 use App\Services\Http\BaseHttpService;
 
-class SelfAssessmentResponsesService extends BaseHttpService
+class SelfAssessmentRatingsService extends BaseHttpService
 {
-    protected string $endpoint = 'self-assessment-responses';
+    protected string $endpoint = 'self-assessment-ratings';
 
     public function list(array $query = [])
     {

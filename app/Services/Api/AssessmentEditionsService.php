@@ -3,14 +3,14 @@ namespace App\Services\Api;
 
 use App\Services\Http\BaseHttpService;
 
-class SelfAssessmentResponsesService extends BaseHttpService
+class AssessmentEditionsService extends BaseHttpService
 {
-    protected string $endpoint = 'self-assessment-responses';
+    protected string $endpoint = 'assessment-editions';
 
     public function list(array $query = [])
     {
         return $this->get($this->endpoint, $query);
-    } 
+    }
 
     public function getById($id)
     {

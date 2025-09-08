@@ -17,7 +17,7 @@ class Router
 
     /**
      * Define a route (method path -> handler)
-     * handler: [ControllerClass::class, 'method'] OR callable
+     * handler: [ControllerClass::class, 'method'] OR callable OR "method" (if group controller is set)
      * middleware: array of middleware class names
      */
     public function add(string $method, string $path, $handler, array $middleware = [])
@@ -25,21 +25,27 @@ class Router
         $method = strtoupper($method);
 
         $prefix = $this->currentGroupPrefix();
-        $full = rtrim($prefix, '/') . '/' . ltrim($path, '/');
-        $full = $this->normalize($full);
+        $full   = rtrim($prefix, '/') . '/' . ltrim($path, '/');
+        $full   = $this->normalize($full);
 
         // combine group middlewares + route middlewares
         $mws = array_merge($this->currentGroupMiddleware(), $middleware);
+
+        // apply group controller if handler is string (method name only)
+        $groupController = $this->currentGroupController();
+        if ($groupController && is_string($handler)) {
+            $handler = [$groupController, $handler];
+        }
 
         // compile regex + param names
         [$regex, $paramNames] = $this->compilePathToRegex($full);
 
         $this->routes[] = [
-            'method' => $method,
-            'path' => $full,
-            'regex' => $regex,
-            'params' => $paramNames,
-            'handler' => $handler,
+            'method'     => $method,
+            'path'       => $full,
+            'regex'      => $regex,
+            'params'     => $paramNames,
+            'handler'    => $handler,
             'middleware' => $mws,
         ];
     }
@@ -53,13 +59,21 @@ class Router
 
     /**
      * Group routes together.
-     * $opts = ['prefix' => '/v1', 'middleware' => [SomeMiddleware::class]]
+     * $opts = ['prefix' => '/v1', 'middleware' => [SomeMiddleware::class], 'controller' => SomeController::class]
      */
     public function group(array $opts, callable $cb)
     {
+        $controller = $opts['controller'] ?? null;
+
+        // If someone passed [Controller::class], unwrap it
+        if (is_array($controller) && count($controller) === 1) {
+            $controller = reset($controller);
+        }
+
         $this->groupStack[] = [
-            'prefix' => $opts['prefix'] ?? '',
-            'middleware' => $opts['middleware'] ?? []
+            'prefix'     => $opts['prefix'] ?? '',
+            'middleware' => $opts['middleware'] ?? [],
+            'controller' => $controller
         ];
 
         $cb($this);
@@ -73,7 +87,7 @@ class Router
     public function dispatch()
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $path = $this->getRequestPath(); // normalized path like "/v1/health"
+        $path   = $this->getRequestPath(); // normalized path like "/v1/health"
 
         foreach ($this->routes as $route) {
             if ($route['method'] !== $method) continue;
@@ -91,7 +105,7 @@ class Router
 
                 // call handler
                 $handler = $route['handler'];
-                if (is_callable($handler) && is_array($handler) === false) {
+                if (is_callable($handler) && !is_array($handler)) {
                     // closure or function - call with ($request, $params) if accepted
                     $this->invokeCallable($handler, $params);
                 } elseif (is_array($handler) && count($handler) === 2) {
@@ -132,6 +146,20 @@ class Router
         return $m;
     }
 
+    public function currentGroupController(): ?string
+    {
+        if (empty($this->groupStack)) {
+            return null;
+        }
+
+        $currentGroup = end($this->groupStack);
+
+        // Only return if it's a string
+        return is_string($currentGroup['controller'] ?? null)
+            ? $currentGroup['controller']
+            : null;
+    }
+
     private function normalize(string $p): string
     {
         $p = preg_replace('#//+#', '/', $p);
@@ -155,11 +183,6 @@ class Router
         return [$regex, $paramNames];
     }
 
-    /**
-     * Determine request path in a subfolder-safe way.
-     * Strips everything *before* "/api" if present, otherwise removes script directory.
-     * Returns leading slash path like "/v1/health" or "/"
-     */
     private function getRequestPath(): string
     {
         $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
@@ -181,7 +204,6 @@ class Router
             }
         }
 
-        // strip leading/trailing and return
         return $this->normalize($uri);
     }
 
@@ -192,7 +214,6 @@ class Router
         }
         $mw = new $mwClass();
 
-        // use reflection to call handle with ($request) or nothing or ($request,$params)
         if (!method_exists($mw, 'handle')) {
             Response::json(['error' => "Middleware $mwClass must implement handle()"], 500);
         }
@@ -217,16 +238,6 @@ class Router
         $this->sendResult($result);
     }
 
-    /*private function invokeControllerMethod($controller, string $methodName, array $params = [])
-    {
-        $ref = new \ReflectionMethod($controller, $methodName);
-        $args = [];
-        if ($ref->getNumberOfParameters() >= 1) $args[] = $this->request;
-        if ($ref->getNumberOfParameters() >= 2) $args[] = $params;
-        $result = $ref->invokeArgs($controller, $args);
-        $this->sendResult($result);
-    }*/
-
     private function invokeControllerMethod($controller, string $methodName, array $params = [])
     {
         $ref = new \ReflectionMethod($controller, $methodName);
@@ -237,9 +248,7 @@ class Router
         }
 
         if ($ref->getNumberOfParameters() >= 2) {
-            // Instead of passing $params array directly, pass values in order
             foreach ($params as $value) {
-                // optionally cast numeric ids
                 $args[] = is_numeric($value) ? (int) $value : $value;
             }
         }
@@ -248,12 +257,9 @@ class Router
         $this->sendResult($result);
     }
 
-
     private function sendResult($result)
     {
-        // if controller already echoed and exited, nothing to do
         if (is_null($result)) return;
-        // if result is a Response object or array - output as JSON
         if (is_array($result) || is_object($result)) {
             Response::json($result);
         } elseif (is_string($result)) {

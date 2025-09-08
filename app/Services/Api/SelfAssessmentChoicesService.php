@@ -22,18 +22,18 @@ class SelfAssessmentChoicesService extends BaseHttpService
         return $this->post($this->endpoint, $data);
     }
 
-    public function update($id, array $data)
+    public function updateById($id, array $data)
     {
         return $this->put("{$this->endpoint}/{$id}", $data);
     }
 
-    public function patchParticipant($id, array $data)
+    public function patchById($id, array $data)
     {
-        return parent::patch("{$this->endpoint}/{$id}", $data);
+        return $this->patch("{$this->endpoint}/{$id}", $data);
     }
 
     public function deleteById($id)
     {
-        return parent::delete("{$this->endpoint}/{$id}");
+        return $this->delete("{$this->endpoint}/{$id}");
     }
 }

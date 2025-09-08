@@ -22,17 +22,17 @@ class ParticipantSessionsService extends BaseHttpService
         return $this->post($this->endpoint, $data);
     }
 
-    public function update($id, array $data)
+    public function updateById($id, array $data)
     {
         return $this->put("{$this->endpoint}/{$id}", $data);
     }
 
-    public function patch($id, array $data)
+    public function patchById($id, array $data)
     {
         return $this->patch("{$this->endpoint}/{$id}", $data);
     }
 
-    public function delete($id)
+    public function deleteById($id)
     {
         return $this->delete("{$this->endpoint}/{$id}");
     }

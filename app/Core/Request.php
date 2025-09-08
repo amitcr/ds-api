@@ -21,13 +21,29 @@ class Request
     private function parseHeaders()
     {
         $headers = [];
+
         foreach ($_SERVER as $k => $v) {
             if (strpos($k, 'HTTP_') === 0) {
                 $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($k, 5)))));
                 $headers[$name] = $v;
             }
         }
-        if (isset($_SERVER['CONTENT_TYPE'])) $headers['Content-Type'] = $_SERVER['CONTENT_TYPE'];
+
+        // Add content type if available
+        if (isset($_SERVER['CONTENT_TYPE'])) {
+            $headers['Content-Type'] = $_SERVER['CONTENT_TYPE'];
+        }
+
+        // Manually handle Authorization (sometimes not passed to PHP by default)
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $headers['Authorization'] = $_SERVER['HTTP_AUTHORIZATION'];
+        } elseif (function_exists('apache_request_headers')) {
+            $apacheHeaders = apache_request_headers();
+            if (isset($apacheHeaders['Authorization'])) {
+                $headers['Authorization'] = $apacheHeaders['Authorization'];
+            }
+        }
+
         return $headers;
     }
 

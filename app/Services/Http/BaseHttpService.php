@@ -51,31 +51,31 @@ class BaseHttpService
     protected function get(string $uri, array $query = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
-        return $req->get($uri, $query)->throw()->json();
+        return $req->get($uri, $query)->throw()->object();
     }
 
     protected function post(string $uri, array $data = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
-        return $req->post($uri, $data)->throw()->json();
+        return $req->post($uri, $data)->throw()->object();
     }
 
     protected function put(string $uri, array $data = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
-        return $req->put($uri, $data)->throw()->json();
+        return $req->put($uri, $data)->throw()->object();
     }
 
     protected function patch(string $uri, array $data = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
-        return $req->patch($uri, $data)->throw()->json();
+        return $req->patch($uri, $data)->throw()->object();
     }
 
     protected function delete(string $uri, array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
-        return $req->delete($uri)->throw()->json();
+        return $req->delete($uri)->throw()->object();
     }
 
     /** Optional: GraphQL helper if/when they migrate */
@@ -83,6 +83,6 @@ class BaseHttpService
     {
         $payload = ['query' => $query, 'variables' => $variables];
         $req = $headers ? $this->withHeaders($headers) : $this->http;
-        return $req->post($endpoint, $payload)->throw()->json();
+        return $req->post($endpoint, $payload)->throw()->object();
     }
 }
