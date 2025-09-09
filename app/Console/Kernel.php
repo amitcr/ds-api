@@ -14,11 +14,11 @@ class Kernel extends CronKernel
     {
         // $schedule->command(ClearTempUsers::class)->daily();
         // $schedule->command(SendReminderEmails::class)->everyMinute();
-        // $schedule->command(ValidateCoupons::class)->dailyAt('00:00');
+        // $schedule->command(ValidateCoupons::class)->dailyAt('00:00')->timezone('UTC');
 
         // $schedule->command('emails:send-reminders')->everyMinute();
-        $schedule->command('emails:coupon-expire-reminder')->dailyAt('00:00');
-        $schedule->command('coupons:expire-status')->dailyAt('00:00');
+        $schedule->command('emails:coupon-expire-reminder')->dailyAt('00:00')->timezone('UTC');
+        $schedule->command('coupons:expire-status')->dailyAt('00:00')->timezone('UTC');
 
     }
 
