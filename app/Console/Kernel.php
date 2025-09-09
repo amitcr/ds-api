@@ -26,16 +26,4 @@ class Kernel extends CronKernel
         $this->register(SendReminderEmails::class);
         $this->register(ValidateCoupons::class);
     }
-
-    /*public function command($command)
-    {
-        if (class_exists($command)) {
-            $instance = new $command();
-            $command = $instance->signature;
-        }
-
-        $task = new ScheduledTask($command);
-        $this->tasks[] = $task;
-        return $task;
-    }*/
 }
