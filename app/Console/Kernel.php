@@ -17,8 +17,8 @@ class Kernel extends CronKernel
         // $schedule->command(ValidateCoupons::class)->dailyAt('00:00')->timezone('UTC');
 
         // $schedule->command('emails:send-reminders')->everyMinute();
-        $schedule->command('emails:coupon-expire-reminder')->cron('*/2 * * * *');
-        $schedule->command('coupons:expire-status')->everyMinute();
+        $schedule->command('emails:coupon-expire-reminder')->dailyAt('00:00')->timezone('UTC');
+        $schedule->command('coupons:expire-status')->dailyAt('00:00')->timezone('UTC');
 
     }
 

@@ -14,10 +14,9 @@ class CouponExpiryReminderEmail implements CommandInterface
 
     public function handle($arguments)
     {
-        Logger::info('Cron emails:coupon-expire-reminder called');
+        // Logger::info('Cron emails:coupon-expire-reminder called');
         $threeDaysLater = Carbon::now()->addDays(3)->toDateString();
-        // $coupons = CouponModel::with(['user'])->where(['end_date' => $threeDaysLater, 'is_locked'  => 0, 'coupon_type'  => 'prepaid_coupon_code'])->orderBy('created_datetime', 'asc')->get();
-        $coupons = CouponModel::with(['user','affiliate','company'])->where(['status' => 'active', 'is_locked'  => 0, 'coupon_type'  => 'prepaid_coupon_code'])->orderBy('created_datetime', 'asc')->limit(1)->get();
+        $coupons = CouponModel::with(['user'])->where(['end_date' => $threeDaysLater, 'is_locked'  => 0, 'coupon_type'  => 'prepaid_coupon_code'])->orderBy('created_datetime', 'asc')->get();
         
         if($coupons->isEmpty()){
             return false;
@@ -25,10 +24,9 @@ class CouponExpiryReminderEmail implements CommandInterface
         
         foreach($coupons as $coupon){   
             if(!empty($coupon->user) && !empty($coupon->user->user_email)){
-                // Mail::send($coupon->user->user_email, 'Your Prepaid Code at FourTemperaments Is About to Expire', 'coupon-expiry-reminder', $coupon);
-                Mail::send("amit@culture-red.com", 'Your Prepaid Code at FourTemperaments Is About to Expire', 'coupon-expiry-reminder', ['coupon' => $coupon]);
+                Mail::send($coupon->user->user_email, 'Your Prepaid Code at FourTemperaments Is About to Expire', 'coupon-expiry-reminder', ['coupon' => $coupon]);
             }
         }
-        Logger::info('Cron emails:coupon-expire-reminder completed');
+        // Logger::info('Cron emails:coupon-expire-reminder completed');
     }
 }

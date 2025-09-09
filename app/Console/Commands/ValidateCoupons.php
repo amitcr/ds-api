@@ -18,7 +18,7 @@ class ValidateCoupons implements CommandInterface
 
     public function handle($arguments)
     {
-        Logger::info('Cron coupons:expire-status called');
+        // Logger::info('Cron coupons:expire-status called');
         $yesterday = Carbon::yesterday()->toDateString();
         $coupons = CouponModel::with(['affiliate', 'company'])->where(['end_date' => $yesterday, 'status' => 'active'])->orderBy('created_datetime', 'asc')->get();
         if($coupons->isEmpty()){
@@ -113,6 +113,6 @@ class ValidateCoupons implements CommandInterface
             $coupon->status = 'expired';
             $coupon->save();            
         }
-        Logger::info('Cron coupons:expire-status completed');
+        // Logger::info('Cron coupons:expire-status completed');
     }
 }
