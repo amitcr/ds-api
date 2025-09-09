@@ -15,12 +15,14 @@ use Dotenv\Dotenv;
 use App\Core\Router;
 use App\Core\Request;
 use App\Core\DB;
+use App\Core\Mail\Mail;
 
 // Load .env (only once)
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
 $dotenv->safeLoad();
 
 DB::init();
+Mail::init();
 // build Request (if you have your Request class, Router will accept it)
 $request = class_exists(\App\Core\Request::class) ? new \App\Core\Request() : null;
 

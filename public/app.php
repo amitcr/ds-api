@@ -13,9 +13,11 @@ require_once __DIR__ . '/../bootstrap.php';
 
 use Dotenv\Dotenv;
 use App\Core\DB;
+use App\Core\Mail\Mail;
 
 // Load .env (only once)
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
 $dotenv->safeLoad();
 
 DB::init();
+Mail::init();

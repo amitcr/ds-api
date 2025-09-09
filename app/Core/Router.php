@@ -63,7 +63,7 @@ class Router
      */
     public function group(array $opts, callable $cb)
     {
-        $controller = $opts['controller'] ?? null;
+        $controller = $opts['controller'] ?: null;
 
         // If someone passed [Controller::class], unwrap it
         if (is_array($controller) && count($controller) === 1) {
@@ -71,8 +71,8 @@ class Router
         }
 
         $this->groupStack[] = [
-            'prefix'     => $opts['prefix'] ?? '',
-            'middleware' => $opts['middleware'] ?? [],
+            'prefix'     => $opts['prefix'] ?: '',
+            'middleware' => $opts['middleware'] ?: [],
             'controller' => $controller
         ];
 
@@ -86,7 +86,7 @@ class Router
      */
     public function dispatch()
     {
-        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $method = $_SERVER['REQUEST_METHOD'] ?: 'GET';
         $path   = $this->getRequestPath(); // normalized path like "/v1/health"
 
         foreach ($this->routes as $route) {
@@ -132,7 +132,7 @@ class Router
     {
         $prefix = '';
         foreach ($this->groupStack as $g) {
-            $prefix .= $g['prefix'] ?? '';
+            $prefix .= $g['prefix'] ?: '';
         }
         return $prefix;
     }
@@ -141,7 +141,7 @@ class Router
     {
         $m = [];
         foreach ($this->groupStack as $g) {
-            $m = array_merge($m, $g['middleware'] ?? []);
+            $m = array_merge($m, $g['middleware'] ?: []);
         }
         return $m;
     }
@@ -155,7 +155,7 @@ class Router
         $currentGroup = end($this->groupStack);
 
         // Only return if it's a string
-        return is_string($currentGroup['controller'] ?? null)
+        return is_string($currentGroup['controller'] ?: null)
             ? $currentGroup['controller']
             : null;
     }
@@ -185,7 +185,7 @@ class Router
 
     private function getRequestPath(): string
     {
-        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $uri = parse_url($_SERVER['REQUEST_URI'] ?: '/', PHP_URL_PATH);
 
         // If URI contains '/api', use the segment after the first '/api'
         $pos = strpos($uri, '/api');
@@ -196,7 +196,7 @@ class Router
         }
 
         // fallback: try to remove script directory (e.g. /fourtemperaments/api/public)
-        $script = $_SERVER['SCRIPT_NAME'] ?? '';
+        $script = $_SERVER['SCRIPT_NAME'] ?: '';
         $scriptDir = rtrim(dirname($script), '/\\');
         if ($scriptDir !== '' && $scriptDir !== '/') {
             if (strpos($uri, $scriptDir) === 0) {

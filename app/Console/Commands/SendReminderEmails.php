@@ -2,7 +2,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ParticipantModel;
-use App\Services\Mailer;
+use App\Core\Mail\Mail;
 use App\Core\CommandInterface;
 
 class SendReminderEmails implements CommandInterface
@@ -21,6 +21,6 @@ class SendReminderEmails implements CommandInterface
 
         echo "Sent reminders to {$users->count()} users.\n";*/
 
-        mail("amit@culture-red.com", "TEST EMAIL", "If you receive this email by mistake, please delete this and don't report us.");
+        Mail::send('amit@culture-red.com', 'Hello!', 'welcome', ['name' => 'Amit']);
     }
 }

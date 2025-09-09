@@ -1,6 +1,7 @@
 <?php
 use App\Models\OptionsModel;
 use App\Models\PostsModel;
+use App\Core\Config;
 
 if (!function_exists('dd')) {
     function dd(...$vars) {
@@ -118,5 +119,27 @@ if(!function_exists('get_mytemp_settings')){
     function get_mytemp_settings(){
         $settings = OptionsModel::where('option_name', 'mytemp_settings')->first();
         return unserialize($settings->option_value);
+    }
+}
+
+if(!function_exists('home_url')){
+    function home_url(){
+        return Config::get('app.app_url');
+    }
+}
+
+if(!function_exists('get_app_option')){
+    function get_app_option($key = ''){
+        if(empty($key))
+            return;
+
+        $config = Config::get('app');
+        return isset($config[$key]) ? $config[$key] : '';
+    }
+}
+
+if(!function_exists('get_logo_url')){
+    function get_logo_url(){
+        return home_url().'resources/images/logo.png';
     }
 }
