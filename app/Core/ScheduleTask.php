@@ -1,7 +1,7 @@
 <?php
 namespace App\Core;
 
-use Cron\CronExpression;
+use App\Core\CronExpression;
 
 class ScheduleTask
 {
