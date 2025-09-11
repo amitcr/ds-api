@@ -37,6 +37,8 @@ class CouponAutoRecharge implements CommandInterface
             ->where(function ($q) {
                 $q->whereRaw('((usage_count / usage_limit) * 100) >= 80')
                 ->orWhereRaw('(usage_limit < 5 and (usage_limit - usage_count) <= 1)');
+            })->whereHas('coupondetail', function ($q) {
+                $q->where('auto_recharge', 1);
             })->get();
 
         if($coupons->isEmpty()){
@@ -46,9 +48,9 @@ class CouponAutoRecharge implements CommandInterface
         foreach($coupons as $coupon){
             if($coupon->affiliate_share >= 0)
                 continue;
-
-            if(empty($coupon->coupondetail) || ($coupon->coupondetail->auto_recharge != 1))
-                continue;
+            
+            // if(empty($coupon->coupondetail) || ($coupon->coupondetail->auto_recharge != 1))
+            //     continue;
             
             $couponPaymentMethod = PaymentMethodModel::find($coupon->coupondetail->payment_method_id);
             if(!$couponPaymentMethod)
@@ -106,7 +108,7 @@ class CouponAutoRecharge implements CommandInterface
                         if($transaction){
                             CouponModel::where('coupon_id', $coupon->coupon_id)->increment('usage_limit', $coupon->coupondetail->auto_recharge_limit);
                             CouponDetailModel::where('id', $coupon->coupondetail->id)->update(['auto_recharge_email' => 0]);
-                            
+
                             if(!empty($coupon->company) && $coupon->company->user_id == $coupon->user_id){
                                 CompanyModel::where('company_id', $coupon->company_id)->decrement('credits', $amount);
                             }else{
