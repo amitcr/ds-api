@@ -21,6 +21,8 @@ class UpcomingAutoRechargeReminder implements CommandInterface
             ->where(function ($q) {
                 $q->whereRaw('((usage_count / usage_limit) * 100) >= 70')
                 ->orWhereRaw('(usage_limit < 5 and (usage_limit - usage_count) <= 2)');
+            })->whereHas('coupondetail', function($q) {
+                $q->where('auto_recharge', 1);
             })->get();
 
         if($coupons->isEmpty()){
@@ -28,9 +30,8 @@ class UpcomingAutoRechargeReminder implements CommandInterface
         }
         
         foreach($coupons as $coupon){   
-            if(empty($coupon->coupondetail) || ($coupon->coupondetail->auto_recharge != 1 || $coupon->coupondetail->auto_recharge_email == 1)){
+            if(empty($coupon->coupondetail) || $coupon->coupondetail->auto_recharge_email == 1)
                 continue;
-            }
 
             if(Mail::send($coupon->user->user_email, 'Your Prepaid Code Is Running Low – Auto-Recharge Scheduled', 'auto-recharge-reminder', ['coupon' => $coupon])){
                 CouponDetailModel::where('id', $coupon->coupondetail->id)->update(['auto_recharge_email' => 1]);
