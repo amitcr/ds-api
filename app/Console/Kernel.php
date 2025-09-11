@@ -20,8 +20,8 @@ class Kernel extends CronKernel
 
         // $schedule->command('emails:send-reminders')->everyMinute();
         $schedule->command('emails:coupon-expire-reminder')->dailyAt('00:00')->timezone('UTC');
-        $schedule->command('emails:auto-recharge-reminder')->everytMinute();
-        $schedule->command('coupons:coupon-auto-recharge')->everytMinute();
+        $schedule->command('emails:auto-recharge-reminder')->everyMinute();
+        $schedule->command('coupons:coupon-auto-recharge')->everyMinute();
         $schedule->command('coupons:expire-status')->dailyAt('00:00')->timezone('UTC');
 
     }
