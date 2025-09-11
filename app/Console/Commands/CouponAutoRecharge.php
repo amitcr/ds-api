@@ -48,7 +48,7 @@ class CouponAutoRecharge implements CommandInterface
         foreach($coupons as $coupon){
             if($coupon->affiliate_share >= 0)
                 continue;
-            
+
             // if(empty($coupon->coupondetail) || ($coupon->coupondetail->auto_recharge != 1))
             //     continue;
             
@@ -90,8 +90,8 @@ class CouponAutoRecharge implements CommandInterface
                     $transaction = TransactionModel::create($transaction_array);
 
                     if($transaction){                        
-                        // Mail::send($coupon->user->user_email, 'Successful Auto Recharge Confirmation & Invoice', 'auto-recharge-reminder', ['coupon' => $coupon, 'transaction' => $transaction, 'paymentMethod' => $paymentMethod, 'paymentIntent' => $paymentIntent]);
-                        Mail::send("amit@culture-red.com", 'Successful Auto Recharge Confirmation & Invoice', 'auto-recharge-invoice', ['coupon' => $coupon, 'transaction' => $transaction, 'paymentMethod' => $paymentMethod, 'paymentIntent' => $paymentIntent]);
+                        // use $coupon->user->user_email
+                        Mail::send($coupon->user->user_email, 'Successful Auto Recharge Confirmation & Invoice', 'auto-recharge-invoice', ['coupon' => $coupon, 'transaction' => $transaction, 'paymentMethod' => $paymentMethod, 'paymentIntent' => $paymentIntent]);
 
                         // TODO: Add Charge Transaction for Credits
                         $transaction_array = [
@@ -115,7 +115,8 @@ class CouponAutoRecharge implements CommandInterface
                                 AffiliateModel::where('affiliate_id', $coupon->affiliate_id)->decrement('unused_credits', $amount);
                             }
 
-                            Mail::send("amit@culture-red.com", 'Your Prepaid Code at FourTemperaments Has Been Auto-Recharged', 'coupon-auto-recharged', ['coupon' => $coupon, 'transaction' => $transaction, 'paymentMethod' => $paymentMethod, 'paymentIntent' => $paymentIntent]);
+                            // use $coupon->user->user_email
+                            Mail::send($coupon->user->user_email, 'Your Prepaid Code at FourTemperaments Has Been Auto-Recharged', 'coupon-auto-recharged', ['coupon' => $coupon, 'transaction' => $transaction, 'paymentMethod' => $paymentMethod, 'paymentIntent' => $paymentIntent]);
                         }
                     }
                 }
