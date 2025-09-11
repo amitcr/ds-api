@@ -30,7 +30,11 @@ class SESMailer implements MailerInterface
 
         try {
             $result = $this->client->sendEmail([
-                'Source' => $this->config['from']['address'],
+                'Source' => sprintf(
+                    '%s <%s>',
+                    $this->config['from']['name'] ?? '',
+                    $this->config['from']['address']
+                ),
                 'Destination' => [
                     'ToAddresses' => [$to],
                 ],

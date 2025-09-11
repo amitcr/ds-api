@@ -18,7 +18,7 @@ if (!function_exists('pr')) {
     function pr(...$vars) {
         foreach ($vars as $v) {
             echo "<pre>";
-            var_dump($v);
+            print_r($v);
             echo "</pre>";
         }
         die(1);
@@ -122,9 +122,80 @@ if(!function_exists('get_mytemp_settings')){
     }
 }
 
-if(!function_exists('home_url')){
-    function home_url(){
-        return Config::get('app.app_url');
+if (!function_exists('get_settings_option')) {
+    function get_settings_option($key)
+    {
+        // Case 1: dot notation string ("option.key1.key2")
+        if (is_string($key) && strpos($key, '.') !== false) {
+            $parts = explode('.', $key);
+            $optionName = array_shift($parts);
+
+            $option = OptionsModel::where('option_name', $optionName)->first();
+            if (!$option) {
+                return null;
+            }
+
+            $value = maybe_unserialize($option->option_value);
+
+            foreach ($parts as $nestedKey) {
+                if (is_array($value) && array_key_exists($nestedKey, $value)) {
+                    $value = $value[$nestedKey];
+                } else {
+                    return null; // nested key not found
+                }
+            }
+            return $value;
+        }
+
+        // Case 2: simple string (direct option_name)
+        if (is_string($key)) {
+            $option = OptionsModel::where('option_name', $key)->first();
+            if (!$option) {
+                return null;
+            }
+            return maybe_unserialize($option->option_value);
+        }
+
+        // Case 3: array syntax ['option_name' => ['nested_key']]
+        if (is_array($key)) {
+            $optionName = array_key_first($key);
+            $nestedKeys = $key[$optionName];
+
+            $option = OptionsModel::where('option_name', $optionName)->first();
+            if (!$option) {
+                return null;
+            }
+
+            $value = maybe_unserialize($option->option_value);
+
+            foreach ((array)$nestedKeys as $nestedKey) {
+                if (is_array($value) && array_key_exists($nestedKey, $value)) {
+                    $value = $value[$nestedKey];
+                } else {
+                    return null;
+                }
+            }
+            return $value;
+        }
+
+        return null;
+    }
+}
+
+
+if (!function_exists('maybe_unserialize')) {
+    function maybe_unserialize($original) {
+        if (is_serialized($original)) {
+            return @unserialize($original);
+        }
+        return $original;
+    }
+}
+
+if (!function_exists('is_serialized')) {
+    function is_serialized($data) {
+        // simple check
+        return ($data === 'b:0;' || @unserialize($data) !== false);
     }
 }
 
@@ -140,6 +211,6 @@ if(!function_exists('get_app_option')){
 
 if(!function_exists('get_logo_url')){
     function get_logo_url(){
-        return home_url().'resources/images/logo.png';
+        return get_settings_option('home').'resources/images/logo.png';
     }
 }

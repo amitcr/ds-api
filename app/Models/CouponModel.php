@@ -3,8 +3,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-use App\Models\UserModel;
 
 class CouponModel extends BaseModel
 {
@@ -30,5 +30,10 @@ class CouponModel extends BaseModel
     public function trackings(): HasMany
     {
         return $this->hasMany(CouponTrackingModel::class, 'coupon_id', 'coupon_id');
+    }
+    
+    public function coupondetail(): HasOne
+    {
+        return $this->hasOne(CouponDetailModel::class, 'coupon_id', 'coupon_id');
     }
 }

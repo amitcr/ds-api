@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Code Link Expiry Notification</title>
+    <title>Code Auto Recharge Reminder Notification</title>
     <style media="all" type="text/css">
     @media all {
         .btn-primary table td:hover {
@@ -100,7 +100,7 @@
                 <div class="content" style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 600px; padding: 0;">
 
                     <!-- START CENTERED WHITE CONTAINER -->
-                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Action required to keep your code active.</span>
+                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">We’ll auto-recharge your code soon using your saved payment method.</span>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #ffffff; width: 100%;" width="100%">
 
                         <!-- START MAIN CONTENT AREA -->
@@ -118,24 +118,33 @@
                                             <td align="left" style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; padding-bottom: 5px;" valign="top">
                                                 <h3 style="margin-bottom: 16px;font-family: Helvetica, sans-serif;  font-weight: bold;font-size: 20px;text-align:left;margin: 0;padding-bottom: 15px; color: #001c40;">Dear <?=$coupon->user->display_name?>,</h3>
                                                 <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
-                                                    Your prepaid code <?=$coupon->coupon_code?> is set to expire on <?=date("m/d/Y", strtotime($coupon->end_date))?>. Please update the expiration date in your account to prevent any disruptions for your users.
+                                                Just a quick heads-up: your prepaid code <?=$coupon->coupon_code?> is running low. Since auto-recharge is enabled, we’ll automatically top it off using your saved payment method when usage runs out.
                                                 </p>
-                                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">
-                                                    <?php 
-                                                    if(!empty($coupon->affiliate) && $coupon->user_id == $coupon->affiliate->user_id){
-                                                        $user_dashboard = get_settings_option('home').'affiliate-area/?tab=coupons';
-                                                    }else if(!empty($coupon->affiliate) && $coupon->user_id == $coupon->affiliate->user_id){
-                                                        $user_dashboard = get_settings_option('home').'company-area/?tab=coupons';
-                                                    }
-                                                    ?>
-                                                    You can log in to your account to view the updated details: <a style="color:#4688dd" href="<?=$user_dashboard?>" target="_blank"><?=$user_dashboard?></a>                                                    
+                                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 0;">
+                                                    <strong>Current Usage Summary:</strong>
                                                 </p>
+                                                <ul style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
+                                                    <li><strong>Usage Limit:</strong> <?=$coupon->usage_limit?></li>
+                                                    <li><strong>Used:</strong> <?=$coupon->usage_count?></li>
+                                                    <li><strong>Remaining:</strong> <?=( $coupon->usage_limit - $coupon->usage_count) ?></li>
+                                                </ul>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
 
 
+                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">No action is required unless you want to update your payment method, disable auto-recharge, or adjust the code settings.</p>
+                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">
+                                    <?php 
+                                    if(!empty($coupon->affiliate) && $coupon->user_id == $coupon->affiliate->user_id){
+                                        $user_dashboard = get_settings_option('home').'affiliate-area/?tab=coupons';
+                                    }else if(!empty($coupon->affiliate) && $coupon->user_id == $coupon->affiliate->user_id){
+                                        $user_dashboard = get_settings_option('home').'company-area/?tab=coupons';
+                                    }
+                                    ?>
+                                    You can log in to your account to make any changes: <a style="color:#4688dd" href="<?=$user_dashboard?>" target="_blank"><?=$user_dashboard?></a>
+                                </p>
                                 <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">
                                     If you have any questions, please email <a href="mailto:support@fourtemperaments.com">support@fourtemperaments.com</a>
                                 </p>

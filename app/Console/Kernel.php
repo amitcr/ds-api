@@ -7,6 +7,8 @@ use App\Core\Schedule;
 // use App\Console\Commands\SendReminderEmails;
 use App\Console\Commands\ValidateCoupons;
 use App\Console\Commands\CouponExpiryReminderEmail;
+use App\Console\Commands\CouponAutoRecharge;
+use App\Console\Commands\UpcomingAutoRechargeReminder;
 
 class Kernel extends CronKernel
 {
@@ -18,6 +20,8 @@ class Kernel extends CronKernel
 
         // $schedule->command('emails:send-reminders')->everyMinute();
         $schedule->command('emails:coupon-expire-reminder')->dailyAt('00:00')->timezone('UTC');
+        $schedule->command('emails:auto-recharge-reminder')->everytMinute();
+        $schedule->command('coupons:coupon-auto-recharge')->everytMinute();
         $schedule->command('coupons:expire-status')->dailyAt('00:00')->timezone('UTC');
 
     }
@@ -26,7 +30,9 @@ class Kernel extends CronKernel
     {
         // $this->register(ClearTempUsers::class);
         // $this->register(SendReminderEmails::class);
-        $this->register(CouponExpiryReminderEmail::class);
         $this->register(ValidateCoupons::class);
+        $this->register(CouponExpiryReminderEmail::class);
+        $this->register(CouponAutoRecharge::class);
+        $this->register(UpcomingAutoRechargeReminder::class);
     }
 }
