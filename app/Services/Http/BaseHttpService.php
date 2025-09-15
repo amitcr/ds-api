@@ -13,7 +13,7 @@ class BaseHttpService
 
     public function __construct(?Factory $factory = null)
     {
-        $factory = $factory ?: new Factory();
+        $factory = $factory ?? new Factory();
 
         // echo Config::get('scoring.base_url'); die;
         $baseUrl = rtrim(Config::get('scoring.base_url'), '/');

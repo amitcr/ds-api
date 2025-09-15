@@ -4,7 +4,7 @@ namespace App\Support;
 class FileCache implements CacheInterface {
     private $dir;
     public function __construct($dir = null) {
-        $this->dir = $dir ?: sys_get_temp_dir() . '/api_cache';
+        $this->dir = $dir ?? sys_get_temp_dir() . '/api_cache';
         if (!is_dir($this->dir)) @mkdir($this->dir, 0755, true);
     }
     private function file($key) { return $this->dir . '/cache_' . md5($key); }

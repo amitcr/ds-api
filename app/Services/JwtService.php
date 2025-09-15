@@ -7,7 +7,7 @@ class JwtService
 
     public function __construct()
     {
-        $this->secret = getenv('JWT_SECRET') ?: 'change_me_in_prod';
+        $this->secret = getenv('JWT_SECRET') ?? 'change_me_in_prod';
     }
 
     /**
@@ -42,7 +42,7 @@ class JwtService
         $payload = json_decode($this->b64d($p), true);
 
         if (!$header || !$payload) return false;
-        if (($header['alg'] ?: '') !== 'HS256') return false;
+        if (($header['alg'] ?? '') !== 'HS256') return false;
 
         $sig = $this->b64u(hash_hmac('sha256', "$h.$p", $this->secret, true));
         if (!hash_equals($sig, $s)) return false;

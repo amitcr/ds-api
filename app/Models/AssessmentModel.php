@@ -4,6 +4,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use App\Core\JsonToObjectCast;
+use Carbon\Carbon;
+use App\Core\Config;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class AssessmentModel extends BaseModel
 {
     protected $table = 'mytemp_assessments'; // NO prefix here!
@@ -37,6 +42,11 @@ class AssessmentModel extends BaseModel
         'pdf_script',
     ];
 
+    protected $casts = [
+        'details' => JsonToObjectCast::class,
+        'modified_at' => 'datetime',
+    ];
+
     public function payment(): HasOne
     {
         return $this->hasOne(PaymentModel::class, 'assessment_id', 'assessment_id');
@@ -50,5 +60,27 @@ class AssessmentModel extends BaseModel
     public function participant(): BelongsTo
     {
         return $this->belongsTo(UserModel::class, 'participant_id', 'participant_id');
+    }
+
+    /**
+     * Scope for abandoned assessments
+     */
+    public function scopeAbandoned($query)
+    {
+        // Default window: 70 → 60 minutes ago
+        $start = Carbon::now()->subMinutes(70);
+        $end   = Carbon::now()->subMinutes(60);
+
+        // Override for staging/local environments
+        if (in_array(Config::get('app.env'), ["staging", "local"])) {
+            $start = Carbon::now()->subDays(365);
+            $end   = Carbon::now()->subMinute();
+        }
+        
+        return $query->where('needs_assessment_status', 'completed')
+            ->where('assessment_status', 'completed')
+            ->whereBetween('modified_at', [$start, $end])
+            ->whereNull(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(details, '$.subscribed_at'))"))
+            ->orderBy('modified_at', 'ASC');
     }
 }

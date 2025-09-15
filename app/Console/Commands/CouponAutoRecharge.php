@@ -122,7 +122,7 @@ class CouponAutoRecharge implements CommandInterface
                 }
             }catch (Exception $e) {
 				$response = $e->getJsonBody();
-                Logger::info(`Auto Recharge of {$coupon->coupon_code} code failed due to: {$response['error']}`);
+                Logger::info("Auto Recharge of ".$coupon->coupon_code." code failed due to: ".$response['error']);
             }
         }
         // Logger::info('Cron coupons:coupon-auto-recharge completed');

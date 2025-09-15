@@ -9,7 +9,7 @@ class RateLimitMiddleware implements MiddlewareInterface {
 
     public function handle($request) {
         $cache = new FileCache(); // swap with APCu if available
-        $ip = $_SERVER['REMOTE_ADDR'] ?: 'anon';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'anon';
         $key = 'rl:' . date('YmdHi') . ':' . $ip;
         $count = (int)$cache->get($key, 0);
         if ($count >= $this->limit) {
