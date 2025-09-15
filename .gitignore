@@ -27,3 +27,4 @@ coverage/
 # Add extra files to ignore
 public/.htaccess
 resources/images/
+credentials.json
