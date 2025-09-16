@@ -28,9 +28,9 @@ class ExportAssessmentStats implements CommandInterface
         foreach($couponIds as $couponId){
             $statusCountQuery .= $statusCountQuery != "" ? ", ": "";
             $statusCountQuery .= "SUM(CASE WHEN {$tablesPrefix}ac.coupon_id = {$couponId} THEN 1 ELSE 0 END) as started_{$couponId},
-                SUM(CASE WHEN {$tablesPrefix}ac.coupon_id = {$couponId} AND {$tablesPrefix}mytemp_assessments.assessment_status = 'finished' THEN 1 ELSE 0 END) as completed_{$couponId},
-                SUM(CASE WHEN {$tablesPrefix}ac.coupon_id = {$couponId} AND {$tablesPrefix}mytemp_assessments.assessment_status = 'completed' AND {$tablesPrefix}mytemp_assessments.needs_assessment_status = 'start' THEN 1 ELSE 0 END) as left_needs_{$couponId},
-                SUM(CASE WHEN {$tablesPrefix}ac.coupon_id = {$couponId} AND {$tablesPrefix}mytemp_assessments.assessment_status = 'completed' AND {$tablesPrefix}mytemp_assessments.needs_assessment_status = 'completed' THEN 1 ELSE 0 END) as left_payment_{$couponId}";
+            SUM(CASE WHEN {$tablesPrefix}ac.coupon_id = {$couponId} AND {$tablesPrefix}mytemp_assessments.assessment_status = 'completed' AND {$tablesPrefix}mytemp_assessments.needs_assessment_status = 'start' THEN 1 ELSE 0 END) as left_needs_{$couponId},
+            SUM(CASE WHEN {$tablesPrefix}ac.coupon_id = {$couponId} AND {$tablesPrefix}mytemp_assessments.assessment_status = 'completed' AND {$tablesPrefix}mytemp_assessments.needs_assessment_status = 'completed' THEN 1 ELSE 0 END) as left_payment_{$couponId},
+            SUM(CASE WHEN {$tablesPrefix}ac.coupon_id = {$couponId} AND {$tablesPrefix}mytemp_assessments.assessment_status = 'finished' THEN 1 ELSE 0 END) as completed_{$couponId}";
         }
 
         // echo $statusCountQuery; die;
