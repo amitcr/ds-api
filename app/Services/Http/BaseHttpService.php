@@ -51,7 +51,7 @@ class BaseHttpService
     protected function get(string $uri, array $query = [], array $headers = [])
     {
         $req = $headers ? $this->withHeaders($headers) : $this->http;
-        // Logger::info("GET API Request ", [ 'req' => $req, 'headers' => $headers, 'data' => $query, 'uri' => $uri]);
+        Logger::info("GET API Request ", [ 'req' => $req, 'headers' => $headers, 'data' => $query, 'uri' => $uri]);
         return $req->get($uri, $query)->throw()->object();
     }
 

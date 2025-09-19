@@ -20,8 +20,7 @@ if (!function_exists('pr')) {
             echo "<pre>";
             print_r($v);
             echo "</pre>";
-        }
-        die(1);
+        }        
     }
 }
 
