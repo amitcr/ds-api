@@ -1,7 +1,9 @@
 <?php
+define('PROJECT_ROOT', realpath(__DIR__ . '/../')); 
+define('MYTEMPERAMENT_PLUGIN_DIR', realpath(__DIR__ . '/../wp-content/plugins/wp-temperament-assessment/')); 
+
 // Try composer autoload first (recommended). Fallback to simple PSR-4 loader.
 $composer = __DIR__ . '/vendor/autoload.php';
-
 if (file_exists($composer)) {
     require_once $composer;
 } else {
@@ -23,3 +25,4 @@ if (file_exists(__DIR__ . '/.env')) {
         if ($k !== null && getenv($k) === false) putenv("$k=$v");
     }
 }
+

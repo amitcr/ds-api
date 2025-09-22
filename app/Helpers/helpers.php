@@ -213,3 +213,21 @@ if(!function_exists('get_logo_url')){
         return get_settings_option('home').'resources/images/logo.png';
     }
 }
+
+if(!function_exists('get_assessment_chart_image')){
+    function get_assessment_chart_image(int $assessment_id, string $imageType = '', string $returnType = ''){
+        if(empty($assessment_id) || $assessment_id == 0)
+            return false;
+
+        $imageName = !empty($imageType) ? $imageType.'_chart_'.$assessment_id.'.png': 'chart_'.$assessment_id.'.png';
+        if(file_exists( PROJECT_ROOT.'/assessments/images/'.$imageName )){
+            if(empty($returnType) || $returnType == "url"){
+                return get_settings_option('home') .'assessments/images/'.$imageName;
+            }else{
+                return PROJECT_ROOT.'/assessments/images/'.$imageName;
+            }
+        }
+
+        return false;
+    }
+}
