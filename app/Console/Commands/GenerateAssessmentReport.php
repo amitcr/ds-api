@@ -217,7 +217,7 @@ class GenerateAssessmentReport implements CommandInterface
         }
 
         // echo 'Missing Chart Image Assessments: '; pr($chartImageMissingAssessments); die;
-        if(!empty($chartImageMissingAssessments) && (date("i", strtotime("+2 minutes ".$modifiedAt)) == '00' || date("i", strtotime("+2 minutes ".$modifiedAt)) % 15 == 0 ) ){
+        if(!empty($chartImageMissingAssessments) && (date("i", strtotime("+2 minutes ".$modifiedAt)) == '00' || date("i", strtotime("+2 minutes ".$modifiedAt)) % 16 == 0 ) ){
             $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : get_settings_option('admin_email');
             if(!empty($sendTo)){
                 Mail::send($sendTo, 'Urgent: Assessment Charts are missing', 'assessment-images-missing', ['assessments' => $chartImageMissingAssessments]);
