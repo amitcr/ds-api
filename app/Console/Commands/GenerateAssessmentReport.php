@@ -40,8 +40,8 @@ class GenerateAssessmentReport implements CommandInterface
 
     public function handle($arguments)
     {
-        // Logger::info('cron assessments:generate-report started');
         $modifiedAt = Carbon::now()->subMinutes(2);
+        Logger::info('cron assessments:generate-report started with modifiedAt: '.$modifiedAt);
         $assessments = AssessmentModel::with('user', 'payment')->where('assessment_status', 'finished')
             ->where('pdf_status', 0)
             ->whereNull('pdf_script')
