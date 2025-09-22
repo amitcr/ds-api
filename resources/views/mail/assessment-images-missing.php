@@ -214,10 +214,10 @@
                                                     <?php 
                                                         $missing_chart = '';
                                                         if(get_assessment_chart_image($assessment->assessment_id) === false) {
-                                                            $missing_chart .= "<a href='".get_settings_option('home')."chart-preview/?chart_type=full&assessment_id=".$assessment->assessment_id."&store=1'>Three Charts Image</a><br/><br/>";
+                                                            $missing_chart .= "<a href='".get_settings_option('home')."/chart-preview/?chart_type=full&assessment_id=".$assessment->assessment_id."&store=1'>Three Charts Image</a><br/><br/>";
                                                         } 
                                                         if(get_assessment_chart_image($assessment->assessment_id, 'single') === false){
-                                                            $missing_chart .= "<a href='".get_settings_option('home')."chart-preview/?chart_type=single&assessment_id=".$assessment->assessment_id."&store=1'>Single Chart Image</a><br/><br/>";
+                                                            $missing_chart .= "<a href='".get_settings_option('home')."/chart-preview/?chart_type=single&assessment_id=".$assessment->assessment_id."&store=1'>Single Chart Image</a><br/><br/>";
                                                         }
                                                         echo $missing_chart;
                                                         ?>
