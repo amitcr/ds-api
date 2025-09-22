@@ -13,7 +13,6 @@ use App\Services\Mailjet\ContactDataService;
 use App\Services\Mailjet\ContactListService;
 use App\Services\Mailjet\ManageContactListService;
 use App\Services\Api\SelfAssessmentResultsService;
-use App\Services\PasswordHashService as PasswordHash;
 use App\Core\Logger;
 use App\Core\Config;
 use Carbon\Carbon;
@@ -26,7 +25,6 @@ class AbandonedAssessmentFollowUp implements CommandInterface
 
     protected $contactService;
     protected $manageContactListService;
-    protected $hasher;
     protected $selfAssessmentResultsService;
     protected $secondaryListId;
 
@@ -35,7 +33,6 @@ class AbandonedAssessmentFollowUp implements CommandInterface
         $this->contactDataService = new ContactDataService();
         $this->manageContactListService = new ManageContactListService();
         $this->selfAssessmentResultsService = new SelfAssessmentResultsService();
-        $this->hasher = new PasswordHash(8, true);
 
         $this->secondaryListId = get_settings_option('mytemp_settings.assessment_abandoned_secondary_list_id');
     }
@@ -94,19 +91,19 @@ class AbandonedAssessmentFollowUp implements CommandInterface
                         ],
                         [
                             "Name"  =>  "userid",
-                            "Value"  =>  $this->hasher->hashPassword($assessment->user_id),
+                            "Value"  =>  md5($assessment->user_id),
                         ],
                         [
                             "Name"  =>  "samplereportlink",
-                            "Value"  =>  get_settings_option('home')."view-sample-report/?mjuid=".$this->hasher->hashPassword($assessment->user_id).'&ftaid='.$this->hasher->hashPassword($assessment->assessment_id),
+                            "Value"  =>  get_settings_option('home')."view-sample-report/?mjuid=".md5($assessment->user_id).'&ftaid='.md5($assessment->assessment_id),
                         ],
                         [
                             "Name"  =>  "customlink",
-                            "Value"  =>  get_settings_option('home')."?mjuid=".$this->hasher->hashPassword($assessment->user_id).'&ftaid='.$this->hasher->hashPassword($assessment->assessment_id),
+                            "Value"  =>  get_settings_option('home')."?mjuid=".md5($assessment->user_id).'&ftaid='.md5($assessment->assessment_id),
                         ],
                         [
                             "Name"  =>  "assessmentid",
-                            "Value"  =>  $this->hasher->hashPassword($assessment->assessment_id),
+                            "Value"  =>  md5($assessment->assessment_id),
                         ],
                         [
                             "Name"  =>  "assessmentprice",
@@ -133,7 +130,7 @@ class AbandonedAssessmentFollowUp implements CommandInterface
 
                 $post = PostsModel::find(get_settings_option('mytemp_settings.mytemp_mini_report'));
                 if(!empty($post)){
-                    $contactData["Data"][] = ["Name"  =>  "minireport", "Value"  => $post->guid."?mjuid=".$this->hasher->hashPassword($assessment->user_id).'&ftaid='.$this->hasher->hashPassword($assessment->assessment_id)."&sessionId=".$this->hasher->hashPassword($assessment->assessment_id)];
+                    $contactData["Data"][] = ["Name"  =>  "minireport", "Value"  => $post->guid."?mjuid=".md5($assessment->user_id).'&ftaid='.md5($assessment->assessment_id)."&sessionId=".md5($assessment->assessment_id)];
                 }
 
                 $contactDataResponse = $this->contactDataService->updateById($contactId, $contactData);
@@ -143,7 +140,7 @@ class AbandonedAssessmentFollowUp implements CommandInterface
 
                     $assessmentVariation = TestingEntryModel::where(['data_id' => $assessment->assessment_id, 'data_type' => 'assessment'])->first();
                     if(!empty($assessmentVariation) && $assessmentVariation->variation != "control"){
-                        $contactListId = Config::get('app.mailjet_mini_list_id');
+                        $contactListId = Config::get('app.mailjet_mini_list_id') ?? $contactListId;
                     }else if(!empty($this->secondaryListId)){
                         $contactListId = $this->validateAssessmentListId($contactListId);
                     }
