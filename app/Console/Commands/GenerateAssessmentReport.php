@@ -163,6 +163,7 @@ class GenerateAssessmentReport implements CommandInterface
                     $coupon = CouponModel::with('user','affiliate','company')->find($assessmentCoupon->coupon_id);
                     if(!empty($coupon)){                        
                         $holdReport = $coupon->hold_report ??0;
+                        $managerReportName = $managerFilePath = '';
                         if($coupon->manager_report == 1){
                             Logger::info("Genrating Assessment Manager Report ");
                             $managerReportName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at))."-Manager-Report.pdf";

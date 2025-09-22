@@ -183,7 +183,7 @@
                                             </td>
                                             <td style="padding:12px 8px;text-align:right;border-collapse:collapse;border-left:1px solid #d3d3d3;border-bottom:1px solid #d3d3d3">
                                                 <p style="text-align:right;margin-top: 0px;margin-bottom: 5px;font-family:'Open Sans', sans-serif;font-size:14px;line-height:14px;color:#343a40">
-                                                    <?="$".format_number( $global_static_price, 2 )?>
+                                                    <?="$".number_format( $global_static_price, 2 )?>
                                                 </p>
                                             </td>
                                         </tr>
@@ -200,7 +200,7 @@
                                                 <td colspan="2" align="right" bgcolor="#ffffff" style="padding:12px 8px;border-collapse:collapse;text-align:right;vertical-align:top">
                                                     <p style="text-align:right;Margin-top:0px;Margin-bottom:0px;font-family: Helvetica, sans-serif; vertical-align: top;">
                                                         <strong style="color:#000; font-weight:bold;">
-                                                            <?="-$".format_number( $global_static_discount, 2)?>
+                                                            <?="-$".number_format( $global_static_discount, 2)?>
                                                         </strong>
                                                     </p>
                                                 </td>
@@ -212,7 +212,7 @@
                                                 <td colspan="2" align="right" bgcolor="#ffffff" style="padding:12px 8px;border-collapse:collapse;text-align:right;vertical-align:top">
                                                     <p style="text-align:right;Margin-top:0px;Margin-bottom:0px;font-family: Helvetica, sans-serif; vertical-align: top;">
                                                         <strong style="color:#000; font-weight:bold;">
-                                                            <?="$".format_number( $assessment_price,2)?>
+                                                            <?="$".number_format( $assessment_price,2)?>
                                                         </strong>
                                                     </p>
                                                 </td>
@@ -232,7 +232,7 @@
                                                     <td colspan="2" align="right" bgcolor="#ffffff" style="padding:12px 8px;border-collapse:collapse;text-align:right;vertical-align:top">
                                                         <p style="text-align:right;Margin-top:0px;Margin-bottom:0px;font-family: Helvetica, sans-serif; vertical-align: top;">
                                                             <strong style="color:#000; font-weight:bold;">
-                                                                <?="-$".format_number( $couponRow->coupon->discount_amount, 2)?>
+                                                                <?="-$".number_format( $couponRow->coupon->discount_amount, 2)?>
                                                             </strong>
                                                         </p>
                                                     </td>
@@ -249,7 +249,7 @@
                                             </td>
                                             <td colspan="2" align="right" bgcolor="#ffffff" style="padding:12px 8px;border-collapse:collapse;text-align:right;vertical-align:top">
                                                 <p style="text-align:right;Margin-top:0px;Margin-bottom:0px;font-family: Helvetica, sans-serif; vertical-align: top;color:#000; font-weight:bold;">
-                                                    <?="$".format_number( $assessment->payment->end_price, 2)?>
+                                                    <?="$".number_format( $assessment->payment->end_price, 2)?>
                                                 </p>
                                             </td>
                                         </tr>
