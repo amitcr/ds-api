@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 use App\Core\CommandInterface;
 
 use App\Models\AssessmentModel;
+use App\Models\CouponModel;
+use App\Models\CouponTrackingModel;
 use App\Services\Api\SelfAssessmentResultsService;
 use App\Services\Api\SelfAssessmentResponsesService;
 use App\Services\Api\SelfAssessmentChoicesService;
@@ -38,9 +40,9 @@ class GenerateAssessmentReport implements CommandInterface
 
     public function handle($arguments)
     {
-        Logger::info('cron assessments:generate-report started');
+        // Logger::info('cron assessments:generate-report started');
         $modifiedAt = Carbon::now()->subMinutes(2);
-        $assessments = AssessmentModel::with('user')->where('assessment_status', 'finished')
+        $assessments = AssessmentModel::with('user', 'payment')->where('assessment_status', 'finished')
             ->where('pdf_status', 0)
             ->whereNull('pdf_script')
             ->where('modified_at', '<=', $modifiedAt)
@@ -52,7 +54,6 @@ class GenerateAssessmentReport implements CommandInterface
             return;
 
         foreach($assessments as $assessment){
-            Logger::info('validating '.$assessment->assessment_id.' assessment PDF Report status');
             // echo $assessment->assessment_id; die;
             // pr($assessment); die;
             
@@ -60,11 +61,11 @@ class GenerateAssessmentReport implements CommandInterface
                 continue;
 
             $participantName = $assessment->first_name.' '.$assessment->last_name;
-            $assessmentPdfFileName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at)).".pdf";
+            $personalReportName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at)).".pdf";
 
-            $filePath = PROJECT_ROOT.'/assessments/pdf/'.$assessmentPdfFileName;
+            $personalFilePath = PROJECT_ROOT.'/assessments/pdf/'.$personalReportName;
             // Validate if PDF file already created or not
-            if(file_exists($filePath)){
+            if(file_exists($personalFilePath)){
                 Logger::info('Assessment Report already exists for '.$assessment->assessment_id);
                 $assessment->pdf_status = 1;   
                 $assessment->save();
@@ -72,13 +73,10 @@ class GenerateAssessmentReport implements CommandInterface
             }
 
             if(get_assessment_chart_image($assessment->assessment_id) && get_assessment_chart_image($assessment->assessment_id, 'single')){
-                Logger::info('Assessment Chart Images exists, now generating PDF Report '.$assessment->assessment_id);
+                Logger::info('Generating Assessment Report for '.$assessment->assessment_id);
                 $assessmentResults = $this->selfAssessmentResultsService->getById($assessment->assessment_result_id);
-                Logger::info('Assessment assessmentResults received '.$assessment->assessment_id, (array) $assessmentResults);
                 $selfChoicesResponse = $this->selfAssessmentResponsesService->list(['participantSessionId' => $assessment->session_id]);
-                Logger::info('Assessment selfChoicesResponse received '.$assessment->assessment_id, (array) $selfChoicesResponse);
                 if(!isset($selfChoicesResponse->data) || empty($selfChoicesResponse->data)){
-                    Logger::error('Failed to get selfChoicesResponse for '.$assessment_id.': ', (array) $selfChoicesResponse);
                     continue;
                 }
 
@@ -91,15 +89,12 @@ class GenerateAssessmentReport implements CommandInterface
                 }
                 
                 if(empty($queryParams)){
-                    Logger::error('queryParams are empty for '.$assessment_id.': ', $selfChoicesResponse);
                     continue;
                 }
 
                 $queryParams[] = '$limit=10000000';
                 $selfAssessmentChoices = $this->selfAssessmentChoicesService->listByQueryParams( $queryParams );
-                Logger::info('Assessment selfAssessmentChoices received '.$assessment->assessment_id, (array) $selfAssessmentChoices);
                 if(!isset($selfAssessmentChoices->data) || empty($selfAssessmentChoices->data)){
-                    Logger::error('Failed to get selfAssessmentChoices for '.$assessment_id.': ', (array) $selfAssessmentChoices);
                     continue;
                 }
                 
@@ -132,11 +127,8 @@ class GenerateAssessmentReport implements CommandInterface
                     }
                 }                 
 
-                Logger::info('Fetching assessment needsAssessmentResponsesService '.$assessment->assessment_id);
                 $needsChoicesResponse = $this->needsAssessmentResponsesService->list(['participantSessionId' => $assessment->session_id]);
-                Logger::info('Assessment needsChoicesResponse received '.$assessment->assessment_id, (array) $needsChoicesResponse);
                 if(!isset($needsChoicesResponse->data) || empty($needsChoicesResponse->data)){
-                    Logger::error('Failed to get needsChoicesResponse for '.$assessment_id.': ', (array) $needsChoicesResponse);
                     continue;
                 }
                 $queryParams = ["surveyId=".$assessment->needs_survey_id];
@@ -145,42 +137,78 @@ class GenerateAssessmentReport implements CommandInterface
                 }
 
                 if(empty($queryParams)){
-                    Logger::error('queryParams are empty for '.$assessment_id.': ', $needsChoicesResponse);
                     continue;
                 }
 
                 $needsAssessmentChoices = $this->needsAssessmentChoicesService->listByQueryParams( $queryParams );
-                Logger::info('Assessment needsAssessmentChoices received '.$assessment->assessment_id, (array) $needsAssessmentChoices);
-                if(!isset($needsAssessmentChoices->data) || empty($needsAssessmentChoices->data)){
-                    Logger::error('Failed to get needsAssessmentChoices for '.$assessment_id.': ', (array) $needsAssessmentChoices);
+                if(!isset($needsAssessmentChoices->data) || empty($needsAssessmentChoices->data)){                    
                     continue;
                 }
 
-                Logger::info('include template-report.php file '.$assessment->assessment_id);
                 // pr($needsAssessmentChoices); die;
                 // Render the template with PHP variables
+                
                 ob_start();
                 include PROJECT_ROOT . '/api/resources/views/template-report.php';
-                $html = ob_get_clean();
+                $personalReportHtml = ob_get_clean();
 
-                Logger::info('report template-report.php file included '.$assessment->assessment_id);
-                // echo $html; die;
-                // Generate PDF
-                $start = microtime(true);
-                $html2pdf = new Html2Pdf('P', array(215,307), 'fr', true, 'UTF-8', array(0,0,0,0));
-                $html2pdf->pdf->SetDisplayMode('fullpage');
-			    $html2pdf->setTestTdInOnePage(false);
-                $html2pdf->writeHTML($html);
-                Logger::info("HTML parsing took " . (microtime(true) - $start) . " sec");
-                // Save PDF file
-                $html2pdf->output($filePath, 'F'); // 'F' = Save to file
-                // Logger::info('report PDF file file created '.$assessment->assessment_id);
-                Logger::info("Output writing took " . (microtime(true) - $start) . " sec (total)");
+                $this->createPDFReportFile($personalFilePath, $personalReportHtml, ['layout' => array(215,307), 'spacing' => array(0,0,0,0)]);
+                
 
-                die("DONE");
+                $holdReport = false;
+                // Valdiate If Manager Report Required
+                $assessmentCoupon = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->first();
+                // Logger::info("Assessment Coupons ", (array) $assessmentCoupon);
+                if(!empty($assessmentCoupon)){
+                    $coupon = CouponModel::with('user','affiliate','company')->find($assessmentCoupon->coupon_id);
+                    if(!empty($coupon)){                        
+                        $holdReport == $coupon->hold_report ??0;
+                        if($coupon->manager_report == 1){
+                            Logger::info("Genrating Assessment Manager Report ");
+                            $managerReportName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at))."-Manager-Report.pdf";
+                            $managerFilePath = PROJECT_ROOT.'/assessments/pdf/'.$managerReportName;
+                            if(!file_exists($managerFilePath)){
+                                // Render the template with PHP variables
+                                ob_start();
+                                include PROJECT_ROOT . '/api/resources/views/template-manager-report.php';
+                                $managerReportHtml = ob_get_clean();
+
+                                $this->createPDFReportFile($managerFilePath, $managerReportHtml, ['layout' => 'A4', 'spacing' => array(10, 5, 10, 5)]);
+                            }
+                        }
+
+                        $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $coupon->user->user_email;
+                        if(!empty($sendTo)){
+                            Mail::send($sendTo, 'New Assessment Profile', 'affiliate-company-assessment-notification', ['assessment' => $assessment, 'coupon' => $coupon, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName , 'managerFilePath' => $managerFilePath, 'managerReportName' => $managerReportName]);
+                        }
+
+                        if(!empty($coupon->other_recipients)){
+                            $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $coupon->other_recipients;
+                            if(!empty($sendTo)){
+                                Mail::send($sendTo, 'New Assessment Profile', 'assessment-notification-recipients', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName]);
+                            }   
+                        }
+                    }
+                }
+
+                if($holdReport == false){
+                    $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $assessment->user->user_email;
+                    if(!empty($sendTo)){
+                        Mail::send($sendTo, 'Your MyTemperament Assessment Profile', 'participant-assessment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName]);
+                    }
+                }
+
+                if($assessment->payment->end_price > 0){
+                    $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $assessment->user->user_email;
+                    if(!empty($sendTo)){
+                        $assessmentCoupons = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->get();
+                        Mail::send($sendTo, 'Thank you for your payment', 'assessment-payment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName, 'assessmentCoupons' => $assessmentCoupons]);
+                    }
+                }
+
                 // Mark as generated
-                // $assessment->pdf_status = 1;
-                // $assessment->save();
+                $assessment->pdf_status = 1;
+                $assessment->save();
             }else{
                 // TODO: 
                 $chartImageMissingAssessments[] = $assessment;
@@ -195,5 +223,22 @@ class GenerateAssessmentReport implements CommandInterface
                 Mail::send($sendTo, 'Urgent: Assessment Charts are missing', 'assessment-images-missing', ['assessments' => $chartImageMissingAssessments]);
             }
         }
+    }
+
+    protected function createPDFReportFile(string $filePath = '', string $html = '', array $attributes = []){
+        if(empty($filePath) || empty($html) || empty($attributes))
+            return false;
+
+        // Generate PDF
+        $start = microtime(true);
+        $html2pdf = new Html2Pdf('P', $attributes['layout'], 'fr', true, 'UTF-8', $attributes['spacing']);
+        $html2pdf->pdf->SetDisplayMode('fullpage');
+        $html2pdf->setTestTdInOnePage(false);
+        $html2pdf->writeHTML($html);
+        Logger::info("HTML parsing took " . (microtime(true) - $start) . " sec");
+        // Save PDF file
+        $html2pdf->output($filePath, 'F'); // 'F' = Save to file
+        Logger::info("Output writing took " . (microtime(true) - $start) . " sec (total)");
+        return true;
     }
 }

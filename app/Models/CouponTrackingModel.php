@@ -16,7 +16,7 @@ class CouponTrackingModel extends BaseModel
     
     public function coupon(): BelongsTo
     {
-        return $this->belongsTo(UserModel::class, 'coupon_id', 'coupon_id');
+        return $this->belongsTo(CouponModel::class, 'coupon_id', 'coupon_id');
     }
     
     public function affiliate(): BelongsTo
