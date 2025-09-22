@@ -178,7 +178,7 @@
                                             </td>
                                             <td valign="top" style="padding:12px 8px;border-collapse:collapse;border-left:1px solid #d3d3d3;border-bottom:1px solid #d3d3d3" align="center">
                                                 <p style="text-align:center;Margin-top:0px;Margin-bottom:0px;font-family: Helvetica, sans-serif; vertical-align: top;"> 
-                                                    <?=date("m/d/Y", strtotime($assessment->payment->payment_datetime))?>
+                                                    <?=date("m-d-Y", strtotime($assessment->payment->payment_datetime))?>
                                                 </p>
                                             </td>
                                             <td style="padding:12px 8px;text-align:right;border-collapse:collapse;border-left:1px solid #d3d3d3;border-bottom:1px solid #d3d3d3">
