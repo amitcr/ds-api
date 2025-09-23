@@ -15,7 +15,7 @@ use Carbon\Carbon;
 
 class DeleteDuplicateAssessments implements CommandInterface
 {
-    public $signature = 'assessments:delete-duplicates {days=1}';
+    public $signature = 'assessments:delete-duplicates';
     public $description = 'Sync Assessment stats with the google sheet.';
 
     public function handle($arguments)
