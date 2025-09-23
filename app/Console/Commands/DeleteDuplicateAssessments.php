@@ -9,6 +9,7 @@ use App\Models\AssessmentRelationshipModel;
 use App\Models\CouponTrackingModel;
 use App\Models\AssessmentModel;
 use App\Models\AssessmentPaymentModel;
+use App\Models\UserModel;
 use App\Core\Logger;
 use App\Core\Config;
 use Carbon\Carbon;
