@@ -5,7 +5,7 @@ use App\Core\CommandInterface;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\ParticipantModel;
-use App\Models\AssessmentRelationshipModel;
+use App\Models\AssessmentRelationshipsModel;
 use App\Models\CouponTrackingModel;
 use App\Models\AssessmentModel;
 use App\Models\AssessmentPaymentModel;
