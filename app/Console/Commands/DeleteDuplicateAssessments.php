@@ -15,12 +15,12 @@ use Carbon\Carbon;
 
 class DeleteDuplicateAssessments implements CommandInterface
 {
-    public $signature = 'assessments:delete-duplicates';
+    public $signature = 'assessments:delete-duplicates {days=1}';
     public $description = 'Sync Assessment stats with the google sheet.';
 
     public function handle($arguments)
     {
-        $days = $arguments['days'] ?? 30;
+        $days = $arguments['days'] ?? 1;
         $questionsCompleted = $days == 30 ? 4 : 1;
         $registeredDate = Carbon::now()->subDays($days)->toDateString();
 
