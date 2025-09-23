@@ -37,9 +37,7 @@ class Kernel extends CronKernel
         // $schedule->command('assessments:delete-duplicates days=1')->dailyAt('06:00')->timezone('UTC');
         // $schedule->command('assessments:delete-duplicates days=30')->dailyAt('06:00')->timezone('UTC');
         // $schedule->command('assessments:delete-duplicates days=180')->dailyAt('06:00')->timezone('UTC');
-        $schedule->command('assessments:delete-duplicates --days=1')->everyMinute();
-        $schedule->command('assessments:delete-duplicates --days=30')->everyMinute();
-        $schedule->command('assessments:delete-duplicates --days=180')->everyMinute();
+        $schedule->command('assessments:delete-duplicates')->everyMinute();
 
     }
 

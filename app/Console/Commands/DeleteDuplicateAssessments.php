@@ -20,42 +20,42 @@ class DeleteDuplicateAssessments implements CommandInterface
 
     public function handle($arguments)
     {
-        $days = $arguments['days'] ?? 1;
-        $questionsCompleted = $days == 30 ? 4 : 1;
-        $registeredDate = Carbon::now()->subDays($days)->toDateString();
+        $daysPeriod = [1,30,180];
+        foreach($daysPeriod as $days){
+            $registeredDate = Carbon::now()->subDays($days)->toDateString();
+            $query = ParticipantModel::where('temp', 1)->whereDate('date_registered', '<=', $registeredDate);
+            if($days != 180){
+                $questionsCompleted = $days == 30 ? 4 : 1;
+                $query->whereHas('assessments', function ($q) {
+                    $q->whereIn('assessment_status', ['new', 'start'])
+                    ->where('questionsCompleted', '<', $questionsCompleted);
+                });
+            }
 
-        // 1. Get matching participants in one query
-        $query = ParticipantModel::where('temp', 1)->whereDate('date_registered', '<=', $registeredDate);
-        if($days != 180){
-            $query->whereHas('assessments', function ($q) {
-                $q->whereIn('assessment_status', ['new', 'start'])
-                ->where('questionsCompleted', '<', $questionsCompleted);
-            });
-        }
+            $duplicateParticipants = $query->get(['participant_id', 'user_id']); // fetch only what we need
 
-        $duplicateParticipants = $query->get(['participant_id', 'user_id']); // fetch only what we need
+            if ($duplicateParticipants->isNotEmpty()) {
+                $participantIds = $duplicateParticipants->pluck('participant_id');
+                $userIds        = $duplicateParticipants->pluck('user_id');
 
-        if ($duplicateParticipants->isNotEmpty()) {
-            $participantIds = $duplicateParticipants->pluck('participant_id');
-            $userIds        = $duplicateParticipants->pluck('user_id');
+                DB::transaction(function () use ($participantIds, $userIds) {
+                    if($days == 30){
+                        UserModel::whereIn('ID', $userIds)->delete();
+                    }else {
+                        // 2. Bulk delete related data
+                        AssessmentRelationshipsModel::whereIn('participant_id', $participantIds)->delete();
+                        CouponTrackingModel::whereIn('participant_id', $participantIds)->delete();
+                        AssessmentModel::whereIn('participant_id', $participantIds)->delete();
+                        AssessmentPaymentModel::whereIn('participant_id', $participantIds)->delete();
 
-            DB::transaction(function () use ($participantIds, $userIds) {
-                if($days == 30){
-                    UserModel::whereIn('ID', $userIds)->delete();
-                }else {
-                    // 2. Bulk delete related data
-                    AssessmentRelationshipsModel::whereIn('participant_id', $participantIds)->delete();
-                    CouponTrackingModel::whereIn('participant_id', $participantIds)->delete();
-                    AssessmentModel::whereIn('participant_id', $participantIds)->delete();
-                    AssessmentPaymentModel::whereIn('participant_id', $participantIds)->delete();
+                        // 3. Delete users
+                        UserModel::whereIn('ID', $userIds)->delete();
 
-                    // 3. Delete users
-                    UserModel::whereIn('ID', $userIds)->delete();
-
-                    // 4. Delete participants last
-                    ParticipantModel::whereIn('participant_id', $participantIds)->delete();
-                }
-            });
+                        // 4. Delete participants last
+                        ParticipantModel::whereIn('participant_id', $participantIds)->delete();
+                    }
+                });
+            }
         }
 
     }
