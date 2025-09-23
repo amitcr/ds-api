@@ -25,8 +25,8 @@ class DeleteDuplicateAssessments implements CommandInterface
             $registeredDate = Carbon::now()->subDays($days)->toDateString();
             $query = ParticipantModel::where('temp', 1)->whereDate('date_registered', '<=', $registeredDate);
             if($days != 180){
-                $questionsCompleted = $days == 30 ? 4 : 1;
-                $query->whereHas('assessments', function ($q) {
+                $questionsCompleted = ($days == 30) ? 4 : 1;
+                $query->whereHas('assessments', function ($q, $questionsCompleted) {
                     $q->whereIn('assessment_status', ['new', 'start'])
                     ->where('questionsCompleted', '<', $questionsCompleted);
                 });
