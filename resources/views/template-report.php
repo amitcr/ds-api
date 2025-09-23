@@ -22861,7 +22861,20 @@ $the_report_pattern = "The ".$report_pattern;
             </td>
         </tr>
 
-        <?php // apply_filters('mytemp_pdf_report_conclusion_page_bottom', $participant_id); ?>
+        <?php if(isset($promotionalCoupon) && !empty($promotionalCoupon)){ ?>
+        <tr>
+            <td align="left" style="width: 85%; display: inline-block; padding-bottom:30px">
+                <p style="color: #231f20; font-size: 15pt; margin: 0px; line-height: 24px;font-family: 'proxima_novabold';margin-top:30px; margin-bottom:8px;">
+                    Invite others to take the Assessment at Discount!
+                </p>
+                <div style="background: #f0f4f7; padding:20px 30px;">
+                    <p style="witdh:100%; display:inline-block; font-family:'proxima_nova_light'; text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom:15px;">As a thank you and token of our appreciation, we're excited to offer you a special link to share with your friends, loved ones, and co-workers. Using your exclusive link, they can access the same comprehensive assessment and receive their Personal Report for just $<?=$promotionalCoupon->end_price?>—that's a $<?=$promotionalCoupon->discount_amount?> discount off the regular price!</p>
+                    <p style="witdh:100%; display:inline-block; font-family:'proxima_novabold'; text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; word-wrap:break-word; padding-bottom:0px;"><img src="<?=WPAFFCOUPON_PLUGIN_DIR?>/assets/images/share-from-square-solid.png" style="width:3%; display:inline-block;" /><span style="width:5%; display:inline-block;">&nbsp;</span><span style="width:91%; display:inline-block; padding-left:20px;">Click below to get your exclusive link: </span></p>
+                    <p style="witdh:100%; display:inline-block; font-family:'proxima_novabold'; text-align:left; color: #41afef; font-size: 13pt; margin: 0px; line-height: 22px; word-wrap:break-word; margin-top:5px; padding:0px;"><a href="<?=get_settings_option('home').'/share/?src='.$assessment->participant_id.'q'?>" style="color: #41afef; text-decoration:none;" ><span style="color: #41afef;"><?=get_settings_option('home').'/share?src='.$assessment->participant_id.'q'?></span></a></p>  
+                </div>
+            </td>
+        </tr>
+        <?php } ?>
     </table>
 
     

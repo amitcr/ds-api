@@ -257,9 +257,30 @@
                                 </table>
 
                                 <?php 
-
-                                // do_action('mytemp_payment_confirmation_mail_footer_content', $assessment_id, $participant_id);
+                                if(isset($promotionalCoupon) && !empty($promotionalCoupon)){
                                 ?>
+                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%; min-width: 100%; margin-top:30px;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; padding-bottom: 5px;" valign="top">
+                                                    <h3 style="font-family: Helvetica, sans-serif;  font-weight: bold;font-size: 20px;text-align:left;margin: 0;padding-bottom: 5px; margin-top: 20px; color: #001c40;">Share with Others</h3>
+                                                    <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; line-height: 24px;">As a token of our appreciation, we're excited to offer you a special link to share. Your friends, loved ones, and co-workers can access our comprehensive online personality assessment and receive their Personal Report, for just $<?=$promotionalCoupon->end_price?> - a $<?=$promotionalCoupon->discount_amount?> discount off the regular price!</p>
+
+                                                    
+                                                    <div style="width:100%; display:inline-block; padding-bottom:25px;">
+                                                        <div style="width:6%; display:inline-block; vertical-align: middle;">
+                                                            <img src="<?=get_settings_option('home')?>/wp-content/plugins/wp-affiliates-coupons/assets/images/share-from-square-solid.png" style="width:100%;"/> 
+                                                        </div>
+                                                        <div style="width:90%; display:inline-block; vertical-align: middle; padding-left:10px;">
+                                                            <div style="font-weight:bold; font-size:17px; margin-bottom:3px;">Click below to get your exclusive link:</div>
+                                                            <div style="font-weight:bold; font-size:16px;"><a href="<?=strtolower(get_settings_option('home').'/share/?src='.$assessment->participant_id.'q' )?>" style="color:#41afef !important;"><?=strtolower(get_settings_option('home').'/share/?src='.$assessment->participant_id.'q' )?></a></div>
+                                                        </div> 
+                                                    </div>  
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                <?php } ?>
 
                                 <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">
                                     If you have questions, <a style="color:#4688dd" href="<?=get_settings_option('home')?>/contact" target="_blank">please click here to contact us</a>

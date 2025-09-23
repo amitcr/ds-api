@@ -145,16 +145,23 @@ class GenerateAssessmentReport implements CommandInterface
                     continue;
                 }
 
+                $promotionalCoupon = null;
+                $isPromotional = get_settings_option('affcp_settings.is_promotional');
+                if($isPromotional == true){
+                    $promotionCouponCode = get_settings_option('affcp_settings.promotional_code');
+                    if(!empty($promotionCouponCode)){
+                        $promotionalCoupon = CouponModel::where(['coupon_code' => $promotionCouponCode])->first();
+                    }
+                }
+
                 // pr($needsAssessmentChoices); die;
                 // Render the template with PHP variables
-                
                 ob_start();
                 include PROJECT_ROOT . '/api/resources/views/template-report.php';
                 $personalReportHtml = ob_get_clean();
 
                 $this->createPDFReportFile($personalFilePath, $personalReportHtml, ['layout' => array(215,307), 'spacing' => array(0,0,0,0)]);
                 
-
                 $holdReport = false;
                 // Valdiate If Manager Report Required
                 $assessmentCoupon = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->first();
@@ -203,7 +210,7 @@ class GenerateAssessmentReport implements CommandInterface
                     $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $assessment->user->user_email;
                     if(!empty($sendTo)){
                         $assessmentCoupons = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->get();
-                        Mail::send($sendTo, 'Thank you for your payment', 'assessment-payment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName, 'assessmentCoupons' => $assessmentCoupons]);
+                        Mail::send($sendTo, 'Thank you for your payment', 'assessment-payment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName, 'assessmentCoupons' => $assessmentCoupons, 'promotionalCoupon' => $promotionalCoupon]);
                     }
                 }
 

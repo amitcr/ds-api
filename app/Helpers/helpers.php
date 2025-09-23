@@ -1,6 +1,6 @@
 <?php
 use App\Models\OptionsModel;
-use App\Models\PostsModel;
+use App\Models\PostModel;
 use App\Core\Config;
 
 if (!function_exists('dd')) {
@@ -42,7 +42,7 @@ if(!function_exists('get_assessment_self_page_link')){
         if(empty($page_id))
             return;
 
-        $post = PostsModel::find($page_id);
+        $post = PostModel::find($page_id);
         if(empty($post))
             return;
 
@@ -69,7 +69,7 @@ if(!function_exists('get_assessment_needs_page_link')){
         if(empty($page_id))
             return;
 
-        $post = PostsModel::find($page_id);
+        $post = PostModel::find($page_id);
         if(empty($post))
             return;
 
@@ -95,7 +95,7 @@ if(!function_exists('get_assessment_payment_page_link')){
         if(empty($page_id))
             return;
 
-        $post = PostsModel::find($page_id);
+        $post = PostModel::find($page_id);
         if(empty($post))
             return;
 

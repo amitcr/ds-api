@@ -6,7 +6,7 @@ use App\Core\CommandInterface;
 use App\Models\AssessmentModel;
 use App\Models\UserModel;
 use App\Models\UserMetaModel;
-use App\Models\PostsModel;
+use App\Models\PostModel;
 use App\Models\TestingEntryModel;
 use App\Services\Mailjet\ContactsService;
 use App\Services\Mailjet\ContactDataService;
@@ -128,7 +128,7 @@ class AbandonedAssessmentFollowUp implements CommandInterface
                     $contactData["Data"][] = ["Name"  =>  "secondary", "Value"  => ucwords(strtolower($assessmentResults->details->preferenceRankedTemperaments[1]))];
                 }
 
-                $post = PostsModel::find(get_settings_option('mytemp_settings.mytemp_mini_report'));
+                $post = PostModel::find(get_settings_option('mytemp_settings.mytemp_mini_report'));
                 if(!empty($post)){
                     $contactData["Data"][] = ["Name"  =>  "minireport", "Value"  => $post->guid."?mjuid=".md5($assessment->user_id).'&ftaid='.md5($assessment->assessment_id)."&sessionId=".md5($assessment->assessment_id)];
                 }
