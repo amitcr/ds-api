@@ -26,7 +26,7 @@ class DeleteDuplicateAssessments implements CommandInterface
             $query = ParticipantModel::where('temp', 1)->whereDate('date_registered', '<=', $registeredDate);
             if($days != 180){
                 $questionsCompleted = ($days == 30) ? 4 : 1;
-                $query->whereHas('assessments', function ($q, $questionsCompleted) {
+                $query->whereHas('assessments', function ($q) use ($questionsCompleted) {
                     $q->whereIn('assessment_status', ['new', 'start'])
                     ->where('questionsCompleted', '<', $questionsCompleted);
                 });
