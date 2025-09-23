@@ -5,7 +5,7 @@ use App\Core\CommandInterface;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\ParticipantModel;
-use App\Models\AssessmentRelationshipsModel;
+use App\Models\AssessmentRelationshipModel;
 use App\Models\CouponTrackingModel;
 use App\Models\AssessmentModel;
 use App\Models\AssessmentPaymentModel;
@@ -43,7 +43,7 @@ class DeleteDuplicateAssessments implements CommandInterface
                         UserModel::whereIn('ID', $userIds)->delete();
                     }else {
                         // 2. Bulk delete related data
-                        AssessmentRelationshipsModel::whereIn('participant_id', $participantIds)->delete();
+                        AssessmentRelationshipModel::whereIn('participant_id', $participantIds)->delete();
                         CouponTrackingModel::whereIn('participant_id', $participantIds)->delete();
                         AssessmentModel::whereIn('participant_id', $participantIds)->delete();
                         AssessmentPaymentModel::whereIn('participant_id', $participantIds)->delete();
