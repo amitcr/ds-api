@@ -39,7 +39,7 @@ class DeleteDuplicateAssessments implements CommandInterface
                 $participantIds = $duplicateParticipants->pluck('participant_id');
                 $userIds        = $duplicateParticipants->pluck('user_id');
 
-                DB::transaction(function () use ($participantIds, $userIds) {
+                DB::transaction(function () use ($participantIds, $userIds, $days) {
                     if($days == 30){
                         UserModel::whereIn('ID', $userIds)->delete();
                     }else {
