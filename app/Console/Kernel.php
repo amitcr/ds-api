@@ -12,6 +12,7 @@ use App\Console\Commands\UpcomingAutoRechargeReminder;
 use App\Console\Commands\AbandonedAssessmentFollowUp;
 use App\Console\Commands\ExportAssessmentStats;
 use App\Console\Commands\GenerateAssessmentReport;
+use App\Console\Commands\DeleteDuplicateAssessments;
 
 class Kernel extends CronKernel
 {
@@ -33,6 +34,9 @@ class Kernel extends CronKernel
         $schedule->command('assessments:abandoned-followup')->everyMinute();
         $schedule->command('assessments:sync-stats')->dailyAt('06:00')->timezone('UTC');
         $schedule->command('assessments:generate-report')->everyMinute();
+        $schedule->command('assessments:delete-duplicates days=1')->dailyAt('06:00')->timezone('UTC');
+        $schedule->command('assessments:delete-duplicates days=30')->dailyAt('06:00')->timezone('UTC');
+        $schedule->command('assessments:delete-duplicates days=180')->dailyAt('06:00')->timezone('UTC');
 
     }
 
@@ -49,5 +53,6 @@ class Kernel extends CronKernel
         $this->register(AbandonedAssessmentFollowUp::class);
         $this->register(ExportAssessmentStats::class);
         $this->register(GenerateAssessmentReport::class);
+        $this->register(DeleteDuplicateAssessments::class);
     }
 }
