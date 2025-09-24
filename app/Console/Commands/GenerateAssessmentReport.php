@@ -40,208 +40,193 @@ class GenerateAssessmentReport implements CommandInterface
 
     public function handle($arguments)
     {
-        Logger::info('cron assessments:generate-report started: ', $arguments);
-        if(isset($arguments['assessment_id']) && !empty($arguments['assessment_id'])){
-            $assessment = AssessmentModel::with('user', 'payment')->find($arguments['assessment_id']);
-            if(!empty($assessment)){
-                $this->processAssessmentReportGeneration($assessment);
-            }
-        }else{
-            $modifiedAt = Carbon::now()->subMinutes(2);
-            // Logger::info('cron assessments:generate-report started with modifiedAt: '.$modifiedAt);
-            $assessments = AssessmentModel::with('user', 'payment')->where('assessment_status', 'finished')
-                ->where('pdf_status', 0)
-                ->whereNull('pdf_script')
-                ->where('modified_at', '<=', $modifiedAt)
-                ->orderByDesc('assessment_id')
-                ->get();
+        $modifiedAt = Carbon::now()->subMinutes(2);
+        // Logger::info('cron assessments:generate-report started with modifiedAt: '.$modifiedAt);
+        $assessments = AssessmentModel::with('user', 'payment')->where('assessment_status', 'finished')
+            ->where('pdf_status', 0)
+            ->whereNull('pdf_script')
+            ->where('modified_at', '<=', $modifiedAt)
+            ->orderByDesc('assessment_id')
+            ->get();
 
-            
-            if($assessments->isEmpty())
-                return;
-
-            foreach($assessments as $assessment){
-                $this->processAssessmentReportGeneration($assessment);
-            }
-
-            // echo 'Missing Chart Image Assessments: '; pr($chartImageMissingAssessments); die;
-            // if(!empty($chartImageMissingAssessments) && (date("i", strtotime("+2 minutes ".$modifiedAt)) == '00' || date("i", strtotime("+2 minutes ".$modifiedAt)) % 15 == 0 ) ){
-            if(!empty($chartImageMissingAssessments) && (date("i", strtotime("+2 minutes ".$modifiedAt)) == '00') ){
-                $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : get_settings_option('admin_email');
-                if(!empty($sendTo)){
-                    Mail::send($sendTo, 'Urgent: Assessment Charts are missing', 'assessment-images-missing', ['assessments' => $chartImageMissingAssessments]);
-                }
-            }
-        }
-    }
-
-    protected function processAssessmentReportGeneration($assessment){
-        // echo $assessment->assessment_id; die;
-        // pr($assessment); die;
         
-        if($assessment->pdf_status ==1)
+        if($assessments->isEmpty())
             return;
 
-        $participantName = $assessment->first_name.' '.$assessment->last_name;
-        $personalReportName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at)).".pdf";
+        foreach($assessments as $assessment){
+            if($assessment->pdf_status ==1)
+                continue;
 
-        $personalFilePath = PROJECT_ROOT.'/assessments/pdf/'.$personalReportName;
-        // Validate if PDF file already created or not
-        if(file_exists($personalFilePath)){
-            Logger::info('Assessment Report already exists for '.$assessment->assessment_id);
-            $assessment->pdf_status = 1;   
-            $assessment->save();
-            return;
-        }
+            $participantName = $assessment->first_name.' '.$assessment->last_name;
+            $personalReportName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at)).".pdf";
 
-        if(get_assessment_chart_image($assessment->assessment_id) && get_assessment_chart_image($assessment->assessment_id, 'single')){
-            Logger::info('Generating Assessment Report for '.$assessment->assessment_id);
-            $assessmentResults = $this->selfAssessmentResultsService->getById($assessment->assessment_result_id);
-            $selfChoicesResponse = $this->selfAssessmentResponsesService->list(['participantSessionId' => $assessment->session_id]);
-            if(!isset($selfChoicesResponse->data) || empty($selfChoicesResponse->data)){
-                return;
+            $personalFilePath = PROJECT_ROOT.'/assessments/pdf/'.$personalReportName;
+            // Validate if PDF file already created or not
+            if(file_exists($personalFilePath)){
+                Logger::info('Assessment Report already exists for '.$assessment->assessment_id);
+                $assessment->pdf_status = 1;   
+                $assessment->save();
+                continue;
             }
 
-            $dMostChoices = $iMostChoices = $sMostChoices = $cMostChoices = array();
-            $dLeastChoices = $iLeastChoices = $sLeastChoices = $cLeastChoices = array();
+            if(get_assessment_chart_image($assessment->assessment_id) && get_assessment_chart_image($assessment->assessment_id, 'single')){
+                Logger::info('Generating Assessment Report for '.$assessment->assessment_id);
+                $assessmentResults = $this->selfAssessmentResultsService->getById($assessment->assessment_result_id);
+                $selfChoicesResponse = $this->selfAssessmentResponsesService->list(['participantSessionId' => $assessment->session_id]);
+                if(!isset($selfChoicesResponse->data) || empty($selfChoicesResponse->data)){
+                    continue;
+                }
 
-            $queryParams = [];
-            foreach($selfChoicesResponse->data as $index=>$choicedata){
-                $queryParams[] = 'questionId[$in]='.$choicedata->questionId;
-            }
-            
-            if(empty($queryParams)){
-                return;
-            }
+                $dMostChoices = $iMostChoices = $sMostChoices = $cMostChoices = array();
+                $dLeastChoices = $iLeastChoices = $sLeastChoices = $cLeastChoices = array();
 
-            $queryParams[] = '$limit=10000000';
-            $selfAssessmentChoices = $this->selfAssessmentChoicesService->listByQueryParams( $queryParams );
-            if(!isset($selfAssessmentChoices->data) || empty($selfAssessmentChoices->data)){
-                return;
-            }
-            
-            foreach($selfChoicesResponse->data as $index=>$choicedata){
-                // pr($choicedata); die;
-                $MostarrayKey = array_search($choicedata->mostChoiceId, array_column($selfAssessmentChoices->data, "id") );
-                $LeastarrayKey = array_search($choicedata->leastChoiceId, array_column($selfAssessmentChoices->data, "id") );
+                $queryParams = [];
+                foreach($selfChoicesResponse->data as $index=>$choicedata){
+                    $queryParams[] = 'questionId[$in]='.$choicedata->questionId;
+                }
                 
-                if($MostarrayKey!== false){
-                    if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "choleric"){
-                        $dMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];
-                    }else if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "sanguine"){
-                        $iMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];
-                    }else if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "phlegmatic"){
-                        $sMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];						
-                    }else if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "melancholy"){
-                        $cMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];
-                    }
+                if(empty($queryParams)){
+                    continue;
                 }
-                if($LeastarrayKey!== false){
-                    if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "choleric"){
-                        $dLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
-                    }else if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "sanguine"){
-                        $iLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
-                    }else if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "phlegmatic"){
-                        $sLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
-                    }else if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "melancholy"){
-                        $cLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
-                    }
+
+                $queryParams[] = '$limit=10000000';
+                $selfAssessmentChoices = $this->selfAssessmentChoicesService->listByQueryParams( $queryParams );
+                if(!isset($selfAssessmentChoices->data) || empty($selfAssessmentChoices->data)){
+                    continue;
                 }
-            }                 
-
-            $needsChoicesResponse = $this->needsAssessmentResponsesService->list(['participantSessionId' => $assessment->session_id]);
-            if(!isset($needsChoicesResponse->data) || empty($needsChoicesResponse->data)){
-                return;
-            }
-            $queryParams = ["surveyId=".$assessment->needs_survey_id];
-            foreach($needsChoicesResponse->data as $index=>$choicedata){
-                $queryParams[] = 'id[$in]='.$choicedata->choiceId;
-            }
-
-            if(empty($queryParams)){
-                return;
-            }
-
-            $needsAssessmentChoices = $this->needsAssessmentChoicesService->listByQueryParams( $queryParams );
-            if(!isset($needsAssessmentChoices->data) || empty($needsAssessmentChoices->data)){                    
-                return;
-            }
-
-            $promotionalCoupon = null;
-            $isPromotional = get_settings_option('affcp_settings.is_promotional');
-            if($isPromotional == true){
-                $promotionCouponCode = get_settings_option('affcp_settings.promotional_code');
-                if(!empty($promotionCouponCode)){
-                    $promotionalCoupon = CouponModel::where(['coupon_code' => $promotionCouponCode])->first();
-                }
-            }
-
-            // pr($needsAssessmentChoices); die;
-            // Render the template with PHP variables
-            ob_start();
-            include PROJECT_ROOT . '/api/resources/views/template-report.php';
-            $personalReportHtml = ob_get_clean();
-
-            $this->createPDFReportFile($personalFilePath, $personalReportHtml, ['layout' => array(215,307), 'spacing' => array(0,0,0,0)]);
-            
-            $holdReport = false;
-            // Valdiate If Manager Report Required
-            $assessmentCoupon = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->first();
-            // Logger::info("Assessment Coupons ", (array) $assessmentCoupon);
-            if(!empty($assessmentCoupon)){
-                $coupon = CouponModel::with('user','affiliate','company')->find($assessmentCoupon->coupon_id);
-                if(!empty($coupon)){                        
-                    $holdReport = $coupon->hold_report ??0;
-                    $managerReportName = $managerFilePath = '';
-                    if($coupon->manager_report == 1){
-                        Logger::info("Genrating Assessment Manager Report ");
-                        $managerReportName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at))."-Manager-Report.pdf";
-                        $managerFilePath = PROJECT_ROOT.'/assessments/pdf/'.$managerReportName;
-                        if(!file_exists($managerFilePath)){
-                            // Render the template with PHP variables
-                            ob_start();
-                            include PROJECT_ROOT . '/api/resources/views/template-manager-report.php';
-                            $managerReportHtml = ob_get_clean();
-
-                            $this->createPDFReportFile($managerFilePath, $managerReportHtml, ['layout' => 'A4', 'spacing' => array(10, 5, 10, 5)]);
+                
+                foreach($selfChoicesResponse->data as $index=>$choicedata){
+                    // pr($choicedata); die;
+                    $MostarrayKey = array_search($choicedata->mostChoiceId, array_column($selfAssessmentChoices->data, "id") );
+                    $LeastarrayKey = array_search($choicedata->leastChoiceId, array_column($selfAssessmentChoices->data, "id") );
+                    
+                    if($MostarrayKey!== false){
+                        if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "choleric"){
+                            $dMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];
+                        }else if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "sanguine"){
+                            $iMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];
+                        }else if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "phlegmatic"){
+                            $sMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];						
+                        }else if(strtolower($selfAssessmentChoices->data[$MostarrayKey]->temperament) == "melancholy"){
+                            $cMostChoices[] = $selfAssessmentChoices->data[$MostarrayKey];
                         }
                     }
-
-                    $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $coupon->user->user_email;
-                    if(!empty($sendTo)){
-                        Mail::send($sendTo, 'New Assessment Profile', 'affiliate-company-assessment-notification', ['assessment' => $assessment, 'coupon' => $coupon, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName , 'managerFilePath' => $managerFilePath, 'managerReportName' => $managerReportName]);
+                    if($LeastarrayKey!== false){
+                        if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "choleric"){
+                            $dLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
+                        }else if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "sanguine"){
+                            $iLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
+                        }else if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "phlegmatic"){
+                            $sLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
+                        }else if(strtolower($selfAssessmentChoices->data[$LeastarrayKey]->temperament) == "melancholy"){
+                            $cLeastChoices[] = $selfAssessmentChoices->data[$LeastarrayKey];
+                        }
                     }
+                }                 
 
-                    if(!empty($coupon->other_recipients)){
-                        $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $coupon->other_recipients;
+                $needsChoicesResponse = $this->needsAssessmentResponsesService->list(['participantSessionId' => $assessment->session_id]);
+                if(!isset($needsChoicesResponse->data) || empty($needsChoicesResponse->data)){
+                    continue;
+                }
+                $queryParams = ["surveyId=".$assessment->needs_survey_id];
+                foreach($needsChoicesResponse->data as $index=>$choicedata){
+                    $queryParams[] = 'id[$in]='.$choicedata->choiceId;
+                }
+
+                if(empty($queryParams)){
+                    continue;
+                }
+
+                $needsAssessmentChoices = $this->needsAssessmentChoicesService->listByQueryParams( $queryParams );
+                if(!isset($needsAssessmentChoices->data) || empty($needsAssessmentChoices->data)){                    
+                    continue;
+                }
+
+                $promotionalCoupon = null;
+                $isPromotional = get_settings_option('affcp_settings.is_promotional');
+                if($isPromotional == true){
+                    $promotionCouponCode = get_settings_option('affcp_settings.promotional_code');
+                    if(!empty($promotionCouponCode)){
+                        $promotionalCoupon = CouponModel::where(['coupon_code' => $promotionCouponCode])->first();
+                    }
+                }
+
+                // pr($needsAssessmentChoices); die;
+                // Render the template with PHP variables
+                ob_start();
+                include PROJECT_ROOT . '/api/resources/views/template-report.php';
+                $personalReportHtml = ob_get_clean();
+
+                $this->createPDFReportFile($personalFilePath, $personalReportHtml, ['layout' => array(215,307), 'spacing' => array(0,0,0,0)]);
+                
+                $holdReport = false;
+                // Valdiate If Manager Report Required
+                $assessmentCoupon = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->first();
+                // Logger::info("Assessment Coupons ", (array) $assessmentCoupon);
+                if(!empty($assessmentCoupon)){
+                    $coupon = CouponModel::with('user','affiliate','company')->find($assessmentCoupon->coupon_id);
+                    if(!empty($coupon)){                        
+                        $holdReport = $coupon->hold_report ??0;
+                        $managerReportName = $managerFilePath = '';
+                        if($coupon->manager_report == 1){
+                            Logger::info("Genrating Assessment Manager Report ");
+                            $managerReportName = $assessment->assessment_id."-".trim(str_replace(" ", "-", $participantName)).'-'. date("m-d-Y", strtotime($assessment->created_at))."-Manager-Report.pdf";
+                            $managerFilePath = PROJECT_ROOT.'/assessments/pdf/'.$managerReportName;
+                            if(!file_exists($managerFilePath)){
+                                // Render the template with PHP variables
+                                ob_start();
+                                include PROJECT_ROOT . '/api/resources/views/template-manager-report.php';
+                                $managerReportHtml = ob_get_clean();
+
+                                $this->createPDFReportFile($managerFilePath, $managerReportHtml, ['layout' => 'A4', 'spacing' => array(10, 5, 10, 5)]);
+                            }
+                        }
+
+                        $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $coupon->user->user_email;
                         if(!empty($sendTo)){
-                            Mail::send($sendTo, 'New Assessment Profile', 'assessment-notification-recipients', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName]);
-                        }   
+                            Mail::send($sendTo, 'New Assessment Profile', 'affiliate-company-assessment-notification', ['assessment' => $assessment, 'coupon' => $coupon, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName , 'managerFilePath' => $managerFilePath, 'managerReportName' => $managerReportName]);
+                        }
+
+                        if(!empty($coupon->other_recipients)){
+                            $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $coupon->other_recipients;
+                            if(!empty($sendTo)){
+                                Mail::send($sendTo, 'New Assessment Profile', 'assessment-notification-recipients', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName]);
+                            }   
+                        }
                     }
                 }
-            }
 
-            if($holdReport == false){
-                $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $assessment->user->user_email;
-                if(!empty($sendTo)){
-                    Mail::send($sendTo, 'Your MyTemperament Assessment Profile', 'participant-assessment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName]);
+                if($holdReport == false){
+                    $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $assessment->user->user_email;
+                    if(!empty($sendTo)){
+                        Mail::send($sendTo, 'Your MyTemperament Assessment Profile', 'participant-assessment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName]);
+                    }
                 }
-            }
 
-            if($assessment->payment->end_price > 0){
-                $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $assessment->user->user_email;
-                if(!empty($sendTo)){
-                    $assessmentCoupons = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->get();
-                    Mail::send($sendTo, 'Thank you for your payment', 'assessment-payment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName, 'assessmentCoupons' => $assessmentCoupons, 'promotionalCoupon' => $promotionalCoupon]);
+                if($assessment->payment->end_price > 0){
+                    $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : $assessment->user->user_email;
+                    if(!empty($sendTo)){
+                        $assessmentCoupons = CouponTrackingModel::where(['assessment_id' => $assessment->assessment_id, 'usage_status' => 'completed'])->orderBy('id', 'ASC')->get();
+                        Mail::send($sendTo, 'Thank you for your payment', 'assessment-payment-notification', ['assessment' => $assessment, 'personalFilePath' => $personalFilePath, 'personalReportName' => $personalReportName, 'assessmentCoupons' => $assessmentCoupons, 'promotionalCoupon' => $promotionalCoupon]);
+                    }
                 }
-            }
 
-            // Mark as generated
-            $assessment->pdf_status = 1;
-            $assessment->save();
-        }else{
-            // TODO: 
-            $chartImageMissingAssessments[] = $assessment;
+                // Mark as generated
+                $assessment->pdf_status = 1;
+                $assessment->save();
+            }else{
+                // TODO: 
+                $chartImageMissingAssessments[] = $assessment;
+            }
+        }
+
+        // echo 'Missing Chart Image Assessments: '; pr($chartImageMissingAssessments); die;
+        // if(!empty($chartImageMissingAssessments) && (date("i", strtotime("+2 minutes ".$modifiedAt)) == '00' || date("i", strtotime("+2 minutes ".$modifiedAt)) % 15 == 0 ) ){
+        if(!empty($chartImageMissingAssessments) && (date("i", strtotime("+2 minutes ".$modifiedAt)) == '00') ){
+            $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : get_settings_option('admin_email');
+            if(!empty($sendTo)){
+                Mail::send($sendTo, 'Urgent: Assessment Charts are missing', 'assessment-images-missing', ['assessments' => $chartImageMissingAssessments]);
+            }
         }
     }
 
