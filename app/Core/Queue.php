@@ -33,15 +33,17 @@ class Queue
      */
     public function fetchNext(): ?JobModel
     {
-        return JobModel::where('status', 'pending')
+        $job = JobModel::where('status', 'pending')
             ->orderBy('id', 'ASC')
             ->lockForUpdate()
-            ->first()
-            ->tap(function($job) {
-                if ($job) {
-                    $job->increment('attempts');
-                }
-            });
+            ->first();
+
+        if ($job) {
+            $job->increment('attempts');
+            return $job;
+        }
+
+        return null;
     }
 
     /**
