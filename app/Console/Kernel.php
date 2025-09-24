@@ -10,7 +10,6 @@ use App\Console\Commands\CouponExpiryReminderEmail;
 use App\Console\Commands\CouponAutoRecharge;
 use App\Console\Commands\UpcomingAutoRechargeReminder;
 use App\Console\Commands\AbandonedAssessmentFollowUp;
-use App\Console\Commands\ExportAssessmentStats;
 use App\Console\Commands\GenerateAssessmentReport;
 use App\Console\Commands\DeleteDuplicateAssessments;
 use App\Console\QueueWorkerCommand;
@@ -33,7 +32,6 @@ class Kernel extends CronKernel
         $schedule->command('coupons:expire-status')->dailyAt('06:00')->timezone('UTC');
 
         $schedule->command('assessments:abandoned-followup')->everyMinute();
-        $schedule->command('assessments:sync-stats')->dailyAt('06:00')->timezone('UTC');
         $schedule->command('assessments:generate-report')->everyMinute();
         $schedule->command('assessments:delete-duplicates')->dailyAt('06:00')->timezone('UTC');
 
@@ -50,7 +48,6 @@ class Kernel extends CronKernel
         $this->register(CouponAutoRecharge::class);
         $this->register(UpcomingAutoRechargeReminder::class);
         $this->register(AbandonedAssessmentFollowUp::class);
-        $this->register(ExportAssessmentStats::class);
         $this->register(GenerateAssessmentReport::class);
         $this->register(DeleteDuplicateAssessments::class);
 
