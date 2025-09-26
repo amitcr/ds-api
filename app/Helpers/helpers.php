@@ -1,6 +1,7 @@
 <?php
 use App\Models\OptionsModel;
 use App\Models\PostModel;
+use App\Models\UserMetaModel;
 use App\Core\Config;
 
 if (!function_exists('dd')) {
@@ -229,5 +230,89 @@ if(!function_exists('get_assessment_chart_image')){
         }
 
         return false;
+    }
+}
+
+if(!function_exists('isJapanese')){
+    function isJapanese($string = ''){
+        if(empty($string))
+            return false;
+
+        return preg_match('/[\x{4E00}-\x{9FBF}\x{3040}-\x{309F}\x{30A0}-\x{30FF}]/u', $string);
+    }
+}
+
+if (!function_exists('trimAndLowerString')) {
+    function trimAndLowerString(?string $str): string {
+        return strtolower(trim((string)$str));
+    }
+}
+
+if(!function_exists('isEnglish')){
+    function isEnglish($string) {
+        if (strlen($string) != strlen(utf8_decode($string)))
+            return false;
+        
+        return true;	
+    }
+}
+
+if(!function_exists('addCustomLineBreak')){
+    function addCustomLineBreak($string, $length){
+        if(!isJapanese($string))
+            return $string;
+            
+        return chunk_split_unicode($string, $length, " ");	
+    }
+}
+
+if(!function_exists('chunk_split_unicode')){
+    function chunk_split_unicode($str, $l = 76, $e = "\r\n") {
+        $tmp = array_chunk(
+            preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY), $l);
+        $str = "";
+        foreach ($tmp as $t) {
+            $str .= join("", $t) . $e;
+        }
+        return $str;
+    }
+}
+
+if(!function_exists('mytemp_custom_length_array_chunks')){
+    function mytemp_custom_length_array_chunks($array = array(), $length = ''){
+        if(empty($length))
+            return $array;
+
+        if(!empty($array) )
+            $array = array_chunk($array,$length);
+        
+        return $array;
+    }
+}
+
+if(!function_exists('get_assessment_participant_name')){
+    function get_assessment_participant_name($assessment, $nameType = 'full'){
+        if(empty($assessment))
+            return '';
+
+        $participantName = !empty($assessment->first_name) ? $assessment->first_name.' '.$assessment->last_name : (isset($assessment->user) ? $assessment->user_display_name : '');
+        $participantFirstName = !empty($assessment->first_name) ? $assessment->first_name : '';
+        if(empty($participantName)){
+            $participantFirstName = UserMetaModel::where(['user_id' => $assessment->user_id, 'meta_key' => 'first_name'])->value('meta_value');
+            $participantLastName = UserMetaModel::where(['user_id' => $assessment->user_id, 'meta_key' => 'last_name'])->value('meta_value');
+
+            if(!empty($participantFirstName)){
+                $participantName = $participantFirstName;
+                if(!empty($participantLastName)){
+                    $participantName .= ' '.$participantLastName;
+                }
+            }
+        }
+        if($nameType == 'first')
+            return $participantFirstName;
+        else if($nameType == 'last')
+            return $participantLastName;
+        else
+            return $participantName;
     }
 }

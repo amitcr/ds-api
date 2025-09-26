@@ -47,6 +47,7 @@ $report_pattern = "Performer";
 
 
 
+
 // S-D = Inspector
 $first_content = "Phlegmatic";
 $sec_content = "Choleric";
@@ -85,57 +86,46 @@ $report_pattern = "Analyst";
 $first_temperament = $second_temperament = '';
 if($first_content=="Choleric"){
 	$Top_one = "D";
-	$Top_one_label = "Chol";
-    $first_temperament = "Choleric";
+    $first_temperament = "Dominance";
 }else if($first_content=="Sanguine"){
 	$Top_one = "I";
-    $Top_one_label = "San";
-    $first_temperament = "Sanguine";
+    $first_temperament = "Influence";
 }else if($first_content=="Phlegmatic"){
 	$Top_one = "S";
-    $Top_one_label = "Phleg";
-    $first_temperament = "Phlegmatic";
+    $first_temperament = "Steadiness";
 }else if($first_content=="Melancholy"){
 	$Top_one = "C";
-    $Top_one_label = "Mel";
-    $first_temperament = "Melancholy";
+    $first_temperament = "Compliance";
 }
 
 if($sec_content=="Choleric"){
 	$Top_two = "D";
-    $Top_two_label = "Chol";
-    $second_temperament = "Choleric";
+    $second_temperament = "Dominance";
 }else if($sec_content=="Sanguine"){
 	$Top_two = "I";
-    $Top_two_label = "San";
-    $second_temperament = "Sanguine";
+    $second_temperament = "Influence";
 }else if($sec_content=="Phlegmatic"){
 	$Top_two = "S";
-    $Top_two_label = "Phleg";
-    $second_temperament = "Phlegmatic";
+    $second_temperament = "Steadiness";
 }else if($sec_content=="Melancholy"){
 	$Top_two = "C";
-    $Top_two_label = "Mel";
-    $second_temperament = "Melancholy";
+    $second_temperament = "Compliance";
 }
 
 if($trd_content=="Choleric"){
 	$Top_trd = "D";
-    $Top_trd_label = "Chol";
 }else if($trd_content=="Sanguine"){
 	$Top_trd = "I";
-    $Top_trd_label = "San";
 }else if($trd_content=="Phlegmatic"){
 	$Top_trd = "S";
-    $Top_trd_label = "Phleg";
 }else if($trd_content=="Melancholy"){
 	$Top_trd = "C";
-    $Top_trd_label = "Mel";
 }
 
 
-$particiapnt_name = $assessment->first_name.' '.$assessment->last_name;
-$participant_first_name = trim(ucfirst($assessment->first_name));
+if(isJapanese($participantFirstName)){
+    $participantFirstName = '<span style="font-family:cid0jp;">'.$participantFirstName.'</span>';
+}
 
 $block_class = $Top_one ."_".$Top_two."_block";
 $the_report_pattern = "The ".$report_pattern;
@@ -229,10 +219,10 @@ $the_report_pattern = "The ".$report_pattern;
 </style>
 
 <page_footer>
-    <table style="width: 100%; margin-top:10px;background: #231f20;display:inline-block;padding-left:80px;padding-right:40px;padding-bottom:15px;">
+    <table style="width: 100%; margin-top:10px;background: #133a54;display:inline-block;padding-left:80px;padding-right:40px;padding-bottom:15px;">
         <tr>
-            <td style="font-family: 'proxima_nova_light';font-size: 10pt;text-align: left;width: 80%;color:#ffffff;">Copyright &copy; 2018, <?= date("Y") ?> Temperament Dynamics, LLC.</td>
-            <td style="font-family: 'proxima_novabold';font-size: 9pt;text-align: right;width: 20%;color:#ffffff;padding:10px">Page [[page_cu]] of [[page_nb]]</td>
+            <td style="font-family: 'proxima_nova_light';font-size: 8pt;text-align: left;width: 80%;color:#ffffff;">Copyright &copy; 2018, <?= date("Y") ?> Temperament Dynamics, LLC.</td>
+            <td style="font-family: 'proxima_nova_light';font-size: 9pt;text-align: right;width: 20%;color:#ffffff;padding:10px">Page [[page_cu]] of [[page_nb]]</td>
         </tr>
     </table>
 </page_footer>
@@ -244,54 +234,64 @@ $the_report_pattern = "The ".$report_pattern;
         <tr style="width: 100%; display:inline-block;">
             <td align="center" style="width: 100%; display:inline-block; padding-top:140px;">
                 <h4 style="font-size:13pt;color:#231f20;text-align:center;margin-bottom:8px; padding-bottom:0px;font-weight:600; text-transform:uppercase;">Prepared For</h4>
-				<h2 style="font-family: 'proxima_novabold'; color:#231f20; font-size:30pt;margin-top:0px;line-height:45px;margin-bottom: 5px;text-align: center; text-transform: uppercase;"><?=$particiapnt_name?></h2> 
+                <?php if(isJapanese($participantName)){ ?>
+					<h2 style="font-family: 'cid0jp'; color:#231f20; font-size:30pt;margin-top:0px;line-height:45px;margin-bottom: 5px;text-align: center; text-transform: uppercase;"><?=$participantName?></h2> 
+				<?php }else if(isEnglish($participantName)){ ?>
+					<h2 style="font-family: 'proxima_novabold'; color:#231f20; font-size:30pt;margin-top:0px;line-height:45px;margin-bottom: 5px;text-align: center; text-transform: uppercase;"><?=$participantName?></h2> 
+				<?php } ?>
             </td>
         </tr>
         <tr>
             <td align="center"> <img style="width: 500px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/border-line-02.png"> </td>
         </tr>
-        <tr>
+        <tr style="width: 100%; display:inline-block;">
             <td align="center" style="width: 100%; display:inline-block; ">
-                <h2 style="font-family: 'proxima_novabold'; font-size:22pt; line-height: 20px;margin-top: 80px; margin-bottom:0px; padding-bottom:0px;text-align: center; color:#231f20; text-transform:uppercase;">The</h2>
+                <h2 style="font-family: 'proxima_novabold'; font-size:20pt;margin-top:0px;line-height: 20px;margin-top: 180px; margin-bottom:0px; padding-bottom:0px;text-align: center; color:#231f20; padding-bottom:0px;text-transform:uppercase;">The</h2>
 
-                <h2 style="font-family: 'proxima_novaextrabold'; font-size:50pt; line-height: 20px;margin-top: 14px; margin-bottom:0px; padding-bottom:0px;text-align: center; color:#231f20; letter-spacing: 3px;text-transform:uppercase;"><?=$report_pattern?></h2>
+                <h2 style="font-family: 'proxima_novaextrabold'; font-size:47pt;margin-top:0px;line-height: 20px;margin-top: 14px; margin-bottom:0px; padding-bottom:0px;text-align: center; color:#231f20; padding-bottom:0px;letter-spacing: 3px;text-transform:uppercase;"><?=$report_pattern?></h2>
 
             </td>
         </tr>
         <tr>
-            <td align="center" style="width: 100%; display:inline-block; ">
-                <h3 style="font-family: 'proxima_novaextrabold'; font-size:25pt; line-height: 20px;margin-top: 140px; margin-bottom:20px; padding-bottom:0px;text-align: center; color:#9fa6ad; "><?=$first_temperament."-".$second_temperament?></h3>
-
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 100%; display:inline-block; padding-bottom:200px;">
+            <td style="width: 100%; display:inline-block; padding-bottom:270px;">
                 <table style="width: 100%; display:inline-block;" align="center">
-                    <tr>
+                    <tr style="width: 100%; display:inline-block;">
                         <td align="center" style="width:79px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#633319;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #f26868; height:60px;">
-                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:15px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 47px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:90px; "><?=$Top_one?></h4>
                                     </div>
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$first_temperament?></h5>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#6b3c23;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #faed85; height:60px;">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:15px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 47px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:90px; "><?=$Top_one?></h4>
                                     </div>
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$first_temperament?></h5>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#1c211f;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #aed2e0; height:60px;">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:15px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 47px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:90px; "><?=$Top_one?></h4>
                                     </div>
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$first_temperament?></h5>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#123f67;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #68ba4b; height:60px;">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:15px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 47px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:90px; "><?=$Top_one?></h4>
                                     </div>
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$first_temperament?></h5>
                                 </div>
                             <?php } ?>
                         </td>
@@ -299,27 +299,39 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:79px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#E8F2FD;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #f16869; height:60px;">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:15px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 47px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:90px;"><?=$Top_two?></h4>
                                     </div>
-                                </div>                                
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$second_temperament?></h5>
+                                </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#6b3c23;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #faed85; height:60px;">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:15px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 47px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:90px;"><?=$Top_two?></h4>
                                     </div>
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$second_temperament?></h5>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#16191a;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #aed2e0; height:60px;">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:15px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 47px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:90px;"><?=$Top_two?></h4>
                                     </div>
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$second_temperament?></h5>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 2px solid #494949; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-43px;">
-                                    <div class="text-center" style="color:#084060;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #65BE4B; height:60px;">
-                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:15px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 47px;position:relative; top:0px; display: block; left:-35.8px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 47px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:90px;"><?=$Top_two?></h4>
                                     </div>
+                                </div>
+                                <div style="font-family:'proxima_novabold';font-size:10pt;margin-top:0px;margin-left:-43px;width:100%; display:inline-block; padding-top:0px; margin-top:5px;">
+                                    <h5 style="margin:0px;text-transform:uppercase;"><?=$second_temperament?></h5>
                                 </div>
                             <?php } ?>
                         </td>
@@ -329,12 +341,12 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
         <tr>
             <td align="center" style="width: 100%; display:inline-block;>
-                <img style="width: 250px; text-align:center; " src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png">
+                <img style="width: 205px; text-align:center; " src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png">
             </td>
         </tr>
         <tr>
             <td align="center" style="width: 100%; display:inline-block;">
-                <div style="background:#bcbdc0; text-transform:uppercase; color:#231f20; font-family: 'proxima_novabold'; font-size:18px; line-height:24px; width:30%; padding:6px; margin-left:-125px; margin-top:15px;">Discovery Report</div>
+                <div style="background:#bcbdc0; text-transform:uppercase; color:#231f20; font-family: 'proxima_novabold'; font-size:15px; line-height:24px; width:20%; padding:4px; margin-left:-100px;">Discovery Report</div>
             </td>
         </tr>
 
@@ -346,7 +358,7 @@ $the_report_pattern = "The ".$report_pattern;
 
 <!--page2 starts here-->
 <div class="" style="height: 1060px; float: left; width: 100%; padding-left: 0px; margin-left: 0px;">
-    <table style="width: 100%;background: #231f20;display:inline-block;padding-left:80px;padding-right:40px;padding-bottom:25px;padding-top:25px;">
+    <table style="width: 100%;background: #133a54;display:inline-block;padding-left:80px;padding-right:40px;padding-bottom:25px;padding-top:25px;">
         <tr>
             <td style="width:100%;font-family: 'proxima_novabold';font-size: 34pt;text-align: left;color:#ffffff; text-transform:uppercase;padding-top:30px;font-stretch:110% !important;letter-spacing:+0.254mm !important;">You are a masterpiece</td>
         </tr>
@@ -354,7 +366,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%;padding-left:80px;padding-right:40px; display: inline-block;">
         <tr>
             <td align="left" style="padding-top: 60px; display: inline-block; width: 100%;">
-                <h2 class="text-left" style="font-size: 26pt; margin-bottom: 30px; line-height: 32px; padding-top: 0px; display: inline-block;color:#231f20;text-transform:uppercase;">Welcome to Four Temperaments!</h2>
+                <h2 class="text-left" style="font-size: 26pt; margin-bottom: 30px; line-height: 32px; padding-top: 0px; display: inline-block;color:#133a54;text-transform:uppercase;">Welcome to DISC Strengths!</h2>
             </td>
         </tr>
     
@@ -367,8 +379,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 <tr>
                                     <td style="width:100%;display:inline-block;">
                                         <p style="color: #231f20; font-family: 'proxima_nova_light'; font-size: 13pt; line-height: 25px; margin-top: 0px; margin-bottom: 30px;">
-                                            <b style="font-family: 'proxima_novabold'; color: #231f20;"><?=$participant_first_name?></b>, this special report is designed just for you! We are excited you are on this journey of discovering more about yourself, your natural
-                                            tendencies, and why you do what you do.
+                                            <b style="font-family: 'proxima_novabold'; color: #133a54;"><?=$participantFirstName?></b>, this special report is designed just for you! We are excited you are on this journey of discovering more about yourself, your natural tendencies, and why you do what you do.
                                         </p>
                                     </td>
                                 </tr>
@@ -391,20 +402,19 @@ $the_report_pattern = "The ".$report_pattern;
                                 <tr>
                                     <td style="width:100%;display:inline-block;margin-top:20px; padding-top:20px;">
                                         <p style="color: #231f20; font-family: 'proxima_nova_light'; font-size: 13pt; line-height: 25px; margin: 0px; margin-bottom: 0px;margin-bottom: 15px;">
-                                            This DISCOVERY REPORT will help you identify your natural temperament strengths and what makes you unique. As you read through this report, you will see an accurate description of who you are most of the time in most
-                                            situations.
+                                            This DISCOVERY REPORT will help you identify your natural temperament strengths and what makes you unique. As you read through this report, you will see an accurate description of who you are most of the time in most situations.
                                         </p>
                                         <p style="color: #231f20; font-family: 'proxima_nova_light'; font-size: 13pt; line-height: 25px; margin: 0px; margin-bottom: 15px;">
-                                            When you accurately see yourself, your needs, and what motivates you, you will realize you are normal and that it is okay to be you.
+                                            When you accurately see yourself, your needs, and what motivates you. You will realize you are normal and that it is okay to be you.
                                         </p>
                                         <p style="color: #231f20; font-family: 'proxima_nova_light'; font-size: 13pt; line-height: 25px; margin: 0px; margin-bottom: 15px;">
-                                            The goal of this report is to help you better understand yourself, others, and equip you to make a difference in the world.
+                                            The goal of this report is to help you better understand yourself, others, and equip you to make a difference in your world.
                                         </p>
                                         <p style="color: #231f20; font-family: 'proxima_nova_light'; font-size: 13pt; line-height: 25px; margin: 0px; margin-bottom: 15px;">
-                                            Enjoy your report — and remember we're here to help you along your journey!
+                                            Enjoy your report -- and remember we're here to help you along your journey!
                                         </p>
                                         <p style="color: #231f20; font-size: 13pt; line-height: 31px; font-weight: 900; margin-top: 0px; font-family: 'proxima_nova_light'; line-height: 25px;">
-                                            Best wishes, <br /><b style="font-family:'proxima_novaregularitalic'">The Team at Four Temperaments<sup>TM</sup></b>
+                                            Best wishes, <br /><b style="font-family:'proxima_novaregularitalic'">The Team @ DISC Strengths<sup>TM</sup></b>
                                         </p>
                                     </td>
                                 </tr>
@@ -427,13 +437,13 @@ $the_report_pattern = "The ".$report_pattern;
 <div class="" style="height: 1060px; float: left; width: 100%; padding-left: 0px; margin-left: 0px;">
     <table style="width: 100%;background: #f0f4f7;display:inline-block;padding-left:80px;padding-right:40px;padding-bottom:25px;padding-top:25px;">
         <tr>
-            <td style="width:100%;font-family: 'proxima_novabold';font-size: 34pt;text-align: center;color:#231f20; text-transform:uppercase;padding-top:30px;font-stretch:110% !important;letter-spacing:+0.254mm !important;">Table of Contents</td>
+            <td style="width:100%;font-family: 'proxima_novabold';font-size: 34pt;text-align: center;color:#231f20; text-transform:uppercase;padding-top:30px;font-stretch:110% !important;letter-spacing:+0.254mm !important; text-transform:uppercase;">Table of Contents</td>
         </tr>
     </table>
     <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 40px; margin-right: 40px; display: inline-block; padding-left: 60px; padding-right: 40px; padding-top: 40px;">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 80%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; padding-bottom: 8px;">
-                <h4 style="color: #f26e6a; font-size: 12pt; margin: 0px; text-transform:uppercase;">About Four Temperaments</h4>
+                <h4 style="color: #f26e6a; font-size: 12pt; margin: 0px;">ABOUT DISC</h4>
             </td>
             <td align="right" style="width: 5%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; text-align: right; padding-bottom: 8px;">
                 <h4 style="color: #f26e6a; text-align: right; font-size: 12pt; margin: 0px; padding-left: 20px;">4</h4>
@@ -473,7 +483,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 80%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; padding-bottom: 8px; padding-left: 15px;">
-                <p style="color: #231f20; font-size: 12pt; margin: 0px;">The Four Temperaments</p>
+                <p style="color: #231f20; font-size: 12pt; margin: 0px;">The Four Dimensions of Behavior</p>
             </td>
             <td align="right" style="width: 5%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; text-align: right; padding-bottom: 8px; padding-left: 15px;">
                 <p style="color: #231f20; text-align: right; font-size: 12pt; margin: 0px;">10</p>
@@ -484,7 +494,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 40px; margin-right: 40px; display: inline-block; padding-left: 60px; padding-right: 40px; padding-top: 20px;">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 80%; display: inline-block; padding: 0px; margin: 0px; color: #ffc82d; padding-bottom: 8px;">
-                <h4 style="color: #ffc82d; font-size: 12pt; margin: 0px; text-transform:uppercase;">Your Results</h4>
+                <h4 style="color: #ffc82d; font-size: 12pt; margin: 0px;">YOUR RESULTS</h4>
             </td>
             <td align="right" style="width: 5%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; text-align: right; padding-bottom: 8px; padding-left: 15px;">
                 <h4 style="color: #ffc82d; text-align: right; font-size: 12pt; margin: 0px;">11</h4>
@@ -492,7 +502,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 80%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; padding-bottom: 8px; padding-left: 15px;">
-                <p style="color: #231f20; font-size: 12pt; margin: 0px;">Your MyTemperament™ Results</p>
+                <p style="color: #231f20; font-size: 12pt; margin: 0px;">Your DISC Strengths™ Results</p>
             </td>
             <td align="right" style="width: 5%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; text-align: right; padding-bottom: 8px; padding-left: 15px;">
                 <p style="color: #231f20; text-align: right; font-size: 12pt; margin: 0px;">12</p>
@@ -570,16 +580,6 @@ $the_report_pattern = "The ".$report_pattern;
                 <p style="color: #231f20; text-align: right; font-size: 12pt; margin: 0px;">21</p>
             </td>
         </tr>
-        <?php if($Top_one == "I" && $Top_two == "D"){ ?>
-            <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
-                <td align="left" style="width: 80%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; padding-bottom: 8px; padding-left: 15px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px;">Avoiding Burnout</p>
-                </td>
-                <td align="right" style="width: 5%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; text-align: right; padding-bottom: 8px; padding-left: 15px;">
-                    <p style="color: #231f20; text-align: right; font-size: 12pt; margin: 0px;">22</p>
-                </td>
-            </tr>
-        <?php } ?>
     </table>
 
     <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 40px; margin-right: 40px; display: inline-block; padding-left: 60px; padding-right: 40px; padding-top: 20px;">
@@ -644,7 +644,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 80%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; padding-bottom: 8px; padding-left: 15px;">
-                <p style="color: #231f20; font-size: 12pt; margin: 0px;">The Different Expressions of <?=$the_report_pattern?></p>
+                <p style="color: #231f20; font-size: 12pt; margin: 0px;">The Different Expressions to <?=$the_report_pattern?></p>
             </td>
             <td align="right" style="width: 5%; display: inline-block; padding: 0px; margin: 0px; color: #f26e6a; text-align: right; padding-bottom: 8px; padding-left: 15px;">
                 <p style="color: #231f20; text-align: right; font-size: 12pt; margin: 0px;"><?=($Top_one == "I" && $Top_two == "D") ? 33 : 32?></p>
@@ -661,7 +661,7 @@ $the_report_pattern = "The ".$report_pattern;
 
         <tr>
             <td align="left" style="padding-top: 65px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -674,21 +674,21 @@ $the_report_pattern = "The ".$report_pattern;
 <div class="" style="height: 1060px; float: left; width: 100%; padding-left: 0px; margin-left: 0px;">
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; margin-left: 40px; padding-left: 60px;" cellpadding="0" cellspacing="0">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
-            <td align="left" style="width: 258px; display: inline-block; padding: 0px; margin: 0px; background: #f26e6a; padding-top: 23px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
-                <h3 style="color: #951c54; font-size: 13pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About Four Temperaments</h3>
+            <td align="left" style="width: 150px; display: inline-block; padding: 0px; margin: 0px; background: #f26e6a; padding-top: 27px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
+                <h3 style="color: #951c54; font-size: 14pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About DISC</h3>
             </td>
         </tr>
     </table>
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 350px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top: 65px;">
-                <h2 style="font-size: 28pt; margin: 0px; padding: 0px; color:#231f20; line-height: 35px; text-transform:uppercase;">About</h2>
-                <h2 style="font-size: 60pt; margin: 0px; padding: 0px; color:#231f20; text-transform:uppercase;">Four Temperaments</h2>
+                <h2 style="font-size: 30pt; margin: 0px; padding: 0px; color:#231f20; line-height: 35px;">ABOUT</h2>
+                <h2 style="font-size: 75pt; margin: 0px; padding: 0px; color:#231f20;">DISC</h2>
             </td>
         </tr>
         <tr>
-            <td align="left" style="padding-top: 350px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+            <td align="left" style="padding-top: 380px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -702,8 +702,8 @@ $the_report_pattern = "The ".$report_pattern;
 	<table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; background: #f0f4f7; margin-top: 0px; padding-bottom: 15px;" cellpadding="0" cellspacing="0">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="display: inline-block; padding: 0px; margin: 0px;">
-                <div style="width: 258px; background: #f26e6a; padding-top: 23px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
-                    <h3 style="color: #951c54; font-size: 13pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About Four Temperaments</h3>
+                <div style="width: 150px; background: #f26e6a; padding-top: 27px; padding-bottom: 10px; text-align: center;padding-left:10px;padding-right:10px;">
+                    <h3 style="color: #951c54; font-size: 14pt; text-align: center; padding: 0px; margin: 0px; width: 150px;text-transform:uppercase;">About DISC</h3>
                 </div>
             </td>
         </tr>
@@ -719,13 +719,13 @@ $the_report_pattern = "The ".$report_pattern;
         <tr>
             <td align="left" style="width: 100%; display: inline-block;">
                 <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px;margin-top: 25px;">
-                    <i style="font-size: 13pt;font-family:'proxima_novalightitalic';">Four Temperaments<sup>TM</sup></i> is built upon the foundations laid by ancient philosophers, physicians, scientists, and modern-day psychologists over several thousand years.
+                    DISC Strengths<sup>TM</sup> is built upon the foundations laid by ancient philosophers, physicians, scientists, and modern-day psychologists over several thousand years.
                 </p>
 				<p style="color: #000; font-family: 'proxima_nova_light'; font-size: 13pt; line-height: 25px; margin: 0px; margin-bottom: 30px;margin-top: 7px; padding: 0px 15px;">
                     <img style="width: 9px; text-align: center;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/arrow1-page-5.png" />
-                    <p style="color: #000;margin-top: -48px; line-height: 20px; padding-left: 15px; padding-top: 0px;font-family:'proxima_novalightitalic'; font-size:13pt;">
-                        This <span style="text-transform:uppercase;">Discovery Report</span> is the product of decades of research, development, and thousands of personal interviews.
-                    </p>
+                <p style="color: #000;margin-top: -45px; line-height: 20px; padding-left: 15px; padding-top: 0px;font-family:'proxima_novalightitalic'; font-size:13pt;">
+                    This <span style="text-transform:uppercase;">Discovery Report</span> is the product of decades of research, development, and thousands of personal interviews.
+                </p>
                 </p>
             </td>
         </tr>
@@ -733,17 +733,14 @@ $the_report_pattern = "The ".$report_pattern;
 	<table style="width: 100%; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 33px; padding-bottom: 30px; background: #f0f4f7; margin-top: 15px;" cellpadding="0" cellspacing="0">
         <tr>
             <td style="width: 100%; display: inline-block;">
-                <h2 style="color: #231f20; font-size: 13pt; padding: 0px; margin: 0px; line-height: 20px; margin-top: 0px; text-transform:uppercase;">History of Temperament</h2>
-                <p align="left" style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top:11px; width:100%; display:inline-block;">Human behavior has been studied for thousands of years to explain why people are different. One of the major factors in explaining the differences in people is that everyone is born with natural tendencies referred to as <i style="font-size: 13pt;font-family:'proxima_novalightitalic';">temperament</i>. </p>
+                <h2 style="color: #231f20; font-size: 13pt; padding: 0px; margin: 0px; line-height: 20px; margin-top: 0px; text-transform:uppercase;">History of Temperament & DISC</h2>
+                <p align="left" style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top:11px; width:100%; display:inline-block;">Human behavior has been studied for over 2,000 years and numerous theories developed to explain behavior; all the major theories recognize four dimensions of behavior. These represent a unique cluster of inborn traits that causes you, in part, to do what you do.</p>
                 
 				<p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top: 11px;">
-                    One of the first systems was developed by Hippocrates (known as the father of modern medicine) who identified the four humors (Chlor, Sangis, Phlegm, and Melan) in 460-377 B.C. Galen (129-216 A.D.), another Greek physician six hundred years later, coined the terms Choleric, Sanguine, Phlegmatic, and Melancholy.
+                   One of the first systems was developed by <b style="font-family:'proxima_novaregularitalic';">Hippocrates</b> (known as the father of modern medicine) who identified the Four Temperaments in 460-377 B.C. Since then, numerous pioneers and innovators have refined and advanced the work done in these early years.
                 </p>
 				<p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top: 11px;">
-                    Since then, numerous pioneers and innovators have refined and advanced the work done in these early years.
-                </p>
-				<p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top: 11px;">
-                One of these innovators, Dr. William M. Marston, scientifically identified that people fit into one of four categories and published his findings in his book <i style="font-size: 13pt;font-family:'proxima_novalightitalic';">The Emotions of Normal People</i> in 1928. Marston’s work correlates to the original four temperaments identified by Hippocrates.
+                   One of these innovators, <b style="font-family:'proxima_novaregularitalic';">William M. Marston,</b> scientifically identified the same four dimensions in 1928 and coined the terms Dominance (D), Inducement (I), Submission (S), and Compliance (C) which is the basis for today’s modern DISC assessments. Marston’s terms and descriptions correlate to the original four temperaments identified by Hippocrates.
                 </p>
 
             </td>
@@ -753,24 +750,23 @@ $the_report_pattern = "The ".$report_pattern;
 	<table style="width: 100%; margin-left: 0px; margin-right: 0px; display: inline-block; padding-left: 83px; padding-right: 40px; padding-top: 28px; padding-bottom: 10px; background: #fff; margin-top: 10px;" cellpadding="0" cellspacing="0">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 650px; display: inline-block; padding: 0px; margin: 0px;">
-                <h2 class="text-center" style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 0px; text-align: left; width: 100%;">The Development of Four Temperaments</h2>
-
+                <h2 class="text-center" style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 0px; text-align: left; width: 100%;">THE DEVELOPMENT OF DISC STRENGTHS</h2>
                 <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top:11px;">
-                    The <i style="font-size: 13pt;font-family:'proxima_novalightitalic';">MyTemperament<sup style="font-size:10pt;">TM</sup> Assessment</i> and this <i style="font-size: 13pt;font-family:'proxima_novalightitalic';">DISCOVERY REPORT</i> is based on Marston’s work as well as years of research, empirical evidence, thousands of interviews, and testing conducted by Dr. John Cocoris since 1977.
+                  The DISC Strengths <sup style="font-size:10pt;">TM</sup> Temperament Assessment and this DISCOVERY REPORT is based on Marston’s work as well as years of research, empirical evidence, thousands of interviews, and testing conducted by <b style="font-family:'proxima_novaregularitalic';">Dr. John Cocoris</b> since 1977.
                 </p>
 				<p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top: 11px;">
-                    Dr. Cocoris developed the Temperament Model of Behavior for use in business, coaching, and counseling. This proven model provides a unique set of benefits to the end-user that is not found in any other temperament assessments. 
+                   Dr. Cocoris developed the Temperament Model of Behavior for use in business, coaching, and counseling. This proven model provides a unique set of benefits to the end-user that is not found in any other DISC assessments.
                 </p>
 				<p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top: 11px;">
-                    We continue the legacy of Dr. Cocoris, by working with individuals and organizations, conducting seminars; and training leaders, managers, and salespeople by providing the most up-to-date, comprehensive, accurate work about the four temperaments.
+                   <b style="font-family:'proxima_novaregularitalic';">DISC Strengths continues the legacy of Dr. Cocoris,</b> by working with individuals and organizations, conducting seminars; training leaders, managers, and salespeople by providing the most up-to-date, comprehensive, accurate work about DISC and the four dimensions of behavior.
                 </p>
             </td>
         </tr>
     </table>
 	 <table style="width:618px; display: inline-block; margin: 0px; padding: 0px; margin-left: 85px; margin-right: 60px; padding: 0px; background: #fff; margin-top: 0px;margin-bottom: 0px;" cellpadding="0" cellspacing="0">
         <tr>
-            <td align="left" style="padding-top: 60px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+            <td align="left" style="padding-top: 30px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -786,8 +782,8 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; background: #f0f4f7; margin-top: 0px; padding-bottom: 15px;" cellpadding="0" cellspacing="0">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="display: inline-block; padding: 0px; margin: 0px;">
-                <div style="width: 258px; background: #f26e6a; padding-top: 23px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
-                    <h3 style="color: #951c54; font-size: 13pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About Four Temperaments</h3>
+                <div style="width: 150px; background: #f26e6a; padding-top: 27px; padding-bottom: 10px; text-align: center;padding-left:10px;padding-right:10px;">
+                    <h3 style="color: #951c54; font-size: 14pt; text-align: center; padding: 0px; margin: 0px; width: 150px;text-transform:uppercase;">About DISC</h3>
                 </div>
             </td>
         </tr>
@@ -803,7 +799,7 @@ $the_report_pattern = "The ".$report_pattern;
         <tr>
             <td align="left" style="width: 100%; display: inline-block;">
                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    The word <b style="font-family:'proxima_novaregularitalic';">temperament</b> is from a Latin word that means blending and refers to a person’s natural behavior. There are four temperaments.
+                   The word <b style="font-family:'proxima_novaregularitalic';">temperament</b> is from a Latin word that means <b style="font-family:'proxima_novaregularitalic';">blending</b> and refers to a person’s natural behavior. There are Four Dimensions of Behavior, classically known as Temperament.
                 </p>
 				
             </td>
@@ -971,27 +967,16 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 97%; display: inline-block; padding-top:0px;margin:0px;">
                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left;">
-                                Meet the need of your natural temperament tendency.
+                          Meet the need of your natural temperament tendency.
                             </p>
                         </td>
                     </tr>		
+				</table>
+				<table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 20px;" cellpadding="0" cellspacing="0">
 				    <tr>
-                        <td align="left" style="width:3%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;">&nbsp;</p>
-                        </td>
-                        <td style="width: 97%; display: inline-block; padding-top:0px;margin:0px;">
-                            <table style="width:90%; display:inline-block; margin:0; padding:0px;">
-                                <tr>
-                                    <td style="width:50%; display:inline-block;  margin:0; padding:0px;">
-                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b> Choleric - Results</p>
-                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b> Sanguine - People</p>                                        
-                                    </td>
-                                    <td style="width:50%; display:inline-block;  margin:0; padding:0px;">
-                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b> Phlegmatic - Routine</p>
-                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b> Melancholy - Plan</p>
-                                    </td>
-                                </tr>
-                            </table>
+                        <td align="left" style="width:3%; display: inline-block; padding-top:0px;margin:0px;">&nbsp;</td>
+                        <td style="width: 97%; display: inline-block; padding-top:10px;margin:0px;">
+                          <img style="width: 400px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-6-image-01.png" />
                         </td>
                     </tr>		
 				</table>
@@ -1029,7 +1014,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 12pt; line-height: 20px; margin: 0px; margin-bottom: 0px; padding: 0px;">
                     <img style="width:12px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-17-arrow.png" />
                 <p style="color:#000000;margin-top: -82px; line-height: 20px; padding-left:35px; padding-top: 0px; width: 100%; display: inline-block;font-family:'proxima_novalightitalic';">
-                    Temperament influences everything you do, including will, purpose, and your mode of achieving. Knowing your temperament will raise awareness of your actions, the impact your behavior has on others, and how others perceive you. You must decide to control your strengths and weaknesses or be controlled by them.
+                    Temperament influences everything you do, including: will, purpose, and your mode of achieving. Knowing your temperament will raise awareness of your actions, the impact your behavior has on others, and how others perceive you. You must decide to control your strengths and weaknesses or be controlled by them.
                 </p>
                 </p>
             </td>
@@ -1045,8 +1030,8 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; background: #f0f4f7; margin-top: 0px; padding-bottom: 15px;" cellpadding="0" cellspacing="0">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="display: inline-block; padding: 0px; margin: 0px;">
-                <div style="width: 258px; background: #f26e6a; padding-top: 23px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
-                    <h3 style="color: #951c54; font-size: 13pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About Four Temperaments</h3>
+                <div style="width: 150px; background: #f26e6a; padding-top: 27px; padding-bottom: 10px; text-align: center;padding-left:10px;padding-right:10px;">
+                    <h3 style="color: #951c54; font-size: 14pt; text-align: center; padding: 0px; margin: 0px; width: 150px;text-transform:uppercase;">About DISC</h3>
                 </div>
             </td>
         </tr>
@@ -1098,7 +1083,7 @@ $the_report_pattern = "The ".$report_pattern;
             <td align="left" style="width: 100%; display: inline-block;">
 			<h4 style="color: #231f20; font-size: 12pt; margin: 0px;margin-top: 20px;padding: 0px;  line-height: 18px;text-transform: uppercase;">RELAX AND BE YOURSELF</h4>
                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 5px;">
-                  Temperament study reveals that there is a natural way of behaving that is in-born. This is not suggesting that you always demonstrate the traits of your temperament or that it is permissible to overlook areas that you need to control. The following foundational principles will help you better understand temperament and help you relax and be yourself.
+                  Temperament study reveals that there is a natural way of behaving that is in-born. This is not suggesting that you always demonstrate the traits of your temperament or that is permissible to overlook areas that you need to control. The following foundational principles will help you better understand temperament and help you relax and be yourself.
                 </p>
 				
             </td>
@@ -1113,7 +1098,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 13px; text-align: left;">
-                                You are the most&nbsp;<u style="font-family:'proxima_novabold';">COMFORTABLE</u> when you are behaving in a manner that represents the controlled strengths of your temperament.
+                         You are the most  <b><u>COMFORTABLE</u></b>  when you are behaving in a manner that represents the controlled strengths of your temperament.
                             </p>
                         </td>
                     </tr>
@@ -1123,7 +1108,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 13px; text-align: left;">
-                         You are&nbsp;<b><u>PERCEIVED IN THE BEST POSSIBLE MANNER</u></b> when you are expressing the controlled strengths of your temperament.
+                         You are <b><u>PERCEIVED IN THE BEST POSSIBLE MANNER</u></b> when you are expressing the controlled strengths of your temperament.
                             </p>
                         </td>
                     </tr>	
@@ -1132,8 +1117,8 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 13px;"><b>•</b></p>
                         </td>
                         <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 13px; text-align: left;">
-                                You have the most&nbsp;<b><u>POSITIVE IMPACT</u></b> upon others when you are expressing the controlled strengths of your temperament.
+                           <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 13px; text-align: left;">
+                         You have your most <b><u>POSITIVE IMPACT</u></b> upon others when you are expressing the controlled strengths of your temperament.
                             </p>
                         </td>
                     </tr>
@@ -1143,7 +1128,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 13px; text-align: left;">
-                          You are the most&nbsp;<b><u>EFFECTIVE & EFFICIENT</u></b> in life when you are expressing the controlled strengths of your temperament.
+                          You are the most <b><u>EFFECTIVE & EFFICIENT</u></b> in life when you are expressing the controlled strengths of your temperament.
                             </p>
                         </td>
                     </tr>					
@@ -1161,14 +1146,14 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; background: #f0f4f7; margin-top: 0px; padding-bottom: 15px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="display: inline-block; padding: 0px; margin: 0px;">
-                <div style="width: 258px; background: #f26e6a; padding-top: 23px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
-                    <h3 style="color: #951c54; font-size: 13pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About Four Temperaments</h3>
+                <div style="width: 150px; background: #f26e6a; padding-top: 27px; padding-bottom: 10px; text-align: center;padding-left:10px;padding-right:10px;">
+                    <h3 style="color: #951c54; font-size: 14pt; text-align: center; padding: 0px; margin: 0px; width: 150px;text-transform:uppercase;">About DISC</h3>
                 </div>
             </td>
         </tr>
         <tr>
             <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-top: 10px; margin-top:10px; text-align: left;">
-                <h2 style="width:100%;font-family: 'proxima_novabold';font-size: 27pt;text-align: left;color:#231f20; text-transform:uppercase;font-stretch:110% !important;letter-spacing:+0.254mm !important; text-transform:uppercase;margin:0px;">10 Foundational Principles</h2>
+                <h2 style="width:100%;font-family: 'proxima_novabold';font-size: 27pt;text-align: left;color:#231f20; text-transform:uppercase;font-stretch:110% !important;letter-spacing:+0.254mm !important; text-transform:uppercase;margin:0px;">10 Foundational Prinicipals</h2>
             </td>
         </tr>
     </table>
@@ -1203,7 +1188,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 97%; display: inline-block; padding-top:0px;margin:0px;">
                            <p style="color: #000000; font-size: 12pt; margin: 0px; line-height: 21px; margin-bottom: 0px; margin-top: 26px; text-align: left; padding-left:8px;">
-                            The greatest influence comes from the combination of the first two temperaments.
+                         The greatest influence comes from the combination of the first two temperaments.
                             </p>
                         </td>
                     </tr>
@@ -1306,7 +1291,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 98%; display: inline-block; padding-top:0px;margin:0px;">
                             <p style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; margin: 0px; line-height: 21px; margin-bottom: 0px; margin-top: 15px; text-align: left;">
-                                The geographical location in the USA or foreign country where you were reared dramatically influences what you think is right, good, and normal.
+                                The geographical location in the USA or foreign country where you were reared dramatically Influences what you think is right, good, and normal.
                             </p>
                         </td>
                     </tr>
@@ -1331,7 +1316,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 98%; display: inline-block; padding:0px;margin:0px;">
                             <p style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; margin: 0px; line-height: 21px; margin-bottom: 0px; margin-top: 22px; text-align: left;">
-                                <b>Peers </b>- Those we associate with strongly influence the development of our beliefs and value system.
+                                <b>Peers </b>- Those we associate with strongly Influence the development of our beliefs and value system.
                             </p>
                         </td>
                     </tr>
@@ -1342,8 +1327,8 @@ $the_report_pattern = "The ".$report_pattern;
 	
 	<table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
-            <td align="left" style="padding-top:40px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+            <td align="left" style="padding-top:10px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>   
@@ -1355,10 +1340,8 @@ $the_report_pattern = "The ".$report_pattern;
 <div class="" style="height: 1060px; float: left; width: 100%; padding-left: 0px; margin-left: 0px;">
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px;" cellpadding="0" cellspacing="0">
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
-            <td align="left" style="display: inline-block; padding: 0px; margin: 0px;">
-                <div style="width: 258px; background: #f26e6a; padding-top: 23px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
-                    <h3 style="color: #951c54; font-size: 13pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About Four Temperaments</h3>
-                </div>
+            <td align="left" style="width: 150px; display: inline-block; padding: 0px; margin: 0px; background: #f26e6a; padding-top: 27px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
+                <h3 style="color: #951c54; font-size: 14pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About DISC</h3>
             </td>
         </tr>
     </table>
@@ -1395,7 +1378,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 98%; display: inline-block; padding-top:0px;margin:0px;">
                             <p style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; margin: 0px; line-height: 21px; margin-bottom: 0px; margin-top: 22px; text-align: left;">
-                                <b>Work Ethic </b>-  Having a work ethic means that a person places a positive value on applying themselves and doing a good job.
+                                <b> Work Ethic </b>-  Having a work ethic means that a person places a positive value on applying themselves and doing a good job.
                             </p>
                         </td>
                     </tr>
@@ -1459,7 +1442,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 98%; display: inline-block; padding-top:0px;margin:0px;">
                             <p style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; margin: 0px; line-height: 21px; margin-bottom: 0px; margin-top: 0px; text-align: left;">
-                                <b>Proximity -</b> refers to the distance between the <b>primary</b> and <b>secondary</b> temperament.
+                                <b>Proximity</b> refers to the distance between the <b>primary</b> and <b>secondary</b> temperament.
                             </p>
                         </td>
                     </tr>
@@ -1470,7 +1453,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 98%; display: inline-block; padding-top:0px;margin:0px;">
                             <p style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; margin: 0px; line-height: 21px; margin-bottom: 0px; margin-top: 22px; text-align: left;">
-                                <b>Position -</b> refers to the <b>order</b> of the third and fourth temperaments.
+                                <b>Position</b> refers to the <b>order</b> of the third and fourth temperaments.
                             </p>
                         </td>
                     </tr>
@@ -1481,7 +1464,7 @@ $the_report_pattern = "The ".$report_pattern;
                         </td>
                         <td style="width: 98%; display: inline-block; padding-top:0px;margin:0px;">
                             <p style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; margin: 0px; line-height: 21px; margin-bottom: 0px; margin-top: 22px; text-align: left;">
-                                <b>Self-Control -</b> refers to whether or not a person has learned to use their natural strengths and overcome their natural weaknesses.
+                                <b> Self-Control</b> refers to whether or not a person has learned to use their natural strengths and overcome their natural weaknesses.
                             </p>
                         </td>
                     </tr>
@@ -1494,7 +1477,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -1505,34 +1488,32 @@ $the_report_pattern = "The ".$report_pattern;
 <!--page10 starts here-->
 <div class="" style="height: 1000px; float: left; width: 100%; padding-left: 0px; margin-left: 0px;">
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; background: #f0f4f7; margin-top: 0px; padding-bottom: 20px;" cellpadding="0" cellspacing="0">
-        <tr>
+        <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="display: inline-block; padding: 0px; margin: 0px;">
-                <div style="width: 258px; background: #f26e6a; padding-top: 23px; padding-bottom: 8px; text-align: center;padding-left:10px;padding-right:10px;">
-                    <h3 style="color: #951c54; font-size: 13pt; text-align: center; padding: 0px; margin: 0px;text-transform:uppercase;">About Four Temperaments</h3>
+                <div style="width: 150px; background: #f26e6a; padding-top: 27px; padding-bottom: 10px; text-align: center;padding-left:10px;padding-right:10px;">
+                    <h3 style="color: #951c54; font-size: 14pt; text-align: center; padding: 0px; margin: 0px; width: 150px;text-transform:uppercase;">About DISC</h3>
                 </div>
             </td>
         </tr>
-        <tr>
+        <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-top: 10px; text-align: left;">
-                <h2 style="width:100%;font-family: 'proxima_novabold';font-size: 27pt;text-align: left;color:#231f20; text-transform:uppercase;text-transform:uppercase;margin:0px; margin-top:20px;">The Four Temperaments</h2>
+                <h2 style="width:100%;font-family: 'proxima_novabold';font-size: 27pt;text-align: left;color:#231f20; text-transform:uppercase;font-stretch:110% !important;letter-spacing:+0.254mm !important; text-transform:uppercase;margin:0px; margin-top:20px;">The Four Dimensions of Behavior</h2>
             </td>
         </tr>
     </table>
 
-    <table style="width: 100%; margin-left: 0px;display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 65px;">
+    <table style="width: 100%; margin-left: 0px;display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 35px;">
         <tr>
             <td style="width: 100%; display: inline-block;">
-                <div style="width: 95%;">
-                    <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height:26px;"> <b style="color:#231f20;font-size: 14pt;line-height:26px;"><?=$participant_first_name?>,</b> everyone is a blend of all four temperaments and the greatest influence on a person’s personality are from their <b>first</b> and <b>second temperament.<br/>Which Are Your First Two?</b></p>
-                </div>
+                <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height:26px;"> <b style="color:#133a54;font-size: 13pt;line-height:26px;"><?=$participantFirstName?>,</b> everyone is a blend of all four dimensions (temperaments) and the <br> greatest influence on a person’s personality are from their first and second temperament.<b>Which Are Your First Two?</b></p>
             </td>
         </tr>
     </table>
-    <table style="width: 100%; display: inline-block;" cellpadding="0" cellspacing="0">
-        <tr>
+    <table style="width: 100%; display: inline-block; padding-top: 18px;" cellpadding="0" cellspacing="0">
+        <tr style="width: 100%; display: inline-block;margin:0px;padding:0px;">
             <td style="width: 100%; display: inline-block;margin:0px;padding:0px;">
-                <div style="float: left; width: 100%; padding: 0px; margin: 0px; margin-top: 65px;">
-                    <img style="width: 100%;padding: 0px; margin: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-10-image.jpg" />
+                <div style="float: left; width: 100%; padding: 0px; margin: 0px; margin-top: 25px;">
+                    <img style="width: 100%;padding: 0px; margin: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-10-image.png" />
                 </div>
             </td>
         </tr>
@@ -1562,8 +1543,8 @@ $the_report_pattern = "The ".$report_pattern;
             </td>
         </tr>
         <tr>
-            <td align="left" style="padding-top: 390px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+            <td align="left" style="padding-top: 380px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -1583,7 +1564,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
         <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
             <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-top: 10px; text-align: left;">
-                <h2 style="width:100%;font-family: 'proxima_novabold';font-size: 27pt;text-align: left;color:#231f20; font-stretch:110% !important;letter-spacing:+0.254mm !important; text-transform:uppercase;margin:0px; margin-top:15px;">Your Results</h2>
+                <h2 style="width:100%;font-family: 'proxima_novabold';font-size: 27pt;text-align: left;color:#231f20; font-stretch:110% !important;letter-spacing:+0.254mm !important; text-transform:uppercase;margin:0px; margin-top:15px;">Your DISC Strengths™ Results</h2>
             </td>
         </tr>
     </table>
@@ -1592,7 +1573,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px;">
         <tr>
             <td style="width: 100%; display: inline-block;">
-                <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 24px;"><b style="color: #231f20;"><?=$participant_first_name?>,</b> based on your answers, you scored as:</p>
+                <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 24px;"><b style="color: #133a54;"><?=$participantFirstName?>,</b> based on your answers, you scored as:</p>
             </td>
         </tr>
         <tr>
@@ -1608,26 +1589,26 @@ $the_report_pattern = "The ".$report_pattern;
                                     <td align="center" style="width:50px;">
                                         <?php if($Top_one == "D"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                                    <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                                <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                                    <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                                 </div>
                                             </div>
                                         <?php }else if($Top_one == "I"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                                    <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                                <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                                    <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                                 </div>
                                             </div>
                                         <?php }else if($Top_one == "S"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                                    <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                                <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                                    <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                                 </div>
                                             </div>
                                         <?php }else if($Top_one == "C"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                                    <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                                <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                                    <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                                 </div>
                                             </div>
                                         <?php } ?>
@@ -1636,26 +1617,26 @@ $the_report_pattern = "The ".$report_pattern;
                                     <td align="center" style="width:50px;">
                                         <?php if($Top_two == "D"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                                    <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                                <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                                    <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                                 </div>
                                             </div>
                                         <?php }else if($Top_two == "I"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                                    <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                                <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                                    <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                                 </div>
                                             </div>
                                         <?php }else if($Top_two == "S"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                                    <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                                <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                                    <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                                 </div>
                                             </div>
                                         <?php }else if($Top_two == "C"){ ?>
                                             <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                                <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                                    <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                                <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                                    <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                                 </div>
                                             </div>
                                         <?php } ?>
@@ -1673,9 +1654,9 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 10px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 10px;">
                         They are practical and uses direct methods to get quick results but still shows an interest in people.
@@ -1687,36 +1668,36 @@ $the_report_pattern = "The ".$report_pattern;
                         They want to be in charge because of confidence in their ability to make decisions. 
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
-                        They have boundless energy and need activity and to see results or they become bored. They need daily challenges and for others to be willing to listen to them and carry out their plans.
+                        They have boundless energy, need activity, and to see results or they become bored. They need daily challenges and for others to be willing to listen to them and carry out their plans.
                     </p>
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 20px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -1725,26 +1706,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -1759,17 +1740,17 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 40px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 40px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         This versatile, eager, self-starter is very competitive. They may be impatient and take a win/lose approach to life.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b>To be highly motivated, the <?=$report_pattern?> needs freedom, the opportunity for advancement, and information that will help them get results. They like having power and authority.</b>
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
-                        <?=$the_report_pattern?> fights for what they think is the right way to accomplish the goal, but he can accept momentary defeat and tends not to be a grudge holder. They dislike weakness.
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px;">
+                        <?=$the_report_pattern?> fights for what they think is the right way to accomplish the goal, but they can accept momentary defeat and tends not to be a grudge holder. They dislike weakness.
                     </p>
                 </td>
             </tr>
@@ -1778,12 +1759,12 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        They are more determined, unemotional, and individualistic than the other Choleric blends.
+                        They are more determined, unemotional, and individualistic than the other D (Dominance) blends.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b><?=$report_pattern?>s are very practical. They will use very direct and persistent methods to get results or promote their ideas.</b>
@@ -1794,31 +1775,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 20px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -1827,26 +1808,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -1861,13 +1842,13 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 50px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 50px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <?=$report_pattern?>s usually have deep personal goals and may pursue them at the expense of others. They need clear direction before they can function efficiently. They tend to have difficulty working with others because of their independent nature and lack of natural people skills.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b>To be highly motivated they need freedom, independence, the opportunity for advancement, and information that will help them get quick results. They dislike weakness. They have a firm, stoic expression.</b>
                     </p>
                 </td>
@@ -1877,12 +1858,12 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more detail oriented than the other Choleric blends. They initiate change. They usually operate from a well-thought-out plan. They have creative ideas. 
+                        <?=$the_report_pattern?> is more detail oriented than the other D (Dominance) blends. They initiate change. They usually operate from a well-thought-out plan. They have creative ideas. 
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         They will often use very direct, forceful, and persistent methods to get results or promote their ideas. They want to be in charge because of confidence in their ability to make things happen the right way.
@@ -1893,31 +1874,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 20px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -1926,26 +1907,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -1960,16 +1941,16 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$report_pattern?>s usually have well-thought-out goals and are very independent in their attempt to carry them out. They need to know exactly what is expected before they can function efficiently.
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        <?=$the_report_pattern?> usually have well-thought-out goals and are very independent in their attempt to carry them out. They need to know exactly what is expected before they can function efficiently.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         They can be both very forceful and very sensitive. They speak with authority and are usually very productive. When working on a project, they exhibit sensitivity and strategy that reveal penetrating insight. They dislike weakness. 
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px;">
                         <b>To be highly motivated, they need freedom, the opportunity for advancement, information that will help them get results, and the chance to make something better.</b>
                     </p>
                 </td>
@@ -1977,11 +1958,11 @@ $the_report_pattern = "The ".$report_pattern;
         </table>
     <?php }else if($Top_one == "I" && $Top_two == "D"){ ?>
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #f0f4f7;margin-top: 10px;">
-            <tr>
+            <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <b><?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.</b> <?=$report_pattern?>s are more assertive than the other Sanguine blends and naturally try to negotiate with others. 
+                        <b><?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.</b> <?=$report_pattern?>s are more assertive than the other I (Influence) blends and naturally try to negotiate with others. 
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         They are very energetic and work well with and through people. This person has an outgoing interest in others and the ability to gain the respect and confidence of varied types of individuals.
@@ -1992,31 +1973,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 20px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2025,26 +2006,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2056,22 +2037,22 @@ $the_report_pattern = "The ".$report_pattern;
         </table>
 
         <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 10px; display: inline-block; padding-left: 80px; padding-right: 80px; padding-top: 20px; padding-bottom: 0px; background: #fff;">
-            <tr>
+            <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 50px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
-                <td align="left" style="width: 340px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 12px;">
-                        <?=$report_pattern?>s exhibit poise and confidence in most situations, especially social events. They will become bored without activity and social involvement. They have a difficult time with details, organization and consistency. 
+                <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        <?=$the_report_pattern?> exhibit poise and confidence in most situations, especially social events. They will become bored without activity and social involvement. They have a difficult time with details, organization, and consistency. 
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 12px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         They prefer others to give them information that will help them make a decision rather than research it themselves.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 12px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <?=$report_pattern?>s work well with others and make good leaders. They are very optimistic but may lack follow-through.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px;">
                         <b>To be highly motivated, they need freedom of expression, recognition, involvement with people, acceptance, and freedom from details.</b>
                     </p>
                 </td>
@@ -2081,12 +2062,12 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <b><?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.</b> 
+                        <b><?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.</b> 
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$report_pattern?>s are more relationship oriented than the other Sanguine blends. They are very approachable and place high importance on enduring relationships.
+                        <?=$report_pattern?>s are more relationship oriented than the other I (Influence) blends. They are very approachable and place high importance on enduring relationships.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b>Most people are impressed by their  warmth, empathy, and their understanding approach.</b> They possess a casual kind of poise in social settings. 
@@ -2094,31 +2075,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 20px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2127,26 +2108,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2161,19 +2142,19 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 45px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         People tend to seek them out to share their problems because they perceive them to be good listeners. Children especially like them.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         Although doing details and organizational things give them difficulty, they are able to do them. 
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> works very well with others, and are personable, optimistic, and accommodating.
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        <?=$the_report_pattern?> works very well with others and are personable, optimistic, and accommodating.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px;">
                         <b>To be highly motivated, <?=$report_pattern?>s need freedom of expression, the opportunity to build relationships, and to be of service to others.</b>
                     </p>
                 </td>
@@ -2183,9 +2164,9 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 10px; padding-bottom: 10px; background: #f0f4f7;margin-top: 5px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
 
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">    
@@ -2200,31 +2181,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 10px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2233,26 +2214,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2267,19 +2248,19 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 15px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 110px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         <b><?=$report_pattern?>s are usually well organized.</b> There are two types of organization – one is neat where everything has a place and is in its place. The other is little piles, but they know what is in the piles. Both are organized, meaning <?=$report_pattern?>s know where things are.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                     They tend to place importance on making a favorable impression, being accepted, and seeking recognition for achievements. Information is very important to them, so they may ask many questions.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         <b><?=$report_pattern?>s function best when they have a plan with sufficient details.</b> They may be reluctant to take action until they are sure they can accomplish the task. If they cannot be sure, they may not try. 
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px;">
                         <b><?=$report_pattern?>s are capable people who tend to succeed at most anything and often rise to leadership positions.</b>
                     </p>
                 </td>
@@ -2289,48 +2270,48 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 25px; padding-bottom: 25px; background: #f0f4f7;margin-top: 5px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
 
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">    
-                        <?=$the_report_pattern?> is more industrious, determined, and unemotional than the other Phlegmatic blends.
+                        <?=$the_report_pattern?> is more industrious, determined, and unemotional than the other S (Steadiness) blends.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         This determined individual brings a deceptively intense approach to the task. <b>Being low-key outwardly, their involvement in a task is not easily observed.</b>
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
-                        <?=$report_pattern?>s are a practical "anchor of reality". They are calm, steady, and persevering.
+                        <?=$report_pattern?>s are a practical "anchor of reality." They are calm, steady and persevering.
                     </p>
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 10px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2339,26 +2320,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2373,16 +2354,16 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 15px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         <?=$report_pattern?>s are successful because of firm determination. After starting a project, they are tenacious and will fight hard for their objectives.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
-                        <b>They are very independent, questioning, and thorough in their approach and will follow through.</b> They want to operate by themselves and set their own pace.
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                        <b>They are very independent, questioning and thorough in their approach, and will follow through.</b> They want to operate by themselves and set their own pace.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         Once their mind is made up, they will typically resist any other method of approach, and they can be very stubborn. They seek challenging assignments without close supervision. They prefer work of a technical nature rather than involvement with people.
                     </p>
                 </td>
@@ -2392,13 +2373,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 25px; padding-bottom: 25px; background: #f0f4f7;margin-top: 5px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
 
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">    
-                        <?=$the_report_pattern?> are more friendly than the other Phlegmatic blends. They are very accepting and tolerant of others.
+                        <?=$the_report_pattern?> is more friendly than the other S (Steadiness) blends. They are very accepting and tolerant of others.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         <b><?=$the_report_pattern?>  is very accommodating and easy to be associated with at work and as a friend.</b> They need some social involvement. They are loyal, consistent, and dependable. They will often work when they are ill.
@@ -2406,31 +2387,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 10px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2439,26 +2420,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2473,16 +2454,16 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 15px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 60px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         <?=$report_pattern?>s are very independent minded and want to operate by themselves and set their own pace. They learn by doing.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         Once their mind is made up, they will resist any other method of approach. <b>They can do routine work but will need some activity and involvement with people during the day.</b>
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 10px;">
                         <?=$report_pattern?>s may have a very difficult time saying no and will often take on more than they can do. They have a very pleasant, soft voice.
                     </p>
                 </td>
@@ -2492,12 +2473,12 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more consistent than the other <?=$first_content?> blends.
+                        <?=$the_report_pattern?> is more consistent than the other <?=$Top_one?> (<?=$first_temperament?>) blends.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         They are very routine, accommodating, and mostly passive. <b>Patience, self-control, and deliberateness characterize the usual behavior of this amiable and easy-going individual.</b>
@@ -2506,31 +2487,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 10px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2539,26 +2520,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2573,19 +2554,19 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <b>They are calm, steady and persevering.</b>
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        <b>They are calm, steady, and persevering.</b>
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$report_pattern?>s are successful because of persistence. After starting a project, they will usually see it through to completion. They are independent, questioning, and thorough in their approach and will follow through. They want to operate by themselves and set their own pace.
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        <?=$report_pattern?>s are successful because of persistence. After starting a project, they will usually see it through to completion. They are independent, questioning, and thorough in their approach, and will follow through. They want to operate by themselves and set their own pace.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$report_pattern?>s are usually possessive of family, material things, and friends.
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        <?=$report_pattern?>s are usually possessive of family, material things and friends.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px;">
                         Once their mind is made up, they often resist other methods of approach. <?=$report_pattern?>s prefer routine work and involvement with a limited number of people. They approach a task with calculated moderation. <b><?=$report_pattern?>s are always willing to help those they consider to be their friend.</b>
                     </p>
                 </td>
@@ -2595,12 +2576,12 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 10px; padding-bottom: 10px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 10px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 10px;">
-                        <?=$the_report_pattern?> is more forceful and direct than the other Melancholy blends.
+                        <?=$the_report_pattern?> is more forceful and direct than the other C (Compliance) blends.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 10px;">
                         <b>They are systematic, precise thinkers, and follow procedures in both their business and personal lives.</b>
@@ -2611,31 +2592,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 10px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2644,26 +2625,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2678,17 +2659,17 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
-                <td align="left" style="width: 340px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                <td align="left" style="width: 320px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b><?=$report_pattern?>s normally behave in a diplomatic manner, except when it comes to deviating from standards they have accepted.</b> They can then be very forceful in insisting the "right way" be followed.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         They tend not to be socially active outside of friends and family, unless there is a purpose, preferring work and privacy. When in relationships, people may perceive them as abrasive and not flexible in their communication. <?=$report_pattern?>s make decisions slowly because of their need to collect and analyze information until they are sure of the best course of action. 
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <b>To be highly motivated, they need a structured environment with clear rules and procedures; time to organize, collect information and think; freedom to develop a plan.</b>
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        <b>To be highly motivated, they need a structured environment with clear rules and procedures; time to organize, collect information, and think; freedom to develop a plan.</b>
                     </p>
                 </td>
             </tr>
@@ -2697,12 +2678,12 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 10px; padding-bottom: 10px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 10px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 8px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 8px;">
-                        <?=$the_report_pattern?> is more friendly than the other Melancholy blends and at times has a natural smile.
+                        <?=$the_report_pattern?> is more friendly than the other C (Compliance) blends and at times has a natural smile.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 8px;">
                         In areas of interest, they have high personal ambitions. <b>They are well-balanced, systematic, precise thinkers who tend to follow procedures in both their work and personal lives.</b> They are attentive to detail and can be openly friendly. They enjoy being with people some of the time. 
@@ -2713,31 +2694,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 10px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2746,26 +2727,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2780,17 +2761,17 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 340px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 12px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 8px;">
                         <?=$the_report_pattern?> is a versatile, productive individual who works well with most everyone. At times, they may be very sensitive to criticism and the perceived needs of others. <b>They may make decisions slowly because of their need to collect and analyze information until they are sure of the best course of action (this is especially true when involved in a new project).</b>
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 12px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 8px;">
                         At times, <?=$report_pattern?>s may have difficulty thinking quickly on their feet. Later, after thinking more about it, they realize how they could have provided a better answer. <?=$the_report_pattern?> is not trying to be right, they are trying to figure out what is right. 
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 12px;">
-                        <b>To be highly motivated, they need a structured environment with clear rules and procedures; time to organize, collect information, think; and develop a plan.</b> <?=$report_pattern?>s need to have  some social interaction with friends and family. 
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 20px; margin-bottom: 8px;">
+                        <b>To be highly motivated, they need a structured environment with clear rules and procedures; time to organize, collect information, and think; and develop a plan.</b> <?=$report_pattern?>s need to have  some social interaction with friends and family. 
                     </p>
                 </td>
             </tr>
@@ -2799,12 +2780,12 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; margin-left: 0px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #f0f4f7;margin-top: 10px;">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 440px; display: inline-block; padding: 0px; margin: 0px;">
-                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$first_temperament?>-<?=$second_temperament?></h4>
+                    <h4 style="font-size: 14pt; margin: 0px; padding: 0px; margin-bottom: 13px;"><?=$Top_one?>-<?=$Top_two?> (<?=$first_temperament?>-<?=$second_temperament?>)</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is a combination of the <?=$first_content?> temperament being first and the <?=$sec_content?> temperament being second.
+                        <?=$the_report_pattern?> is a combination of the <?=$Top_one?> (<?=$first_temperament?>) temperament being first and the <?=$Top_two?> (<?=$second_temperament?>) temperament being second.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        They are more conscientious and private than the other Melancholy blends. 
+                        They are more conscientious and private than the other C (Compliance) blends. 
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b><?=$the_report_pattern?> is a quiet and capable  individual who works well in a structured environment, requiring attention to detail.</b> They are systematic, precise thinkers who tend to follow procedures in both their work and personal lives. 
@@ -2815,31 +2796,31 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
                 <td align="center" style="width: 200px; display: inline-block; padding: 0px; margin: 0px; padding-left: 30px; padding-top: 10px;">
                     <img style="width: 180px; text-align: center;" src="<?=get_assessment_chart_image($assessment->assessment_id, 'single', 'dirpath')?>" />
-                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:55px;" align="left">
+                    <table style="width: 100%; margin: 0px; padding:0px; display: inline-block; padding-left:45px;" align="left">
                         <tr>
                             <td align="center" style="width:50px;">
                                 <?php if($Top_one == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
-                                            <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f26868; ">
+                                            <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_one == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
-                                            <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                        <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #68ba4b; ">
+                                            <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2848,26 +2829,26 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="center" style="width:50px;">
                                 <?php if($Top_two == "D"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
-                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #f16869; ">
+                                            <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "I"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
-                                            <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #faed85; ">
+                                            <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "S"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
-                                            <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #aed2e0; ">
+                                            <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php }else if($Top_two == "C"){ ?>
                                     <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                        <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
-                                            <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                        <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.65px;  width:100%;background-color: #65BE4B; ">
+                                            <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -2882,16 +2863,16 @@ $the_report_pattern = "The ".$report_pattern;
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 245px; display: inline-block; padding: 0px; margin: 0px; padding-left: 0px; padding-top: 30px;">
                     <img style="width: 300px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/behavior-<?=$Top_one.$Top_two?>.png" />
-                    <img style="width: 210px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                    <img style="width: 170px; text-align: left; margin-top: 80px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
                 </td>
                 <td align="left" style="width: 340px; display: inline-block; padding: 0px; margin: 0px; padding-left: 20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b><?=$report_pattern?>s are good at anticipating problems but may struggle to take action.</b> They initially withdraw from aggressive people, but after collecting their thoughts they may re-engage the person or situation.
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        They are usually very well organized and function best when they have a well-thought-out plan. <?=$the_report_pattern?> is not trying to be right, they are trying to figure out what is right. 
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                        They are usually very well organized and function best when they have a well-thought-out plan. <?=$report_pattern?> is not trying to be right, they are trying to figure out what is right. 
                     </p>
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
+                    <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
                         <b>To be highly motivated, <?=$report_pattern?>s need a structured environment with clear rules and procedures; time to organize, collect information, and think; and time to develop a plan.</b>
                     </p>
                 </td>
@@ -2920,26 +2901,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -2948,26 +2929,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -3004,7 +2985,7 @@ $the_report_pattern = "The ".$report_pattern;
 
                                 <img style="width: 100%; text-align: center; margin: 0px; padding: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-13-secondary-need.png" />
                                 
-                                <h4 class="text-center" style="color: #231f20; font-size: 12pt; text-align: center; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-align: center; width: 100%;text-transform:uppercase;">To Be Accepted Socially!</h4>
+                                <h4 class="text-center" style="color: #231f20; font-size: 12pt; text-align: center; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-align: center; width: 100%;text-transform:uppercase;">Be Accepted Socially!</h4>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 0px; text-align: center;">
                                     <?=$report_pattern?>s also shape their environment by bringing others together to accomplish results.
                                 </p>
@@ -3207,7 +3188,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more forceful and sociable than the other Choleric blends.
+                        <?=$the_report_pattern?> is more forceful and sociable than the other D (Dominance) blends.
                     </p>
                 </td>
             </tr>
@@ -3426,12 +3407,12 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom:120px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 90px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more determined than the other Choleric blends. They are unemotional and individualistic.
+                        <?=$the_report_pattern?> is more determined than the other D (Dominance) blends. They are unemotional and individualistic.
                     </p>
                 </td>
             </tr>
@@ -3670,12 +3651,12 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 110px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 90px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more detail-oriented than the other Choleric blends. They initiate change and will operate from a well-thought-out plan of action.
+                        <?=$the_report_pattern?> is more detail-oriented than the other D (Dominance) blends. They initiate change and will operate from a well-thought-out plan of action.
                     </p>
                 </td>
             </tr>
@@ -3934,12 +3915,12 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 100px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 60px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more assertive than the other Sanguine blends. They assertively persuade others to their point of view.
+                        <?=$the_report_pattern?> is more assertive than the other I (Influence) blends. They assertively persuade others to their point of view.
                     </p>
                 </td>
             </tr>
@@ -4188,12 +4169,12 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 100px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 60px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more friendship oriented than the other Sanguine blends. They are very approachable and place high importance on lasting relationships.
+                        <?=$the_report_pattern?> is more friendship oriented than the other I (Influence) blends. They are very approachable and place high importance on lasting relationships.
                     </p>
                 </td>
             </tr>
@@ -4300,7 +4281,7 @@ $the_report_pattern = "The ".$report_pattern;
                                                     </td>
                                                     <td style="width: 90%; display: inline-block; padding-top:0px;margin:0px;">
                                                         <p style="color: #231f20; font-size: 11pt; margin: 0px; line-height: 16px; margin-bottom: 0px; margin-top: 0px; text-align: left;padding-left:8px;">
-                                                        Planning
+                                                        planning
                                                         </p>
                                                     </td>
                                                 </tr>
@@ -4466,7 +4447,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 50px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 25px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
@@ -4741,12 +4722,12 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 90px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-right: 0px; margin-left: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 0px; padding-bottom: 10px; margin-bottom: 50px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr style="width: 100%; display: inline-block; margin: 0px; padding: 0px;">
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$report_pattern?>s are more persistent than the other Phlegmatic blends. They rarely give up once they accept a goal or focus on getting the task completed.
+                        <?=$report_pattern?>s is more persistent than the other S (Steadiness) blends. They rarely give up once they accept a goal or focus on getting the task completed.
                     </p>
                 </td>
             </tr>
@@ -4776,7 +4757,7 @@ $the_report_pattern = "The ".$report_pattern;
 
                                 <img style="width: 100%; text-align: center; margin: 0px; padding: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-13-secondary-need.png" />
                                 
-                                <h4 class="text-center" style="color: #231f20; font-size: 12pt; text-align: center; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-align: center; width: 100%;text-transform:uppercase;">To Be Accepted Socially!</h4>
+                                <h4 class="text-center" style="color: #231f20; font-size: 12pt; text-align: center; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-align: center; width: 100%;text-transform:uppercase;">To Accepted Socially!</h4>
 
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 0px; text-align: center;">
                                     <?=$report_pattern?>s also shape their environment by bringing others into alliance to accomplish results.
@@ -4991,7 +4972,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 30px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$report_pattern?>s are more friendly than the other Phlegmatic blends. They are very accepting and tolerant of others.
+                        <?=$report_pattern?>s is more friendly than the other S (Steadiness) blends. They are very accepting and tolerant of others.
                     </p>
                 </td>
             </tr>
@@ -5014,14 +4995,14 @@ $the_report_pattern = "The ".$report_pattern;
                                 <h4 style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; text-align: center; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-transform:uppercase;">To Accommodate Others!</h4>
 
                                 <p style="width:100%; display:inline-block; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; text-align: center;">
-                                <?=$report_pattern?>s shape their environment by cooperating with others to carry out the task.
+                                <?=$report_pattern?>s shape their environment by overcoming opposition to accomplish results.
                                 </p>
                             </td>
                             <td style="width:50%; display:inline-block;">
 
                                 <img style="width: 100%; text-align: center; margin: 0px; padding: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-13-secondary-need.png" />
                                 
-                                <h4 class="text-center" style="color: #231f20; font-size: 12pt; text-align: center; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-align: center; width: 100%;text-transform:uppercase;">To Do things right!</h4>
+                                <h4 class="text-center" style="color: #231f20; font-size: 12pt; text-align: center; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-align: center; width: 100%;text-transform:uppercase;">Do things right!</h4>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 0px; text-align: center;">
                                     They also shape their environment by seeking quality in products or service.
                                 </p>
@@ -5129,7 +5110,7 @@ $the_report_pattern = "The ".$report_pattern;
                                         </td>
                                         <td style="width: 97%; display: inline-block; padding-top:0px;margin:0px;">
                                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 0px; text-align: left;padding-left:8px;">
-                                            Routine, consistent, and very loyal
+                                            Routine, consistent and very loyal
                                             </p>
                                         </td>
                                     </tr>
@@ -5241,12 +5222,12 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin: 0px; padding: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-bottom: 25px; padding-top: 20px; margin-bottom: 90px;  background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin: 0px; padding: 0px; margin-top: 20px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-bottom: 25px; padding-top: 20px; margin-bottom: 60px;  background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 12pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px;">
-                        <?=$the_report_pattern?> is more consistent than the other <?=$first_content?> blends. They are very routine, loyal, and accommodating.
+                        <?=$the_report_pattern?> is more consistent than the other <?=$Top_one?> (<?=$first_temperament?>) blends. They are very routine, loyal, and accommodating.
                     </p>
                 </td>
             </tr>
@@ -5522,7 +5503,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 12pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 0px;">
-                        <?=$the_report_pattern?> is more forceful and direct than the other Melancholy blends. They will follow through once they have formulated their plan.
+                        <?=$the_report_pattern?> is more forceful and direct than the other C (Compliance) blends. They will follow through once they have formulated their plan.
                     </p>
                 </td>
             </tr>
@@ -5777,7 +5758,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 12pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 0px;">
-                        <?=$the_report_pattern?> is more friendly than the other Melancholy blends and at times have a natural smile. In areas of interest, they have high personal ambitions. They are usually well-balanced.
+                        <?=$the_report_pattern?> is more friendly than the other C (Compliance) blends and at times have a natural smile. In areas of interest, they have high personal ambitions. They are usually well-balanced.
                     </p>
                 </td>
             </tr>
@@ -6021,7 +6002,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 100%; display: inline-block; padding: 0px; margin: 0px; padding-right:150px;">
                     <h4 style="color: #231f20; font-size: 12pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-bottom: 10px; text-align: left; width: 100%; text-transform:uppercase;">Uniqueness</h4>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 0px;">
-                        <?=$the_report_pattern?> is more conscientious and private than the other Melancholy blends. 
+                        <?=$the_report_pattern?> is more conscientious and private than the other C (Compliance) blends. 
                     </p>
                 </td>
             </tr>
@@ -6031,7 +6012,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; margin-left: 85px; margin-right: 60px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top: 10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -6057,26 +6038,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -6085,26 +6066,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -6136,7 +6117,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">These tendencies promote the <?=$report_pattern?>’s effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">These tendencies promote the <?=$report_pattern?>’s effectiveness in relationships and productivity in their career</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -6207,7 +6188,7 @@ $the_report_pattern = "The ".$report_pattern;
                                                 <tr>
                                                     <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p></td>
                                                     <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
-                                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Impatient</p>
+                                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Impatience</p>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -6266,7 +6247,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$the_report_pattern?> may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -6371,7 +6352,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin: 0px; padding: 0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career: </p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -6437,7 +6418,7 @@ $the_report_pattern = "The ".$report_pattern;
         </table>
 
         
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:140px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:120px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-transform:uppercase;">Fears</h4>
@@ -6445,7 +6426,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$the_report_pattern?> may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -6562,7 +6543,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin: 0px; padding: 0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -6624,7 +6605,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -6729,7 +6710,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; maring:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career: </p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -6791,7 +6772,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -6926,7 +6907,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin: 0px; padding: 0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career: </p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -6976,7 +6957,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -7087,7 +7068,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin: 0px; padding: 0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career: </p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -7149,7 +7130,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -7272,7 +7253,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -7334,7 +7315,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -7463,7 +7444,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -7525,7 +7506,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -7648,7 +7629,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -7728,7 +7709,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$the_report_pattern?> may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -7859,7 +7840,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -7941,7 +7922,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 5px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 5px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$the_report_pattern?> may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -8112,7 +8093,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -8202,7 +8183,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$the_report_pattern?> may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -8373,7 +8354,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td style="width:100%; display:inline-block; margin:0px; padding:0px; padding-right:20px;">
-                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these tendencies which may get in the way of their effectiveness in relationships and productivity in their career:</p>
+                                            <p style="width:100%; display:inline-block; font-family:'proxima_nova_light'; text-align: left; font-size:12pt; line-height:20px; color: #231f20; padding-right:10px;">Successful <?=$report_pattern?>s have learned to overcome these natural weaknesses to be more effective in relationships and productive in their career:</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -8439,7 +8420,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
-                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">Fear</span> is a primary emotion and <span style="font-family:'proxima_novalightitalic';font-size: 13pt; margin: 0px; line-height: 22px;">anger</span> is a secondary emotion. <?=$report_pattern?>s may respond with anger if any of the following fears are realized:</p>
+                    <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Fear tends to create anger. <span style="font-family:'proxima_novalightitalic';">Fear</span> is a primary emotion, and <span style="font-family:'proxima_novalightitalic';">anger</span> is a secondary emotion. <?=$the_report_pattern?> may respond with anger if any of the following fears are realized:</p>
                 </td>
             </tr>
             <tr>
@@ -8494,7 +8475,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top: 10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -8520,26 +8501,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -8548,26 +8529,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -8736,7 +8717,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px; padding:0; padding-bottom:10px;">
-                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 15px; display:inline-block;"><b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is a hard-driving, “think big,” take-charge, "get the job done now" person.</b> They are result-oriented. They will usually expect the same approach from those with whom they are associated.</p>
+                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 15px; display:inline-block;"><b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is a hard-driving, “think big,” take-charge, get-the-job-done now person.</b> They are result-oriented. They will usually expect the same approach from those with whom they are associated.</p>
                 </td>
             </tr>
             <tr>
@@ -8959,7 +8940,7 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
             </tr>
             <tr>
-                <td style="width:100%; display: inline-block; margin: 0px; padding:0px; padding-top:18px; padding-bottom:30px;">
+                <td style="width:100%; display: inline-block; margin: 0px; padding:0px; padding-top:25px; padding-bottom:30px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-top: 0px; text-align: left;">
                         <?=$the_report_pattern?> will usually try to run everything. They like to get others involved to do the actual work. They may select strong subordinates but not allow them to function freely.
                     </p>
@@ -9126,7 +9107,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px; padding:0; padding-bottom:10px;">
-                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 5px; display:inline-block;"><b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is a hard-driving, “think big,” take-charge, "get the job done now", and unemotional person.</b> They will usually expect the same approach from those with whom they are associated. They rarely show excitement.</p>
+                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 5px; display:inline-block;"><b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is a hard-driving, “think big,” take-charge, get-the-job-done-now, and unemotional person.</b> They will usually expect the same approach from those with whom they are associated. They rarely show excitement.</p>
                 </td>
             </tr>
             <tr>
@@ -9435,7 +9416,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px; padding:0; padding-bottom:30px;">
-                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 5px; display:inline-block;"><b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is a hard-driving, “think big,” take-charge, "get the job done now" person.</b> They are very detailed, result-oriented, and operate from a plan. They will usually expect the same approach from those with whom they are associated.</p>
+                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 5px; display:inline-block;"><b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is a hard-driving, “think big,” take-charge, get-the-job-done-now person.</b> They are very detailed, result-oriented, and operate from a plan. They will usually expect the same approach from those with whom they are associated.</p>
                 </td>
             </tr>
             <tr>
@@ -10327,6 +10308,15 @@ $the_report_pattern = "The ".$report_pattern;
                     </table>
                 </td>
             </tr>
+            <?php /*
+            <tr>
+                <td style="width:100%; display: inline-block; margin: 0px; padding:0px; padding-top:15px; padding-bottom:35px;">
+                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-top: 0px; text-align: left;">
+                        <?=$the_report_pattern?> will likely rise to a position of leadership and naturally try to run everything. They like to get others involved to do the work. They may select strong subordinates but not allow them to function freely.
+                    </p>
+                </td>
+            </tr>
+            */ ?>
         </table>
     <?php }else if($Top_one == "I" && $Top_two == "C"){ ?>
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 20px;" cellpadding="0" cellspacing="0">
@@ -10683,6 +10673,15 @@ $the_report_pattern = "The ".$report_pattern;
                     </table>
                 </td>
             </tr>
+            <?php /*
+            <tr>
+                <td style="width:100%; display: inline-block; margin: 0px; padding:0px; padding-top:15px; padding-bottom:35px;">
+                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-top: 0px; text-align: left;">
+                        <?=$the_report_pattern?> will likely rise to a position of leadership and naturally try to run everything. They like to get others involved to do the work. They may select strong subordinates but not allow them to function freely.
+                    </p>
+                </td>
+            </tr>
+            */ ?>
         </table>
     <?php }else if($Top_one == "S" && $Top_two == "D"){ ?>
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 20px;" cellpadding="0" cellspacing="0">
@@ -11446,6 +11445,16 @@ $the_report_pattern = "The ".$report_pattern;
                                                     </td>
                                                     <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
                                                         <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">
+                                                        Willingness to confront 
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;">
+                                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p>
+                                                    </td>
+                                                    <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
+                                                        <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">
                                                         Flexibility
                                                         </p>
                                                     </td>
@@ -11834,7 +11843,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px; padding:0; padding-bottom:10px;">
-                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 15px; display:inline-block;"><b style="font-family:'proxima_novaregular';margin:0px; padding:0px;"><?=trim($the_report_pattern)?> is a cautious sometimes direct person who wants to do what is "right".</b> They will support others without wanting the "spotlight".
+                    <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; margin-bottom: 15px; display:inline-block;"><b style="font-family:'proxima_novaregular';margin:0px; padding:0px;"><?=trim($the_report_pattern)?> is a cautious sometimes direct person who wants to do what is "right."</b> They will support others without wanting the "spotlight."
                     </p>
 
                     <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px; display:inline-block;">
@@ -12470,7 +12479,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px; padding:0; padding-bottom:10px;">
                     <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 5px; display:inline-block;">
-                        <b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is an analytical, cautious, and routine person who wants to do what is "right".</b> They will support others without wanting the "spotlight".
+                        <b style="font-family:'proxima_novaregular';"><?=$the_report_pattern?> is an analytical, cautious, and routine person who wants to do what is "right."</b> They will support others without wanting the "spotlight."
                     </p>
 
                     <p style="font-family: 'proxima_nova_light'; text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; display:inline-block;">
@@ -12650,26 +12659,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -12678,26 +12687,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -12787,7 +12796,7 @@ $the_report_pattern = "The ".$report_pattern;
 
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:240px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:220px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-transform:uppercase;">Also...</h4>
@@ -13304,7 +13313,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:180px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:170px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-transform:uppercase;">Also...</h4>
@@ -13375,7 +13384,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p></td>
                             <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;"><b>Never embarrassing them; they may become aggressive or withdraw</b></p>
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Never embarrassing them; they may become aggressive or withdraw</p>
                             </td>
                         </tr>
                         <tr>
@@ -13407,7 +13416,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:250px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:50px; margin-bottom:200px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-transform:uppercase;">Also...</h4>
@@ -13514,7 +13523,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p></td>
                             <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Asking questions (they will likely <i style="font-family:'proxima_novalightitalic';">not</i> ask you questions)</p>
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Asking questions (they will likely not ask you questions)</p>
                             </td>
                         </tr>
                         <tr>
@@ -13528,7 +13537,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:20px; margin-bottom:80px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:20px; margin-bottom:40px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width:100%; display: inline-block; margin: 0px;">
                     <h4 style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 20px; margin-top: 20px; margin-bottom: 10px; text-transform:uppercase;">Also...</h4>
@@ -13798,7 +13807,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p></td>
                             <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Giving clear, specific information and use visual aids</p>
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Giving clear, specific information, and using visual aids</p>
                             </td>
                         </tr>
                         <tr>
@@ -14048,6 +14057,12 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width:3%; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p></td>
                             <td style="width: 97%; display: inline-block; padding-top:0px;margin:0px;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">Avoiding asking for sudden change</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" style="width:3%; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p></td>
+                            <td style="width: 97%; display: inline-block; padding-top:0px;margin:0px;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">
                                 Not expecting much social involvement
                                 </p>
@@ -14138,7 +14153,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="left" style="width:3%; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 6px;"><b>•</b></p></td>
                             <td style="width: 97%; display: inline-block; padding-top:0px;margin:0px;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 6px; text-align: left; padding-left:8px;">
-                                Presenting a new idea with controlled emotions, using logic, facts and visual aids; allowing them<br/>time to think about how the idea can be done
+                                Presenting a new idea with controlled emotions, using logic, facts, and visual aids; allowing them<br/>time to think about how the idea can be done
                                 </p>
                             </td>
                         </tr>
@@ -14463,7 +14478,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top: 10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -14490,26 +14505,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -14518,26 +14533,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -14571,42 +14586,42 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">save time</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">results</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">productive</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">goals</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">effective</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">quick</p>
                     </div>
                 </td>
@@ -14652,7 +14667,7 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
             </tr>
         </table>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 270px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 220px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-right:50px;">
                     <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 15pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
@@ -14679,42 +14694,42 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">save time</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">productive</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">quick</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">results</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">goals</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
@@ -14723,13 +14738,13 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;"></td>
                 <td align="left" style="width: 8%; display: inline-block;"></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">effective</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block;"></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">bottom line</p>
                     </div>
                 </td>
@@ -14744,7 +14759,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 2px;"><b>•</b></p></td>
                             <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 2px; text-align: left;padding-left:8px;">Brief, direct and to the point</p>
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 2px; text-align: left;padding-left:8px;">Brief, direct, and to the point</p>
                             </td>
                         </tr>
 
@@ -14769,7 +14784,7 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
             </tr>
         </table>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 210px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 190px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-right:50px;">
                     <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 15pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
@@ -14795,63 +14810,63 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">save time</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">goal</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
-                        <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">results</p>
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                        <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">result</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">effective</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">details</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">productive</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">quick</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">plan</p>
                     </div>
                 </td>
@@ -14867,7 +14882,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;"><p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px;margin-top: 2px;"><b>•</b></p></td>
                             <td style="width: 100%; display: inline-block; padding-top:0px;margin:0px;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 2px; text-align: left;padding-left:8px;">
-                                Be brief, direct and to the point (do not get intimidated or offended) 
+                                Be brief, direct, and to the point (do not get intimidated or offended) 
                                 </p>
                             </td>
                         </tr>
@@ -14897,7 +14912,7 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
             </tr>
         </table>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 210px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 190px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-right:50px;">
                     <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 15pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
@@ -14923,38 +14938,38 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">exciting</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">status</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">prestigious</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">latest</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">fun</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">team</p>
                     </div>
                 </td>
@@ -15001,7 +15016,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 260px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 230px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-right:50px;">
                     <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 15pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
@@ -15027,38 +15042,38 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">relationship</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">exciting</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">fun</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">friendship</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">latest</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">prestigious</p>
                     </div>
                 </td>
@@ -15067,13 +15082,13 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;"></td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">status</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">loyalty</p>
                     </div>
                 </td>
@@ -15130,7 +15145,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 190px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 170px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-right:50px;">
                     <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 15pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
@@ -15156,38 +15171,38 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">proud</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">latest</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">prestigious</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">exciting</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">status</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">plan</p>
                     </div>
                 </td>
@@ -15196,13 +15211,13 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;"></td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">fun</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">think</p>
                     </div>
                 </td>                
@@ -15269,7 +15284,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 160px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 30px; margin-bottom: 140px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top: 15px; padding-bottom: 25px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-right:50px;">
                     <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 15pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
@@ -15295,38 +15310,38 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">support</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">realistic</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">traditional</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">care</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">results</p>
                     </div>
                 </td>
@@ -15335,13 +15350,13 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;"></td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">family</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">“sincerely appreciate…”</p>
                     </div>
                 </td>
@@ -15425,57 +15440,57 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">support</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">care</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">traditional</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">family</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">relationship</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">realistic</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">service</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">“sincerely appreciate…”</p>
                     </div>
                 </td>
@@ -15558,61 +15573,61 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">support</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">care</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">traditional</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">family</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">relationship</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">realistic</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">service</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">loyalty</p>
                     </div>
                 </td>
@@ -15623,7 +15638,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;">&nbsp;</td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">“sincerely appreciate”</p>
                     </div>
                 </td>           
@@ -15706,42 +15721,42 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">logical</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">precise</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">efficient</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">fact</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">quality</p>
                     </div>
                 </td>
@@ -15750,14 +15765,14 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;"></td>
                 <td align="left" style="width: 8%; display: inline-block;"></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">detail</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">results</p>
                     </div>
                 </td>
@@ -15850,42 +15865,42 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">logical</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">precise</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">efficient</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">fact</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">quality</p>
                     </div>
                 </td>
@@ -15894,14 +15909,14 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;"></td>
                 <td align="left" style="width: 8%; display: inline-block; "></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">detail</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">fun</p>
                     </div>
                 </td>
@@ -15994,42 +16009,42 @@ $the_report_pattern = "The ".$report_pattern;
         <table align="left" style="width: 75%; display: inline-block; margin: 0px; padding: 0px; padding-left: 145px; padding-right: 40px; margin-top:30px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">logical</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">precise</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">details</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                         <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">fact</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">practical</p>
                     </div>
                 </td>
                 <td align="left" style="width: 8%; display: inline-block; ">
                 </td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">efficient </p>
                     </div>
                 </td>
@@ -16040,7 +16055,7 @@ $the_report_pattern = "The ".$report_pattern;
                 <td align="left" style="width: 28%; display: inline-block;"></td>
                 <td align="left" style="width: 8%; display: inline-block;"></td>
                 <td align="left" style="width: 28%; display: inline-block;">
-                    <div style="width: 100%; display:inline-block;background-color: #231f20;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
+                    <div style="width: 100%; display:inline-block;background-color: #133a54;border-radius: 5px;padding: 10px 10px; margin-bottom:15px;">
                     <p style="color: #fff; font-size: 13pt; text-align: center; margin: 0px;">quality</p>
                     </div>
                 </td>
@@ -16114,7 +16129,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -16140,26 +16155,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -16168,26 +16183,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -16293,7 +16308,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:70px; margin-top:40px; margin-bottom:60px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:70px; margin-top:40px; margin-bottom:40px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:15px;">
                     <h2 class="text-center" style="color: #231f20; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 30px; text-align: left; width: 100%; text-transform:uppercase;">Suggestions for best Performance</h2>
@@ -16485,7 +16500,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:30px; margin-top:40px; margin-bottom:30px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:30px; margin-top:40px; margin-bottom:20px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:15px;">
                     <h2 class="text-center" style="color: #231f20; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 30px; text-align: left; width: 100%; text-transform:uppercase;">Suggestions for best Performance</h2>
@@ -16909,7 +16924,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:70px; margin-top:40px; margin-bottom:170px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:70px; margin-top:40px; margin-bottom:160px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:30px;">
                     <h2 class="text-center" style="color: #231f20; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 30px; text-align: left; width: 100%; text-transform:uppercase;">Suggestions for best Performance</h2>
@@ -17440,7 +17455,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:25px; padding-bottom:20px; margin-top:20px; margin-bottom:45px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:25px; padding-bottom:20px; margin-top:20px; margin-bottom:30px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:30px;">
                     <h2 class="text-center" style="color: #231f20; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 30px; text-align: left; width: 100%; text-transform:uppercase;">Suggestions for best Performance</h2>
@@ -17834,7 +17849,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:50px; margin-top:40px; margin-bottom:50px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; padding-bottom:50px; margin-top:40px; margin-bottom:30px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:15px;">
                     <h2 class="text-center" style="color: #231f20; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 30px; text-align: left; width: 100%; text-transform:uppercase;">Suggestions for best Performance</h2>
@@ -18522,7 +18537,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -18549,26 +18564,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -18577,26 +18592,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -18620,7 +18635,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
-                        <b><?=$the_report_pattern?> may be impatient and irritable when things do not happen fast enough or go their way.</b> They tend to have little time for details, unless they believe it will help them accomplish results quicker. They may sulk and be trouble-makers when not in the limelight. They tend to overstep prerogatives.
+                        <b><?=$the_report_pattern?> may be impatient and irritable when things do not happen fast enough or go their way.</b> They tend to have little time for details, unless they believe it will help them accomplish results quicker. They may sulk and be troublemakers when not in the limelight. They tend to overstep prerogatives.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
                         They tend to suffer from high turnover early in their career because they are searching for something to keep them challenged. They may lose interest in a project once the challenge is gone or the results are not coming fast enough and may…
@@ -18735,7 +18750,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:25px; padding-bottom:0px; margin-bottom:50px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:25px; padding-bottom:0px; margin-bottom:30px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:100%; display: inline-block; margin: 0px; padding:0px;">
                     <table style="width:100%; display:inline-block; padding-bottom:20px;">
@@ -18749,7 +18764,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they fail to see how doing the activity will help them accomplish their goals or get results. They also tend to promise too much and forget to follow through.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they fail to see how doing the activity will help them accomplish their goals or get results. They also tend to promise too much and forget to follow through.</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -18773,7 +18788,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <b><?=$report_pattern?>s may be impatient and irritable when things do not happen fast enough.</b> They have little time for details or people (unless they believe the details or people will help them accomplish results quicker). They can be cold, blunt, and abrupt. They tend to overstep prerogatives.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 15px;">
-                        They may fail to identify with the company and will often resist being a "team member". <b>They may lose interest in a project once the challenge is gone or the results are not coming fast enough.</b>
+                        They may fail to identify with the company and will often resist being a "team member." <b>They may lose interest in a project once the challenge is gone or the results are not coming fast enough.</b>
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
                         <b>Concerns and Potential Areas for Growth Include:</b>
@@ -18888,7 +18903,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:25px; padding-bottom:0px; margin-bottom:50px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:25px; padding-bottom:0px; margin-bottom:40px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:100%; display: inline-block; margin: 0px; padding:0px;">
                     <table style="width:100%; display:inline-block; padding-bottom:20px;">
@@ -18902,7 +18917,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they fail to see how doing the activity will help them accomplish their goals. Sometimes they procrastinate for no reason.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they fail to see how doing the activity will help them accomplish their goals. Sometimes they procrastinate for no reason.</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -18922,7 +18937,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
-                        <b><?=$the_report_pattern?> may be impatient and irritable when things do not happen fast enough.</b> They may sulk and be troublemakers when not in the limelight. They tend to overstep prerogatives often to do it "their" way. <b>They often have "high turnover" early in their career because they are searching for something to keep them challenged.</b>
+                        <b><?=$the_report_pattern?> maybe impatient and irritable when things do not happen fast enough.</b> They may sulk and be troublemakers when not in the limelight. They tend to overstep prerogatives often to do it "their" way. <b>They often have "high turnover" early in their career because they are searching for something to keep them challenged.</b>
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
                         <?=$report_pattern?>s may take excessive time to make decisions and be very forceful carrying out the conclusion. They can be very critical at times. Their aggressive behavior often causes others to withdraw. <b>They may lose interest in a project once the challenge is gone, or if results do not come fast enough. <?=$report_pattern?>s may...</b>
@@ -19011,7 +19026,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they fail to see how doing the activity will help them accomplish their goals. They may also fail to see the reason why it should be done.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they fail to see how doing the activity will help them accomplish their goals. They may also fail to see the reason why it should be done.</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -19040,9 +19055,6 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
-                        <b>The <?=$report_pattern?> may...</b>
-                    </p>
                     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding="0" cellspacing="0">
                         <tr>
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;">
@@ -19129,7 +19141,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:45px; padding-bottom:20px; margin-bottom:80px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:45px; padding-bottom:20px; margin-bottom:100px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:100%; display: inline-block; margin: 0px; padding:0px;">
                     <table style="width:100%; display:inline-block; padding-bottom:20px;">
@@ -19143,7 +19155,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they do not remember what they promised to do. (They do mean well.) They often take on more than they can do.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if they do not remember what they promised to do. (They do mean well.) They often take on more than they can do.</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -19171,10 +19183,7 @@ $the_report_pattern = "The ".$report_pattern;
                 </td>
             </tr>
             <tr>
-                <td align="left" style="width: 85%; display: inline-block; padding-bottom:10px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; padding:0px;">
-                        <b>The Relater may...</b>
-                    </p>
+                <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding="0" cellspacing="0">
                         <tr>
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;">
@@ -19271,7 +19280,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:35px; margin-top:40px; padding-bottom:20px; margin-bottom:40px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:40px; padding-bottom:20px; margin-bottom:30px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:100%; display: inline-block; margin: 0px; padding:0px;">
                     <table style="width:100%; display:inline-block; padding-bottom:20px;">
@@ -19285,8 +19294,8 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$the_report_pattern?> may procrastinate when it becomes necessary to confront or put pressure on someone.</p>
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">They may also procrastinate when they are not able to accommodate all concerned. They may forget what they promised to do.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$the_report_pattern?> may procrastinate when it becomes necessary to confront or put pressure on someone.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">They may also procrastinate when they are not able to accommodate all concerned. They may forget what they promised to do.</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -19324,7 +19333,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:25px; margin-top:20px; margin-bottom:35px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:25px; margin-top:20px; margin-bottom:15px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:100%; display: inline-block; margin: 0px; padding:0px;">
                     <table style="width:100%; display:inline-block; padding-bottom:20px;">
@@ -19339,8 +19348,8 @@ $the_report_pattern = "The ".$report_pattern;
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
                                             <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><b><?=$report_pattern?>s may procrastinate if they think they may not make a favorable impression or the risk of failure is too great.</b></p>
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Also, they may procrastinate if they are unsure of the "right" way to accomplish the task or if they forget to do what they promised.</p>
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$the_report_pattern?> needs to develop coping skills to handle failure and embarrassment. (When it occurs, do not take it personally. Decide to learn from the experience.)</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Also, they may procrastinate if they are unsure of the "right" way to accomplish the task or if they forget to do what they promised.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$the_report_pattern?> needs to develop coping skills to handle failure and embarrassment. (When it occurs, do not take it personally. Decide to learn from the experience.)</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -19369,9 +19378,6 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;">
-                        <b>Concerns and Potential Areas of Growth Include:</b>
-                    </p>
                     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding="0" cellspacing="0">
                         <tr>
                             <td align="left" style="width:8px; display: inline-block; padding-top:0px;margin:0px;">
@@ -19508,7 +19514,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
 
-        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:20px; margin-top:15px; padding-bottom:20px; margin-bottom:25px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+        <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:20px; margin-top:15px; padding-bottom:20px; margin-bottom:15px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:100%; display: inline-block; margin: 0px; padding:0px;">
                     <table style="width:100%; display:inline-block; padding-bottom:0px;">
@@ -19522,15 +19528,15 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if the activity does not fit their routine and they do not want to change.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if the activity does not fit their routine and they do not want to change.</p>
 
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Sometimes they procrastinate because they are not sure how to accommodate everyone involved (trying to avoid conflict).</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Sometimes they procrastinate because they are not sure how to accommodate everyone involved (trying to avoid conflict).</p>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
-                                <div style="background: #fff; padding:20px 30px;width: 175px;">
+                                <div style="background: #fff; padding:20px 30px;width: 170px;">
                                     <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; width: 100%;"><?=$report_pattern?>s need slight but consistent pressure to encourage them to act. They need to see it is okay to act although not everyone will be accommodated.</p>
                                 </div>
                             </td>
@@ -19686,15 +19692,15 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if the activity does not fit their routine and they do not want to change.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if the activity does not fit their routine and they do not want to change.</p>
 
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Sometimes they procrastinate because they are not sure how to accommodate everyone involved (trying to avoid conflict).</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Sometimes they procrastinate because they are not sure how to accommodate everyone involved (trying to avoid conflict).</p>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
-                                <div style="background: #fff; padding:20px 30px;width: 175px;">
+                                <div style="background: #fff; padding:20px 30px;width: 170px;">
                                     <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; width: 100%;"><?=$report_pattern?>s need slight but consistent pressure to encourage them to act. They need to see it is okay to act although not everyone will be accommodated.</p>
                                 </div>
                             </td>
@@ -19850,8 +19856,8 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if the activity does not fit their routine and they do not want to change.</p>
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Sometimes they procrastinate because they are not sure how to accommodate everyone involved (trying to avoid conflict).</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;"><?=$report_pattern?>s may procrastinate if the activity does not fit their routine and they do not want to change.</p>
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">Sometimes they procrastinate because they are not sure how to accommodate everyone involved (trying to avoid conflict).</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -20004,11 +20010,11 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
                                                 <?=$report_pattern?>s may procrastinate if they are not sure of the right or best thing to do. They may take a great deal of time to think through the options.
                                             </p>
 
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
                                                 <b>Frustration occurs (therefore procrastination) when the secondary need for results interferes with the primary need to think.</b>
                                             </p>
                                         </td>
@@ -20154,11 +20160,11 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
                                                 <?=$report_pattern?>s may procrastinate if they are not sure of the right or best thing to do. They usually take a lot of time to think through the options. 
                                             </p>
 
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
                                                 <b>Frustration occurs (therefore procrastination) when the secondary need for people interferes with the primary need to think.</b>
                                             </p>
                                         </td>
@@ -20304,7 +20310,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     </tr>
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px;">
-                                            <p style="text-align:left; color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
+                                            <p style="text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 13px; display:inline-block;">
                                                 <?=$report_pattern?>s may procrastinate if they are not sure of the right or best thing to do. They usually take a lot of time to think through the options before making decisions. 
                                             </p>
 
@@ -20329,7 +20335,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -20355,26 +20361,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -20383,26 +20389,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -20442,7 +20448,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
             
             <tr>
-                <td align="left" style="width: 85%; display: inline-block; padding-top:30px; padding-bottom:470px;">
+                <td align="left" style="width: 85%; display: inline-block; padding-top:30px; padding-bottom:460px;">
                     <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 15pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
                         <img style="width:12px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-17-arrow.png" />
                         <p style="color:#000000;margin-top: -65px; line-height: 24px; padding-left:35px; padding-top: 0px; width: 100%; display: inline-block; ">
@@ -20489,11 +20495,11 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "D" && $Top_two == "C"){ ?>
-        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:470px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:450px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
-                        <b>When confronted or opposed, the <?=$report_pattern?> may have a sudden burst of anger.</b> This will pass quickly. It is usually not meant to be taken personally.
+                        <b>When confronted or opposed, the <?=$report_pattern?>s may have a sudden burst of anger.</b> This will pass quickly. It is usually not meant to be taken personally.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom:20px;">
                         <?=$the_report_pattern?> responds best when a person is factual, direct, to the point, and matter-of-fact. They like others to demonstrate strength.
@@ -20502,7 +20508,7 @@ $the_report_pattern = "The ".$report_pattern;
                         They do not mind others taking issue with their work but will likely respond aggressively if they are criticized personally.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
-                        <b><?=$report_pattern?>s need reasons <i style="font-family:'proxima_novaregularitalic'">why</i> their behavior needs to change.</b> They will usually respond well if they are shown that different behavior will get better, faster results.
+                        <b><?=$report_pattern?>s need reasons why their behavior needs to change.</b> They will usually respond well if they are shown that different behavior will get better, faster results.
                     </p>
                 </td>
             </tr>
@@ -20518,7 +20524,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>            
         </table>
     <?php }else if($Top_one == "I" && $Top_two == "D"){ ?>
-        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:510px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:450px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
@@ -20526,6 +20532,9 @@ $the_report_pattern = "The ".$report_pattern;
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom:20px;">
                         <b><?=$report_pattern?>s respond best when a person is non-emotional, factual, direct, to the point, and matter-of-fact.</b>
+                    </p>
+                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom:20px;">
+                        When confronted, <?=$report_pattern?>s should consider if the information given to them can be used to improve some area of their life.
                     </p>
                 </td>
             </tr>
@@ -20545,7 +20554,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
-                        <b>When confronted or opposed, the <?=$report_pattern?> may become defensive.</b> They fear rejection and tension and may respond with emotion, withdraw, or become very stubborn and avoid taking action.
+                        <b>When confronted or opposed, the <?=$report_pattern?> may become defensive.</b> They fear rejection and tension and may respond with emotion, withdraw or become very stubborn, and avoid taking action.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom:20px;">
                         <?=$the_report_pattern?> responds best when a person is warm, non-emotional, factual, direct, to the point, and matter-of-fact.
@@ -20605,7 +20614,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>            
         </table>
     <?php }else if($Top_one == "S" && $Top_two == "D"){ ?>
-        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:460px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:420px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
@@ -20709,7 +20718,7 @@ $the_report_pattern = "The ".$report_pattern;
         </table>
 
     <?php }else if($Top_one == "C" && $Top_two == "D"){ ?>
-        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:540px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:500px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
@@ -20719,7 +20728,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <b>They can accept personal criticism easier than criticism concerning their work.</b>
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom:20px;">
-                        <?=$the_report_pattern?> responds best when a person is warm, gentle, and personable. Be factual and logical. They need reasons "why". They need low-key correction.
+                        <?=$the_report_pattern?> responds best when a person is warm, gentle, and personable. Be factual and logical. They need reasons "why." They need low-key correction.
                     </p>
                 </td>
             </tr>
@@ -20770,7 +20779,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "C" && $Top_two == "S"){ ?>
-        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:500px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px; margin-bottom:460px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
@@ -20783,7 +20792,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <?=$the_report_pattern?> responds best when a person is warm, gentle, and personal. Be factual and logical.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom:20px;">
-                        <?=$the_report_pattern?> needs low-key correction. They need reasons "why".
+                        <?=$the_report_pattern?> needs low-key correction. They need reasons "why."
                     </p>
                 </td>
             </tr>
@@ -20805,7 +20814,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -20832,26 +20841,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -20860,26 +20869,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -21004,7 +21013,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21105,7 +21114,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21119,7 +21128,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 85%; display: inline-block; padding-bottom:20px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
-                        A person’s style of relating to others is a reflection of their basic temperament blend. Just as in every other aspect of life, a person has both strengths and weaknesses in this area too.
+                        A person’s style of relating to others is a reflection by their basic temperament blend. Just as in every other aspect of life, a person has both strengths and weaknesses in this area too.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">
                         <b><?=$the_report_pattern?> tends to build relationships that have a purpose.</b> They can be very private and may have only a few close friends.
@@ -21217,7 +21226,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21315,7 +21324,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21416,7 +21425,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21507,7 +21516,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21538,7 +21547,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 <table style="width:100%; display:inline-block;">
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px; padding-bottom:20px;">
-                                            <img style="width: 100%; text-align: center; margin: 0px; padding: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-21-be-image.png" />
+                                            <img style="width: 100%; text-align: center; margin: 0px; padding: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-21-image.png" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -21601,7 +21610,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21632,7 +21641,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 <table style="width:100%; display:inline-block;">
                                     <tr>
                                         <td align="left" style="width: 100%; display: inline-block; padding-right:20px; padding-bottom:20px;">
-                                            <img style="width: 100%; text-align: center; margin: 0px; padding: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-21-be-image.png" />
+                                            <img style="width: 100%; text-align: center; margin: 0px; padding: 0px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-21-image.png" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -21685,7 +21694,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21779,7 +21788,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -21897,7 +21906,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -22028,7 +22037,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -22179,7 +22188,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 35.5%; display: inline-block; padding-right:20px;">
                                 <div style="background: #b2cad9; padding:20px 30px;width: 170px;">
-                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%; font-family:'proxima_novabold';">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
+                                    <p style="color: #fff; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 23px; margin-top: 0px; margin-bottom: 0px; text-align: left; width: 100%;">Because a person's temperament represents such dominant needs, no one can hide or deny their temperament for very long.</p>
                                 </div>
                             </td>
                         </tr>
@@ -22215,7 +22224,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
     </table>
 </div>
-<!--page21 ends here-->
+<!--page21 starts here-->
 
 <?php if($Top_one == "I" && $Top_two == "D"){ ?>
 <!--negotiator extra starts here-->
@@ -22236,26 +22245,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -22264,26 +22273,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -22386,12 +22395,12 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
     </table>
 
-    <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:40px; padding-bottom:40px; margin-top:15px; margin-bottom:230px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+    <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:40px; padding-bottom:40px; margin-top:15px; margin-bottom:200px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:15px;">
-                <h4 class="text-center" style="color: #231f20; font-size: 13pt; text-align: center; padding: 0px; margin: 0px; line-height: 22px; width: 100%; text-transform:uppercase; margin-bottom:15px;">Temperament influences everything you do, including your will, purpose and mode of achieving.</h4>
+                <h4 class="text-center" style="color: #231f20; font-size: 13pt; text-align: center; padding: 0px; margin: 0px; line-height: 22px; width: 100%; text-transform:uppercase; margin-bottom:15px;">Temperament influences everything you do, including your will, purpose, and mode of achieving.</h4>
 
-                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">Knowing about your temperament will raise your awareness of what you are doing, the impact your behavior has on others and how others perceive you. Once you understand these things, you must decide to control your strengths and weakness or be controlled by them.</p>
+                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px; margin-bottom: 20px;">Knowing about your temperament will raise your awareness of what you are doing, the impact your behavior has on others, and how others perceive you. Once you understand these things, you must decide to control your strengths and weakness or be controlled by them.</p>
             </td>
         </tr>
     </table>
@@ -22399,7 +22408,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -22428,7 +22437,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
         <tr>
             <td align="left" style="padding-top: 380px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -22623,8 +22632,8 @@ $the_report_pattern = "The ".$report_pattern;
 
 	<table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
-            <td align="left" style="padding-top:30px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+            <td align="left" style="padding-top:10px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -22653,7 +22662,7 @@ $the_report_pattern = "The ".$report_pattern;
     
         <tr>
             <td align="left" style="width: 85%; display: inline-block; padding: 0px; margin: 0px; padding-bottom:10px;">
-                <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 24px;font-family: 'proxima_novabold';"><span style="color: #231f20;"><?=$participant_first_name?>,</span> what’s your plan?</p>
+                <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 24px;font-family: 'proxima_novabold';"><span style="color: #133a54;"><?=$participantFirstName?>,</span> what’s your plan?</p>
                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 18px; margin-bottom: 0px; margin-top: 10px; text-align: left;">
                    Different people have different plans for how to effectively move ahead in their journey. 
                 </p>
@@ -22696,7 +22705,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top: 0px; text-align: left;">
                             <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 24px; margin-bottom: 10px; margin-top: 0px; text-align: left; width: 100%;"><b>Enroll in our brand-new online course: “7 Steps to Unlock Your Strengths.”  </b> You’ll discover how to practically apply what you’ve learned in this DISCOVERY REPORT in order to play to your strengths, remove roadblocks to your success, and live more fulfilled in life, both personally and professionally.</p>
 
-                            <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 24px; margin-bottom: 10px; margin-top: 10px; text-align: left; width: 100%;">Visit:<span style="font-family: 'proxima_novabold';color:#00aeef;"> <a style="color:#00aeef; text-decoration:none;" href="<?=get_settings_option('home')?>/7steps" target="_blank"><?=get_settings_option('home')?>/7steps</a></span></p>
+                            <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 24px; margin-bottom: 10px; margin-top: 10px; text-align: left; width: 100%;">Visit:<span style="font-family: 'proxima_novabold';color:#00aeef;"> <a style="color:#00aeef; text-decoration:none;" href="https://discstrengths.com/7steps" target="_blank">www.DISCstrengths.com/7steps</a></span></p>
                             </p>
                         </td>
                     </tr>
@@ -22716,7 +22725,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom: 0px; margin-top: 0px; text-align: left;">
                             <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 24px; margin-bottom: 10px; margin-top: 0px; text-align: left; width: 100%;"><b>Talk with one of our temperament coaches</b> and, together, create a personalized plan that helps you better understand yourself and how to achieve your goals. </p>
 
-                            <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 24px; margin-bottom: 10px; margin-top: 10px; text-align: left; width: 100%;">Visit:<span style="font-family: 'proxima_novabold';color:#00aeef;"> <a style="color:#00aeef; text-decoration:none;" href="<?=get_settings_option('home')?>/coach" target="_blank"><?=get_settings_option('home')?>/coach</a></span></p>
+                            <p style="color: #231f20; font-size: 13pt; text-align: left; padding: 0px; margin: 0px; line-height: 24px; margin-bottom: 10px; margin-top: 10px; text-align: left; width: 100%;">Visit:<span style="font-family: 'proxima_novabold';color:#00aeef;"> <a style="color:#00aeef; text-decoration:none;" href="https://discstrengths.com/coach" target="_blank">www.DISCstrengths.com/coach</a></span></p>
                             </p>
                         </td>
                     </tr>
@@ -22727,8 +22736,8 @@ $the_report_pattern = "The ".$report_pattern;
     </table>
     <table style="width:618px; display: inline-block; margin: 0px; padding: 0px; margin-left: 85px; margin-right: 60px; padding: 0px; background: #fff; margin-top: 0px;margin-bottom: 0px;" cellpadding="0" cellspacing="0">
         <tr>
-            <td align="left" style="padding-top:210px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+            <td align="left" style="padding-top:180px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -22755,26 +22764,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_one == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#633319;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
-                                        <h4 class="text-center" style="color:#992253;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#633319;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f26868; ">
+                                        <h4 class="text-center" style="color:#992253;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f26868; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#1c211f;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#1c211f;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#1c211f;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_one == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#123f67;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
-                                        <h4 class="text-center" style="color:#123f67;font-size: 15px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:10px 0px; "><?=$Top_one_label?></h4>
+                                    <div class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #68ba4b; ">
+                                        <h4 class="text-center" style="color:#123f67;font-size: 24px;position:relative; top:1px;width:100%;background-color: #68ba4b; padding:0px; margin:6px 0px;height:60px; "><?=$Top_one?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -22783,26 +22792,26 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="center" style="width:50px;">
                             <?php if($Top_two == "D"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#E8F2FD;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
-                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 15px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #f16869; ">
+                                        <h4 class="text-center" style="color:#E8F2FD;font-size: 24px;position:relative; top:1px;width:100%;background-color: #f16869; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "I"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#6b3c23;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
-                                        <h4 class="text-center" style="color:#6b3c23;font-size: 15px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #faed85; ">
+                                        <h4 class="text-center" style="color:#6b3c23;font-size: 24px;position:relative; top:1px;width:100%;background-color: #faed85; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "S"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#16191a;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
-                                        <h4 class="text-center" style="color:#16191a;font-size: 15px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #aed2e0; ">
+                                        <h4 class="text-center" style="color:#16191a;font-size: 24px;position:relative; top:1px;width:100%;background-color: #aed2e0; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php }else if($Top_two == "C"){ ?>
                                 <div style="border: 1px solid #000000; padding:3px;padding-top:2px; width:100%; display:inline-block;margin-left:-17px;">
-                                    <div class="text-center" style="color:#084060;height:40px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
-                                        <h4 class="text-center" style="color:#084060;font-size: 15px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:10px 0px;"><?=$Top_two_label?></h4>
+                                    <div class="text-center" style="color:#084060;font-size: 24px;position:relative; top:0px; display: block; left:-21.45px;  width:100%;background-color: #65BE4B; ">
+                                        <h4 class="text-center" style="color:#084060;font-size: 24px;position:relative; top:1px;width:100%;background-color: #65BE4B; padding:0px; margin:6px 0px;height:60px;"><?=$Top_two?></h4>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -22813,7 +22822,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
     </table>
 
-    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px;" cellpadding="0" cellspacing="0">
+    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 25px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="width: 85%; display: inline-block; padding-bottom:10px;">
                 <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 30px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">Conclusion</h2>
@@ -22822,8 +22831,8 @@ $the_report_pattern = "The ".$report_pattern;
 
         <tr>
             <td align="left" style="width: 85%; display: inline-block;">
-                <p style="color: #231f20; font-size: 15pt; margin: 0px; line-height: 24px;font-family: 'proxima_novabold';margin-top:15px;">
-                    <b style="color: #231f20;"><?=$participant_first_name?>,</b> congratulations on completing your report!
+                <p style="color: #231f20; font-size: 15pt; margin: 0px; line-height: 24px;font-family: 'proxima_novabold';margin-top:70px;">
+                    <b style="color: #133a54;"><?=$participantFirstName?>,</b> congratulations on completing your report!
                 </p>
             </td>
         </tr>
@@ -22831,11 +22840,11 @@ $the_report_pattern = "The ".$report_pattern;
     </table>
 
     
-    <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:20px; background: #f0f4f7;padding-top:20px; padding-bottom: 20px;" cellpadding="0" cellspacing="0">
+    <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; margin-top:25px; background: #f0f4f7;padding-top:20px; padding-bottom: 40px;" cellpadding="0" cellspacing="0">
         <tr>
-            <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:15px;">
+            <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:30px;">
                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 24px;margin-top: 16px;">We hope you discovered more about yourself in this report and what drives and motivates you. <b> This <span style="font-family:'proxima_nova_b_i'; color:#000000;">DISCOVERY REPORT</span> is just the beginning of a wonderful journey of discovering who you really are, playing to your strengths, and overcoming your weaknesses.</b> Remember, you are uniquely designed to do certain things well.</p>
-                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 24px;margin-top: 16px;">After reviewing your report, you should have a good idea of where you are doing your best, and some areas where you need to do some work.</p>
+                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 24px;margin-top: 16px;">After reviewing your report, you should have a good idea of your where you are doing your best, and some areas where you need to do some work.</p>
                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 24px;margin-top: 16px;"> <b>It’s important to develop an actionable plan as you move forward in your journey so that you can measure success, identify areas of continued growth, and reach your full potential.</b> </p>
             </td>
         </tr>        
@@ -22849,7 +22858,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
     </table>
     
-    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding:0px; background: #fff; margin-top: 15px; margin-bottom: 0px; padding-bottom: 10px; padding-top: 0px;" cellpadding=" 0" cellspacing="0">
+    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding:0px; background: #fff; margin-top: 25px; margin-bottom: 0px; padding-bottom: 180px; padding-top: 0px;" cellpadding=" 0" cellspacing="0">
         <tr>
             <td align="left" style="width: 85%; display: inline-block;">
                 <p style=" width: 100%; display: inline-block;color: #000000; font-family: 'proxima_nova_light'; font-size: 14pt; line-height: 23px; margin: 0px; margin-bottom: 20px; padding: 0px;">
@@ -22860,33 +22869,18 @@ $the_report_pattern = "The ".$report_pattern;
                 </p>
             </td>
         </tr>
-
-        <?php if(isset($promotionalCoupon) && !empty($promotionalCoupon)){ ?>
-        <tr>
-            <td align="left" style="width: 85%; display: inline-block; padding-bottom:30px">
-                <p style="color: #231f20; font-size: 15pt; margin: 0px; line-height: 24px;font-family: 'proxima_novabold';margin-top:30px; margin-bottom:8px;">
-                    Invite others to take the Assessment at Discount!
-                </p>
-                <div style="background: #f0f4f7; padding:20px 30px;">
-                    <p style="witdh:100%; display:inline-block; font-family:'proxima_nova_light'; text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; margin-bottom:15px;">As a thank you and token of our appreciation, we're excited to offer you a special link to share with your friends, loved ones, and co-workers. Using your exclusive link, they can access the same comprehensive assessment and receive their Personal Report for just $<?=$promotionalCoupon->end_price?>—that's a $<?=$promotionalCoupon->discount_amount?> discount off the regular price!</p>
-                    <p style="witdh:100%; display:inline-block; font-family:'proxima_novabold'; text-align:left; color: #231f20; font-size: 13pt; margin: 0px; line-height: 22px; word-wrap:break-word; padding-bottom:0px;"><img src="<?=WPAFFCOUPON_PLUGIN_DIR?>/assets/images/share-from-square-solid.png" style="width:3%; display:inline-block;" /><span style="width:5%; display:inline-block;">&nbsp;</span><span style="width:91%; display:inline-block; padding-left:20px;">Click below to get your exclusive link: </span></p>
-                    <p style="witdh:100%; display:inline-block; font-family:'proxima_novabold'; text-align:left; color: #41afef; font-size: 13pt; margin: 0px; line-height: 22px; word-wrap:break-word; margin-top:5px; padding:0px;"><a href="<?=get_settings_option('home').'/share/?src='.$assessment->participant_id.'q'?>" style="color: #41afef; text-decoration:none;" ><span style="color: #41afef;"><?=get_settings_option('home').'/share?src='.$assessment->participant_id.'q'?></span></a></p>  
-                </div>
-            </td>
-        </tr>
-        <?php } ?>
     </table>
-
     
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
 </div>
 <!--page25 starts here-->
+
 
 <!--page26 starts here-->
 <div class="" style="height: 1060px; float: left; width: 100%; padding-left: 0px; margin-left: 0px;">
@@ -22909,7 +22903,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
         <tr>
             <td align="left" style="padding-top: 380px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -22944,7 +22938,7 @@ $the_report_pattern = "The ".$report_pattern;
         <tr style="width:100%; display:inline-block;">
 			<td style="width:100%; display:inline-block; padding:0px 30px;" align="center">
 				<hr style="border-top: 3px solid #186680; color: #186680;">
-				<h1 style="font-size:18pt;word-break: break-all; margin-top:8px;margin-bottom:8px; line-height:18pt;" align="center"><?= $participant_first_name?>, based on your selections, you scored as<br/><?=$the_report_pattern?><br/>(<?=$first_content."-".$sec_content?>)</h1>
+				<h1 style="font-size:18pt;word-break: break-all; margin-top:8px;margin-bottom:8px; line-height:18pt;" align="center"><?=isJapanese($participantFirstName) ? '<span style="font-family:cid0jp;">'.$participantFirstName.'</span>' : $participantFirstName?>, based on your selections, you scored as<br/><?=$the_report_pattern?><br/>(<?=$Top_one."-".$Top_two?>)</h1>
 				<hr style=" border-bottom: 3px solid #186680; color: #186680; margin-bottom:0px;"> 
 			</td>
 		</tr>
@@ -22961,7 +22955,7 @@ $the_report_pattern = "The ".$report_pattern;
             <td align="left" style="width:85%; display: inline-block; margin: 0px; padding:0; padding-right:50px;">
                 <div style="background: #b2cad9; margin-top:10px; padding:20px 30px;">
                     <p style="font-family:'proxima_novabold'; text-align:left; color: #fff; font-size: 13pt; margin: 0px; line-height: 22px; display:inline-block;">
-                        If you'd like to learn more about the graphs or your report, <a href="mailto:support@fourtemperament.com" style="font-family:'proxima_nova_b_i'; color:#fff;">click here</a> to schedule a session with our experienced coaches.
+                        If you'd like to learn more about the graphs or your report, <a href="mailto:support@discstrengths.com" style="font-family:'proxima_nova_b_i'; color:#fff;">click here</a> to schedule a session with our experienced coaches.
                     </p>
                 </div>
             </td>
@@ -22985,7 +22979,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 10px; margin-bottom: 10px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="width: 85%; display: inline-block; padding-bottom:0px;">
-                <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 36px; margin-top: 0px; text-align: left; width: 80%; text-transform:uppercase;">Words you selected from the<br/>MyTemperament™ Assessment</h2>
+                <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 36px; margin-top: 0px; text-align: left; width: 80%; text-transform:uppercase;">Words you selected from the<br/>DISC Strengths™ Assessment</h2>
             </td>
         </tr>
         <tr>
@@ -22994,7 +22988,7 @@ $the_report_pattern = "The ".$report_pattern;
 					<tr>
 						<td style="width:100%; display:inline-block; padding:10px 0px;" align="left">
 							<div style="background-color:#f26868;">
-								<h2 style="color:#9a2253; text-transform:uppercase; text-align:center;padding:5px; margin:6px 0px;"> Choleric </h2> 
+								<h2 style="color:#9a2253; text-transform:uppercase; text-align:center;padding:5px; margin:6px 0px;"> D (Dominance) </h2> 
 							</div>
 							<table style="background-color:#fee9e2;width:100%; padding:0px 10px; margin-top:5px;">
 								<tr>
@@ -23004,7 +22998,7 @@ $the_report_pattern = "The ".$report_pattern;
 											<?php if(!empty($dMostChoices)): ?>
 												<table style="width:100%; diplay:inline-block;">
 												<?php  
-                                                $dMostChoices = array_chunk($dMostChoices,2);
+												$dMostChoices= mytemp_custom_length_array_chunks($dMostChoices,2); 
 												foreach($dMostChoices as $choices){ ?>
 													<tr>
 													<?php foreach($choices as $choice){ ?>
@@ -23023,8 +23017,8 @@ $the_report_pattern = "The ".$report_pattern;
 											<h4 style=" color:#000; text-align:left;margin:0px; padding:0px;margin-bottom:5px;">Least words</h4>
 											<?php if(!empty($dLeastChoices)): ?>
 												<table style="width:100%;diplay:inline-block;">
-												<?php 
-                                                $dLeastChoices = array_chunk($dLeastChoices,2);
+												<?php  
+												$dLeastChoices= mytemp_custom_length_array_chunks($dLeastChoices,2);
 												foreach($dLeastChoices as $choices){ ?>
 													<tr>
 													<?php foreach($choices as $choice){ ?>
@@ -23049,7 +23043,7 @@ $the_report_pattern = "The ".$report_pattern;
 					<tr>
 						<td style="width:100%; display:inline-block; padding:10px 0px;" align="left">
 							<div style="background-color:#fdeb86; margin-top:5px;">
-								<h2 style="color:#6e4120; text-transform:uppercase; text-align:center;padding:5px; margin:6px 0px;"> Sanguine </h2> 
+								<h2 style="color:#6e4120; text-transform:uppercase; text-align:center;padding:5px; margin:6px 0px;"> I (Influence) </h2> 
 							</div>
 							
 							<table style="background-color:#fcf5e3;width:100%; padding:0px 10px; margin-top:5px;">
@@ -23060,7 +23054,7 @@ $the_report_pattern = "The ".$report_pattern;
 											<?php if(!empty($iMostChoices)): ?>
 												<table style="width:100%; display:inline-block;">
 												<?php  
-												$iMostChoices= array_chunk($iMostChoices,2);												
+												$iMostChoices= mytemp_custom_length_array_chunks($iMostChoices,2);												
 												foreach($iMostChoices as $choices){ ?>
 													<tr style="width:100%; display:inline-block;">
 													<?php foreach($choices as $choice){ ?>
@@ -23083,7 +23077,7 @@ $the_report_pattern = "The ".$report_pattern;
 											<?php if(!empty($iLeastChoices)): ?>
 												<table style="width:100%;diplay:inline-block;">
 												<?php  
-												$iLeastChoices= array_chunk($iLeastChoices,2);
+												$iLeastChoices= mytemp_custom_length_array_chunks($iLeastChoices,2);
 												foreach($iLeastChoices as $choices){ ?>
 													<tr>
 													<?php foreach($choices as $choice){ ?>
@@ -23108,7 +23102,7 @@ $the_report_pattern = "The ".$report_pattern;
 					<tr>
 						<td style="width:100%; display:inline-block; padding:10px 0px;" align="left">
 							<div style="background-color:#abcfdc; margin-top:5px;">
-								<h2 style="color:#1b1a1a; text-transform:uppercase; text-align:center;padding:5px; margin:6px 0px;"> Phlegmatic </h2> 
+								<h2 style="color:#1b1a1a; text-transform:uppercase; text-align:center;padding:5px; margin:6px 0px;"> S (Steadiness) </h2> 
 							</div>
 							
 							<table style="background-color:#e8f0f3;width:100%; padding:0px 10px; margin-top:5px;">
@@ -23119,7 +23113,7 @@ $the_report_pattern = "The ".$report_pattern;
 											<?php if(!empty($sMostChoices)): ?>
 												<table style="width:100%; display:inline-block;">
 												<?php  
-												$sMostChoices= array_chunk($sMostChoices,2);												
+												$sMostChoices= mytemp_custom_length_array_chunks($sMostChoices,2);												
 												foreach($sMostChoices as $choices){ ?>
 													<tr style="width:100%; display:inline-block;">
 													<?php foreach($choices as $choice){ ?>
@@ -23142,7 +23136,7 @@ $the_report_pattern = "The ".$report_pattern;
 											<?php if(!empty($sLeastChoices)): ?>
 												<table style="width:100%;diplay:inline-block;">
 												<?php  
-												$sLeastChoices= array_chunk($sLeastChoices,2);
+												$sLeastChoices= mytemp_custom_length_array_chunks($sLeastChoices,2);
 												foreach($sLeastChoices as $choices){ ?>
 													<tr>
 													<?php foreach($choices as $choice){ ?>
@@ -23167,7 +23161,7 @@ $the_report_pattern = "The ".$report_pattern;
 					<tr>
 						<td style="width:100%; display:inline-block; padding:10px 0px;" align="left">
 							<div style="background-color:#68bd4d; margin-top:5px;">
-								<h2 style="color:#17405f; text-transform:uppercase; text-align:center;padding:5px; margin:5px 0px;"> Melancholy </h2> 
+								<h2 style="color:#17405f; text-transform:uppercase; text-align:center;padding:5px; margin:5px 0px;"> C (Compliance) </h2> 
 							</div>
 							
 							<table style="background-color:#e5f3e8;width:100%; padding:0px 10px; margin-top:5px;">
@@ -23178,7 +23172,7 @@ $the_report_pattern = "The ".$report_pattern;
 											<?php if(!empty($cMostChoices)): ?>
 												<table style="width:100%; display:inline-block;">
 												<?php  
-												$cMostChoices= array_chunk($cMostChoices,2);												
+												$cMostChoices= mytemp_custom_length_array_chunks($cMostChoices,2);												
 												foreach($cMostChoices as $choices){ ?>
 													<tr style="width:100%; display:inline-block;">
 													<?php foreach($choices as $choice){ ?>
@@ -23201,7 +23195,7 @@ $the_report_pattern = "The ".$report_pattern;
 											<?php if(!empty($cLeastChoices)): ?>
 												<table style="width:100%;diplay:inline-block;">
 												<?php  
-												$cLeastChoices= array_chunk($cLeastChoices,2);
+												$cLeastChoices= mytemp_custom_length_array_chunks($cLeastChoices,2);
 												foreach($cLeastChoices as $choices){ ?>
 													<tr>
 													<?php foreach($choices as $choice){ ?>
@@ -23228,6 +23222,15 @@ $the_report_pattern = "The ".$report_pattern;
 		</tr>
     </table>
 
+    <?php /*
+    <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="left" style="padding-top:10px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
+            </td>
+        </tr>
+    </table>
+    */ ?>
 </div>
 <!--page28 ends here-->
 
@@ -23246,7 +23249,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; margin-top: 15px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="width: 85%; display: inline-block; padding-bottom:10px;">
-                <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 36px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">Top 10 Temperament Needs<br/>For <?=$particiapnt_name?></h2>
+                <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 36px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">Top 10 Temperament Needs<br/>For <?=$participantName?></h2>
             </td>
         </tr>
         <tr>
@@ -23265,7 +23268,7 @@ $the_report_pattern = "The ".$report_pattern;
 
     </table>
 
-    <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:40px; margin-bottom:50px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
+    <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 140px; padding-top:45px; margin-top:40px; margin-bottom:40px; background: #f0f4f7;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="width: 100%; display: inline-block; margin: 0px; padding:0; padding-bottom:15px;">
                 <h2 class="text-center" style="color: #231f20; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 36px; text-align: left; width: 100%; text-transform:uppercase;">Your Selections from the Temperament Needs Assessment</h2>
@@ -23294,7 +23297,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -23315,7 +23318,7 @@ $the_report_pattern = "The ".$report_pattern;
     </table>
 
     
-    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 190px; margin-top: 15px;" cellpadding="0" cellspacing="0">
+    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 160px; margin-top: 15px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
                 <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 30px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">Factors that influence how a Temperament is Expressed</h2>
@@ -23329,7 +23332,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>1. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Proximity </b>(closeness) of the <b style="font-family:'proxima_nova_b_i';">first</b> temperament to the <b style="font-family:'proxima_nova_b_i';">second</b> temperament has the most significant influence on how a temperament combination is expressed in behavior.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Proximity </b>(closeness) of the first temperament to the second temperament has the most significant influence on how a temperament combination is expressed in behavior.</p>
                         </td>
                     </tr>
                 </table>
@@ -23344,7 +23347,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height: 22px;margin-top: 10px;padding-right:5px;">•</p>
                         </td>
                         <td align="left" style="width: 96%; display: inline-block;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;">The <b style="font-family:'proxima_nova_b_i';">closer</b> the <i style="font-family:'proxima_novalightitalic';">second</i> temperament is to the <b style="font-family:'proxima_nova_b_i';">primary</b> temperament, the <b style="font-family:'proxima_nova_b_i';">less</b> the primary temperament tendencies are visible in behavior. <b style="font-family:'proxima_nova_b_i';">More</b> of the <b style="font-family:'proxima_nova_b_i';">secondary</b> tendencies are observable.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;">The closer the second temperament is to the <b>primary </b> temperament, the <b>less</b> the primary temperament tendencies are visible in behavior. <b>More</b> of the <b>secondary</b> tendencies are observable.</p>
                         </td>
                     </tr>
                 
@@ -23353,7 +23356,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height: 22px;margin-top: 10px;padding-right:5px;">•</p>
                         </td>
                         <td align="left" style="width:96%; display: inline-block;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;">When there is a <b style="font-family:'proxima_nova_b_i';">moderate</b> separation between the <b style="font-family:'proxima_nova_b_i';">primary</b> and <b style="font-family:'proxima_nova_b_i';">secondary</b> temperaments, <b style="font-family:'proxima_nova_b_i';">both</b> are visible in a person’s normal behavior.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;">When there is a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> separation between the <b>primary</b> and <b>secondary</b> temperaments, <b>both</b> are visible in a person’s normal behavior.</p>
                         </td>
                     </tr>
                 
@@ -23362,7 +23365,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height: 22px;margin-top: 10px;padding-right:5px;">•</p>
                         </td>
                         <td align="left" style="width: 96%; display: inline-block;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;">The <b style="font-family:'proxima_nova_b_i';">greater</b> the distance between the second temperament to the primary temperament, the <b style="font-family:'proxima_nova_b_i';">fewer</b> of the secondary tendencies are visible in behavior.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;">The <b>greater</b> the distance between the second temperament to the primary temperament, the fewer of the secondary tendencies are visible in behavior.</p>
                         </td>
                     </tr>
                 
@@ -23371,7 +23374,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height: 22px;margin-top: 10px;padding-right:5px; ">•</p>
                         </td>
                         <td align="left" style="width: 96%; display: inline-block;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;"> The primary temperament will be more <b style="font-family:'proxima_nova_b_i';">intensely</b> expressed the <b style="font-family:'proxima_nova_b_i';">greater</b> the separation from the second temperament.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px;"> The primary temperament will be more <b>intensely</b> expressed the <b>greater</b> the separation from the second temperament.</p>
                         </td>
                     </tr>
                 </table>
@@ -23386,7 +23389,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>2. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Blending</b> refers to the <b style="font-family:'proxima_nova_b_i';">mixing</b> together of the natural tendencies from all four temperaments, especially the first and second temperaments. <i style="font-family:'proxima_novalightitalic';">More</i> traits of one temperament and <i style="font-family:'proxima_novalightitalic';">fewer</i> traits of another temperament changes how that particular combination is expressed in behavior.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Blending</b> refers to the <b>mixing</b> together of the natural tendencies from all four temperaments, especially the first and second temperaments. More traits of one temperament and fewer traits of another temperament changes how that particular combination is expressed in behavior.</p>
                         </td>
                     </tr>
                 </table>
@@ -23400,7 +23403,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>3. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>The third and fourth</b> temperament alignment will have some influence on behavior in varying degrees. That is, which temperament is <i style="font-family:'proxima_novalightitalic';">third</i> and which temperament is <i style="font-family:'proxima_novalightitalic';">fourth</i> will influence behavior.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>The third and fourth</b> temperament alignment will have some influence on behavior in varying degrees. That is, which temperament is third and which temperament is fourth will influence behavior.</p>
                         </td>
                     </tr>
                 </table>
@@ -23414,7 +23417,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>4. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Self-control.</b> The difference in behavior may be explained by the <b style="font-family:'proxima_nova_b_i';">choices</b> you make to <i style="font-family:'proxima_novalightitalic';">use</i> your natural strengths and <i style="font-family:'proxima_novalightitalic';">overcome</i> your natural weaknesses.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Self-control.</b> The difference in behavior may be explained by the choices you make to use your natural strengths and overcome your natural weaknesses.</p>
                         </td>
                     </tr>
                 </table>
@@ -23428,7 +23431,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>5. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Heart attitude.</b> The degree to which you are <b style="font-family:'proxima_nova_b_i';">motivated</b> to use your natural strengths and <i style="font-family:'proxima_novalightitalic';">overcome</i> your natural weaknesses influences your behavior.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Heart attitude.</b> The degree to which you are <b>motivated</b> to use your natural strengths and overcome your natural weaknesses influences your behavior.</p>
                         </td>
                     </tr>
                 </table>
@@ -23442,7 +23445,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>6. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Work ethic.</b> The degree to which you <b style="font-family:'proxima_nova_b_i';">apply</b> your natural tendencies to accomplish a task influences how you use your natural temperament tendencies.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Work ethic.</b> The degree to which you <b>apply</b> your natural tendencies to accomplish a task influences how you use your natural temperament tendencies.</p>
                         </td>
                     </tr>
                 </table>
@@ -23454,7 +23457,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -23475,7 +23478,7 @@ $the_report_pattern = "The ".$report_pattern;
         </tr>
     </table>
 
-    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 150px; margin-top: 15px;" cellpadding="0" cellspacing="0">
+    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 120px; margin-top: 15px;" cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="width: 100%; display: inline-block;  padding: 0px; margin: 0px; margin-top:0px;">
                 <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
@@ -23484,7 +23487,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 35px;"><b>7. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 35px; padding-left:10px;"><b>Cultural Customs</b> may mask one’s natural tendencies; for example, some cultures de-emphasize assertive behavior.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 35px; padding-left:10px;"><b>Cultural customs</b> may mask one’s natural tendencies; for example, some cultures de-emphasize assertive behavior.</p>
                         </td>
                     </tr>
                 </table>
@@ -23499,7 +23502,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>8. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Influence</b> from others can <i style="font-family:'proxima_novalightitalic';">positively</i> or <i style="font-family:'proxima_novalightitalic';">negatively</i> impact the choices you make to <i style="font-family:'proxima_novalightitalic';">use</i> your natural strengths and <i style="font-family:'proxima_novalightitalic';">overcome</i> your natural weaknesses.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Influence</b> from others can positively or negatively impact the choices you make to use your natural strengths and overcome your natural weaknesses.</p>
                         </td>
                     </tr>
                 </table>
@@ -23514,7 +23517,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;"><b>9. </b></p>
                         </td>
                         <td style="width: 96%; display: inline-block; padding-top:0px;margin:0px;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Life events</b> can <i style="font-family:'proxima_novalightitalic';">temporarily</i> change the way you express your natural temperament combination.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px; padding-left:10px;"><b>Life events</b> can temporarily change the way you express your natural temperament combination.</p>
                         </td>
                     </tr>
                 </table>
@@ -23527,7 +23530,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <td align="left" style="width: 97%; display: inline-block;">
                             <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-left:10px;">Circumstances can temporarily move you out of your usual, comfortable way of feeling and behaving. Dr. William M. Marston states the following in Emotions of Normal People (1928, p.12): “I do not regard you as a normal person, emotionally, when you are suffering from fear, rage, pain, shock, desire to deceive, or any other emotional state whatsoever containing turmoil and conflict. Your emotional responses are normal when they produce pleasantness and harmony.”</p>
                         
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-left:10px;">We may also <i style="font-family:'proxima_novalightitalic';">choose</i> to alter our behavior temporarily to meet a perceived need when, for example, we go to a social gathering, a job interview, or when we meet someone new, etc. We may <i style="font-family:'proxima_novalightitalic';">choose</i> to be more or less friendly or more or less assertive, depending on what we think the situation requires.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-left:10px;">We may also choose to alter our behavior temporarily to meet a perceived need when, for example, we go to a social gathering or a job interview, or when we meet someone new, etc. We may choose to be more or less friendly or more or less assertive, depending on what we think the situation requires.</p>
                         </td>
                     </tr>
                 </table>
@@ -23559,7 +23562,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height: 22px;margin-top: 10px;padding-right:5px;">•</p>
                         </td>
                         <td align="left" style="width: 96%; display: inline-block;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">Level <i style="font-family:'proxima_novalightitalic';">one</i> behavior represents a <b>close proximity</b> of the second temperament to the first.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">Level one behavior represents a <b>close proximity</b> of the second temperament to the first.</p>
                         </td>
                     </tr>
                 
@@ -23568,7 +23571,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height: 22px;margin-top: 10px;padding-right:5px;">•</p>
                         </td>
                         <td align="left" style="width: 96%; display: inline-block;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">Level <i style="font-family:'proxima_novalightitalic';">two</i> behavior represents a <b>moderate (classic) spread</b> between the first temperament and the second.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">Level two behavior represents a <b>moderate (classic) spread</b> between the first temperament and the second.</p>
                         </td>
                     </tr>
                 
@@ -23577,7 +23580,7 @@ $the_report_pattern = "The ".$report_pattern;
                             <p style="color: #231f20; font-size: 14pt; margin: 0px; line-height: 22px;margin-top: 10px;padding-right:5px;">•</p>
                         </td>
                         <td align="left" style="width: 96%; display: inline-block;">
-                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">Level <i style="font-family:'proxima_novalightitalic';">three</i> behavior represents a <b>widespread (distance)</b> between the first and the second temperament.</p>
+                            <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">Level three behavior represents a <b>widespread (distance)</b> between the first and the second temperament.</p>
                         </td>
                     </tr>
                 </table>
@@ -23589,7 +23592,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -23642,11 +23645,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b>narrow</b> proximity of the Sanguine to the Choleric. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Sanguine traits are clearly observable in behavior. The closeness of the Sanguine tendencies will speed up (intensify) the expression of the Choleric tendencies.
+                                Represents a <b>narrow</b> proximity of the I (Influence) to the D (Dominance). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary I (Influence) traits are clearly observable in behavior. The closeness of the I (Influence) tendencies will speed up (intensify) the expression of the D (Dominance) tendencies.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -23655,7 +23658,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:25px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                        This person will be more open and friendly. They will be more socially active than the other Choleric combinations and will smile naturally and more frequently. This person will be able to inspire and motivate others to take action easily. They will frequently seek to influence others in a social setting. They can be very charming and will have a powerful and sometimes overwhelming presence.
+                        This person will be more open and friendly. They will be more socially active than the other D (Dominance) combinations and will smile naturally and more frequently. This person will be able to inspire and motivate others to take action easily. They will frequently seek to influence others in a social setting. They can be very charming and will have a powerful and sometimes overwhelming presence.
                     </p>
                 </td>
             </tr>
@@ -23692,11 +23695,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b>narrow</b> proximity of the Phlegmatic to the Choleric. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Phlegmatic traits are more observable in behavior.
+                                Represents a <b>narrow</b> proximity of the S (Steadiness) to the D (Dominance). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary S (Steadiness) traits are more observable in behavior.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -23705,10 +23708,10 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:25px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                        The closeness of the Phlegmatic tendencies will slow down the pace of the Choleric, their speed of response to others, and their ability to express emotions. They can be somewhat accommodating at times. This person will have a stoic (stone like) expression and will have difficulty empathizing with the feelings of others.
+                        The closeness of the S (Steadiness) tendencies will slow down the pace of the D (Dominance), their speed of response to others, and their ability to express emotions. They can be somewhat accommodating at times. This person will have a stoic (stone like) expression and will have difficulty empathizing with the feelings of others.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                        Because of the closeness of the Phlegmatic tendencies to the primary Choleric temperament they will not be flexible. They will hold to their routine and standards without compromise. They like to be the director of a project but still prefer to work alone. They can go to sleep very quickly.
+                        Because of the closeness of the S (Steadiness) tendencies to the primary D (Dominance) temperament they will not be flexible. They will hold to their routine and standards without compromise. They like to be the director of a project but still prefer to work alone. They can go to sleep very quickly.
                     </p>
                 </td>
             </tr>
@@ -23745,13 +23748,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b>narrow</b> proximity of the Melancholy to the Choleric. The closer these two temperaments are to each other, the more competition there is between the two for expression. 
-                                    <br/>
-                                    When very close, the secondary Melancholy traits are more observable in behavior like being more apologetic and more detailed planning. It produces a person who will usually not attempt to accomplish a goal (project) unless they have a detailed plan.
+                                    Represents a <b>narrow</b> proximity of the C (Compliance) to the D (Dominance). The closer these two temperaments are to each other, the more competition there is between the two for expression.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -23760,13 +23761,13 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                        They may take excessive time to figure out their strategy. They can be so detailed and calculating that they will resist listening to other people’s opinion. The closeness of the Melancholy tendencies will slow down the expression of the Choleric tendencies adding the need to analyze before taking action.
+                        When very close, the secondary C (Compliance) traits are more observable in behavior like being more apologetic and more detailed planning. It produces a person who will usually not attempt to accomplish a goal (project) unless they have a detailed plan.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                        Dr. William M. Marston states in <i style="font-family:'proxima_novalightitalic'">Emotions of Normal People</i>, “When active Dominance [Choleric] and active Compliance [Melancholy], evoked by the same stimulus, take place simultaneously, they tend to cancel each other out, or at least mutually modify one another.” This means that this person will have some difficulty being decisive without significant time to think through their options.
+                        They may take excessive time to figure out their strategy. They can be so detailed and calculating that they will resist listening to other people’s opinion. The closeness of the C (Compliance) tendencies will slow down the expression of the D (Dominance) tendencies adding the need to analyze before taking action. Dr. William M. Marston states in Emotions of Normal People, “When active dominance [D (Dominance)] and active compliance [C (Compliance)], evoked by the same stimulus, take place simultaneously, they tend to cancel each other out, or at least mutually modify one another.” This means that this person will have some difficulty being decisive without significant time to think through their options.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                        The closer the Melancholy gets to the Choleric, the individual is more formal acting. They will often be guarded and cautious in expressing their emotions. Due to the closeness of the Melancholy to the Choleric, they are more sensitive to how their behavior impacts others. They can be very direct (Choleric), and then apologize (Melancholy).
+                        The closer the C (Compliance) gets to the D (Dominance), the individual is more formal acting. They will often be guarded and cautious in expressing their emotions. Due to the closeness of the C (Compliance) to the D (Dominance), they are more sensitive to how their behavior impacts others. They can be very direct (D (Dominance)), and then apologize (C (Compliance)).
                     </p>
                 </td>
             </tr>
@@ -23803,11 +23804,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b>narrow</b> proximity of the Choleric to the Sanguine. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Choleric traits are more observable in behavior. The closeness of the Choleric tendencies will speed up and intensify the expression of the Sanguine tendencies.
+                                    Represents a <b>narrow</b> proximity of the D (Dominance) to the I (Influence). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary D (Dominance) traits are more observable in behavior. The closeness of the D (Dominance) tendencies will speed up and intensify the expression of the I (Influence) tendencies.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -23853,11 +23854,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Phlegmatic  to the Sanguine. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Phlegmatic  traits are more observable in behavior. The closeness of the Phlegmatic tendencies will slow down the expression of the Sanguine tendencies.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the S (Steadiness)  to the I (Influence). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary S (Steadiness)  traits are more observable in behavior. The closeness of the S (Steadiness)  tendencies will slow down the expression of the I (Influence) tendencies.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -23866,10 +23867,10 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                    When very close, the secondary Phlegmatic  traits are more observable in behavior like being calm and routine. The higher the Phlegmatic  tendencies cause this person to move at a slower pace and smile less.
+                    When very close, the secondary S (Steadiness)  traits are more observable in behavior like being calm and routine. The higher the S (Steadiness)  tendencies cause this person to move at a slower pace and smile less.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                    When the Phlegmatic is very close to the Sanguine, it produces a more stoic, subtle, and emotionally stable person. The closer the Phlegmatic gets to the Sanguine, the more difficult it is for this person to change a routine. They can easily gain trust of others, especially children. They form lasting relationships and have difficulty letting go.
+                    When the S (Steadiness)  is very close to the I (Influence), it produces a more stoic, subtle, and emotionally stable person. The closer the S (Steadiness)  gets to the I (Influence), the more difficult it is for this person to change a routine. They can easily gain trust of others, especially children. They form lasting relationships and have difficulty letting go.
                     </p>
                 </td>
             </tr>
@@ -23884,7 +23885,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                        <b>This report represents the normal and natural behavior of the <?=$report_pattern?>.</b> There are variables, however, that cause differences in the way this creative combination is expressed in behavior. Unlike other temperament combinations, the <?=$report_pattern?> has the natural ability to express the entire range of human emotions. The Sanguine can get more excited than the other temperaments, and the Melancholy can get further down than the other temperaments. Because of their emotional range, they will differ widely in expression and behavior more so than any other temperament combination.
+                        <b>This report represents the normal and natural behavior of the <?=$report_pattern?>.</b> There are variables, however, that cause differences in the way this creative combination is expressed in behavior. Unlike other temperament combinations, the <?=$report_pattern?> has the natural ability to express the entire range of human emotions. The I (Influence) can get more excited than the other temperaments, and the C (Compliance) can get further down than the other temperaments. Because of their emotional range, they will differ widely in expression and behavior more so than any other temperament combination.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 25px;">
                     These are three major expressions of the <?=$report_pattern?> behavioral pattern listed below. Remember, the <?=$report_pattern?>, at all three levels, is driven to be socially accepted.
@@ -23906,11 +23907,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Melancholy to the Sanguine. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Melancholy traits are clearly observable in behavior.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the C (Compliance) to the I (Influence). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary C (Compliance) traits are clearly observable in behavior.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -23919,10 +23920,10 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                    In this alignment, the Melancholy is very close to the Sanguine which means that less Sanguine tendencies will be expressed and more of the Melancholy tendencies will be observed in normal, everyday behavior. This person will smile less, be more serious, and be more subtle in social activity.
+                    In this alignment, the C (Compliance) is very close to the I (Influence) which means that less I (Influence)  tendencies will be expressed and more of the C (Compliance) tendencies will be observed in normal, everyday behavior. This person will smile less, be more serious, and be more subtle in social activity.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                    They will be a more cautious, and guarded person (they often see themselves as introverted). This close proximity of the Melancholy to the Sanguine means the individual can easily move from showing Sanguine tendencies to showing Melancholy tendencies. They will like planning in more detail and being more analytical about most everything. They need lots of alone time.
+                    They will be a more cautious, and guarded person (they often see themselves as introverted). This close proximity of the C (Compliance) to the I (Influence) means the individual can easily move from showing I (Influence) tendencies to showing C (Compliance) tendencies. They will like planning in more detail and being more analytical about most everything. They need lots of alone time.
                     </p>
                 </td>
             </tr>
@@ -23959,11 +23960,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Choleric to the Phlegmatic. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Choleric traits are more observable in behavior.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the D (Dominance) to the S (Steadiness). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary D (Dominance) traits are more observable in behavior.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -23975,7 +23976,7 @@ $the_report_pattern = "The ".$report_pattern;
                     When very close, it produces a more forceful, blunt person, that can be direct, sarcastic, insensitive, and result driven.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                        The closeness of the Choleric tendencies will speed up and intensify the expression of the Phlegmatic tendencies. This person will stubbornly resist any change to their routine. They may also resist authority. They will have only a few close relationships over their lifespan.
+                        The closeness of the D (Dominance) tendencies will speed up and intensify the expression of the S (Steadiness) tendencies. This person will stubbornly resist any change to their routine. They may also resist authority. They will have only a few close relationships over their lifespan.
                     </p>
                 </td>
             </tr>
@@ -24012,14 +24013,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Sanguine to the Phlegmatic. The closer these two temperaments are to each other, the more competition there is between the two for expression.
-                                </p>
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:10px;">  
-                                    When very close, the secondary Sanguine traits are more observable in behavior. The closeness of the Sanguine tendencies will speed up (intensify) the expression of the Phlegmatic tendencies.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the (Influence) to the S (Steadiness). The closer these two temperaments are to each other, the more competition there is between the two for expression.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24028,7 +24026,10 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                        When the Sanguine is very close to the Phlegmatic, it produces a soft, very friendly person, that is more active than the other Phlegmatic combinations. The closer the Sanguine is to the Phlegmatic, the more likely the person will talk excessively. They fear conflict.
+                        When very close, the secondary I (Influence) traits are more observable in behavior. The closeness of the I (Influence) tendencies will speed up (intensify) the expression of the S (Steadiness) tendencies.
+                    </p>
+                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
+                        When the I (Influence) is very close to the S (Steadiness), it produces a soft, very friendly person, that is more active than the other S (Steadiness) combinations. The closer the I (Influence) is to the S (Steadiness), the more likely the person will talk excessively. They fear conflict.
                     </p>
                 </td>
             </tr>
@@ -24065,11 +24066,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Melancholy to Phlegmatic. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Melancholy traits are more observable in behavior. The closeness of the Melancholy tendencies causes this person to be more detailed and analytical.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the C (Compliance) to S (Steadiness). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary C (Compliance) traits are more observable in behavior. The closeness of the C (Compliance) tendencies causes this person to be more detailed and analytical.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24078,7 +24079,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:25px;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                        When the Melancholy is very close to the Phlegmatic, it produces a more detailed, private person, that has limited activity outside the home. They will be very family oriented, and live a quiet, peaceful, and routine life.
+                        When the C (Compliance) is very close to the S (Steadiness), it produces a more detailed, private person, that has limited activity outside the home. They will be very family oriented, and live a quiet, peaceful, and routine life.
                     </p>
                 </td>
             </tr>
@@ -24116,11 +24117,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Choleric to the Melancholy. The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary Choleric traits are more observable in behavior.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the D (Dominance) to the C (Compliance). The closer these two temperaments are to each other, the more competition there is between the two for expression. When very close, the secondary D (Dominance) traits are more observable in behavior.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24129,7 +24130,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                    When the Choleric is very close, it will speed up (intensify) and push the expression of the Melancholy tendencies. A close alignment produces a more direct, cold, and blunt person.
+                    When the D (Dominance) is very close, it will speed up (intensify) and push the expression of the C (Compliance) tendencies. A close alignment produces a more direct, cold, and blunt person.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
                     When any two plotting points are nearly equal, the decision-making process will likely be impaired to some degree. The general principle is that the two tend to cancel out each other, and the result may be ambivalence. This person may have difficulty deciding whether to complete the task correctly, or to get it completed quickly. This combination likes to tell (teach) others what they know.
@@ -24169,11 +24170,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Sanguine to the Melancholy . The closer these two temperaments are to each other, the more competition there is between the two for control and expression.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the I (Influence) to the C (Compliance) . The closer these two temperaments are to each other, the more competition there is between the two for control and expression.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24182,10 +24183,10 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                    When very close, the secondary Sanguine traits are more observable in behavior. The closeness of the Sanguine tendencies will speed up (intensify) the expression of the Melancholy tendencies.
+                    When very close, the secondary I (Influence) traits are more observable in behavior. The closeness of the I (Influence) tendencies will speed up (intensify) the expression of the C (Compliance) tendencies.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                    When the Sanguine is very close to the Melancholy, it produces a more friendly and talkative person. Others may even think of them as being Sanguine first. When around others, they can be very outgoing and friendly. This combination will smile frequently even in casual conversations.
+                    When the I (Influence) is very close to the C (Compliance), it produces a more friendly and talkative person. Others may even think of them as being I (Influence) first. When around others, they can be very outgoing and friendly. This combination will smile frequently even in casual conversations.
                     </p>
                 </td>
             </tr>
@@ -24222,11 +24223,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 70%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the Phlegmatic to the Melancholy. The closer these two temperaments are to each other, the more competition there is between the two for expression.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">close</b> proximity of the S (Steadiness) to the C (Compliance). The closer these two temperaments are to each other, the more competition there is between the two for expression.
                                 </p>
                             </td>
                             <td align="right" style="width: 30%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-1.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-1.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24235,10 +24236,10 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 10px; padding-right:0px;">
-                    When very close, the secondary Phlegmatic traits are more observable in behavior. The closeness of the Phlegmatic tendencies will slow down the expression of the Melancholy  tendencies.
+                    When very close, the secondary S (Steadiness) traits are more observable in behavior. The closeness of the S (Steadiness) tendencies will slow down the expression of the C (Compliance)  tendencies.
                     </p>
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                    When the Phlegmatic is very close to the Melancholy, it produces a more stoic and laid-back person. When very close, it is easy to see the secondary Phlegmatic traits expressed in behavior. Others may think of them as being Phlegmatic first due to their lack of emotional expression and cautious response.
+                    When the S (Steadiness) is very close to the C (Compliance), it produces a more stoic and laid-back person. When very close, it is easy to see the secondary S (Steadiness) traits expressed in behavior. Others may think of them as being S (Steadiness) first due to their lack of emotional expression and cautious response.
                     </p>
                 </td>
             </tr>
@@ -24275,12 +24276,12 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) separation of the secondary Sanguine from the primary Choleric. In this alignment, the Sanguine tendencies of friendliness are seen with some but less smiling. The separation between the Choleric and Sanguine allows more of the Choleric tendencies to be expressed. When interacting with others, they will show confidence and command in their voice. They will be brief and direct without offending others.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) separation of the secondary I (Influence) from the primary D (Dominance). In this alignment, the I (Influence) tendencies of friendliness are seen with some but less smiling. The separation between the D (Dominance) and I (Influence) allows more of the D (Dominance) tendencies to be expressed. When interacting with others, they will show confidence and command in their voice. They will be brief and direct without offending others.
 
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24299,11 +24300,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Sanguine from the Choleric. This produces a less sociable person, more driven to get results, and more controlling of others and events. Their facial expression is firmer and more unyielding. The primary Choleric temperament will be more intensely expressed the greater the separation from the Sanguine temperament. The Choleric tendencies of control and Choleric may be overwhelming. They can be very direct!
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the I (Influence) from the D (Dominance). This produces a less sociable person, more driven to get results, and more controlling of others and events. Their facial expression is firmer and more unyielding. The primary D (Dominance) temperament will be more intensely expressed the greater the separation from the I (Influence) temperament. The D (Dominance) tendencies of control and dominance may be overwhelming. They can be very direct!
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24311,7 +24312,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "D" && $Top_two == "S"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top:0px; padding-bottom: 550px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top:0px; padding-bottom: 480px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
@@ -24325,12 +24326,12 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) separation between the secondary Phlegmatic and the primary Choleric. The separation between the Choleric and Phlegmatic is enough to allow the Choleric tendencies to be more clearly expressed in daily behavior and interaction with others. They will be blunt and direct when interacting and communicating with others.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) separation between the secondary S (Steadiness) and the primary D (Dominance). The separation between the D (Dominance) and S (Steadiness) is enough to allow the D (Dominance) tendencies to be more clearly expressed in daily behavior and interaction with others. They will be blunt and direct when interacting and communicating with others.
 
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24349,11 +24350,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Phlegmatic and the Choleric. This produces a person who will be more direct, blunt, and very independent. The primary Choleric temperament will be more intensely expressed the greater the separation from the Phlegmatic (second) temperament.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the S (Steadiness) and the D (Dominance). This produces a person who will be more direct, blunt, and very independent. The primary D (Dominance) temperament will be more intensely expressed the greater the separation from the S (Steadiness) (second) temperament.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24361,7 +24362,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "D" && $Top_two == "C"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 490px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 440px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24375,11 +24376,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) separation of the Melancholy from the Choleric. In this alignment, the Choleric tendencies of directness are easily seen. The Melancholy tendencies of planning and interest in details can be observed but this alignment allows the person to make quicker decisions than Level 1.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) separation of the C (Compliance) from the D (Dominance). In this alignment, the D (Dominance) tendencies of directness are easily seen. The C (Compliance) tendencies of planning and interest in details can be observed but this alignment allows the person to make quicker decisions than Level 1.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24391,7 +24392,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 100%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 5px; padding-right:0px;">
-                                    The spread between the Choleric and Melancholy tendencies is enough to allow the Melancholy sensitivity to be expressed and easily seen in daily behavior and interaction with others. They can be brief and direct without offending.
+                                    The spread between the D (Dominance) and C (Compliance) tendencies is enough to allow the C (Compliance) sensitivity to be expressed and easily seen in daily behavior and interaction with others. They can be brief and direct without offending.
                                 </p>
                             </td>
                         </tr>
@@ -24410,11 +24411,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation of the Melancholy from the Choleric. It produces a person who will more forcefully communicate with others, is less sensitive, and is less likely to quickly apologize for their bluntness. The primary Choleric temperament will be more intensely expressed the greater the separation from the Melancholy (second) temperament.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation of the C (Compliance) from the D (Dominance). It produces a person who will more forcefully communicate with others, is less sensitive, and is less likely to quickly apologize for their bluntness. The primary D (Dominance) temperament will be more intensely expressed the greater the separation from the C (Compliance) (second) temperament.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24422,7 +24423,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "I" && $Top_two == "D"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 390px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 340px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24436,11 +24437,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) closeness of the Choleric to the Sanguine. In this alignment, the Sanguine tendencies of friendliness are easily seen with frequent smiles. The spread between the Sanguine and Choleric is enough to allow the Choleric tendencies to be expressed easily in daily behavior and interaction with others. This person will be moderately direct (matter-of-fact) in communication with others but not overly pushy to make their point known.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) closeness of the D (Dominance) to the I (Influence). In this alignment, the I (Influence) tendencies of friendliness are easily seen with frequent smiles. The spread between the I (Influence) and D (Dominance) is enough to allow the D (Dominance) tendencies to be expressed easily in daily behavior and interaction with others. This person will be moderately direct (matter-of-fact) in communication with others but not overly pushy to make their point known.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24459,11 +24460,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Sanguine and the Choleric tendencies. The more the Choleric is separated from the Sanguine, the more Sanguine tendencies will be visible in behavior. When there is a wide separation this person will be easily excited, very expressive, very friendly, talkative, and will smile more frequently. They will have difficulty concentrating, being organized, being detailed, following through on promises, and being on time for appointments. They can get very excited about people and events.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the I (Influence) and the D (Dominance) tendencies. The more the D (Dominance) is separated from the I (Influence), the more I (Influence) tendencies will be visible in behavior. When there is a wide separation this person will be easily excited, very expressive, very friendly, talkative, and will smile more frequently. They will have difficulty concentrating, being organized, being detailed, following through on promises, and being on time for appointments. They can get very excited about people and events.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24475,7 +24476,7 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 100%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 5px; padding-right:0px;">
-                                The primary Sanguine temperament will be more intensely expressed the greater the separation from the Choleric (second) temperament.
+                                The primary I (Influence) temperament will be more intensely expressed the greater the separation from the D (Dominance) (second) temperament.
                                 </p>
                             </td>
                         </tr>
@@ -24484,7 +24485,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "I" && $Top_two == "S"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 470px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 340px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24498,11 +24499,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Phlegmatic  to the Sanguine. The spread between the Sanguine and Phlegmatic  is enough to allow the Phlegmatic  tendencies to be expressed and easily seen in daily behavior and interaction with others. This moderate alignment produces a person who is warm and friendly and frequently smiles. This person is calm, pleasant, and disarming when interacting with others.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the S (Steadiness)  to the I (Influence). The spread between the I (Influence) and S (Steadiness)  is enough to allow the S (Steadiness)  tendencies to be expressed and easily seen in daily behavior and interaction with others. This moderate alignment produces a person who is warm and friendly and frequently smiles. This person is calm, pleasant, and disarming when interacting with others.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24521,19 +24522,32 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Sanguine and the Phlegmatic (S). In this alignment, the more the Phlegmatic  is separated from the Sanguine, the more Sanguine tendencies will be visible in behavior like being more openly friendly and showing more acceptance and warmth when interacting with others. The primary Sanguine temperament will be more intensely expressed the greater the separation from the Phlegmatic  (second) temperament. They can get very excited about people and events.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the I (Influence) and the Phlegmatic (S). In this alignment, the more the S (Steadiness)  is separated from the I (Influence), the more I (Influence) tendencies will be visible in behavior like being more openly friendly and showing more acceptance and warmth when interacting with others. The primary I (Influence) temperament will be more intensely expressed the greater the separation from the S (Steadiness)  (second) temperament. They can get very excited about people and events.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
+            <?php /*<tr>
+                <td align="left" style="width: 100%; display: inline-block;">
+                    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
+                        <tr>
+                            <td align="left" style="width: 100%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 5px; padding-right:0px;">
+                                The primary I (Influence) temperament will be more intensely expressed the greater the separation from the D (Dominance) (second) temperament.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>*/ ?>
         </table>
     <?php }else if($Top_one == "I" && $Top_two == "C"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 530px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 480px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24547,11 +24561,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Melancholy to the Sanguine. In this alignment, the Sanguine tendencies of friendliness are easily seen with frequent smiles. The spread between the Sanguine and Melancholy is enough to allow the Sanguine to be expressed and easily seen in daily behavior and interaction with others.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the C (Compliance) to the I (Influence). In this alignment, the I (Influence) tendencies of friendliness are easily seen with frequent smiles. The spread between the I (Influence) and C (Compliance) is enough to allow the I (Influence) to be expressed and easily seen in daily behavior and interaction with others.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24570,11 +24584,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Sanguine and the Melancholy. In this alignment, the Melancholy is separated enough that this person will show a lot of Sanguine tendencies most of the time. They will be open and friendly and will smile a lot. The greater the separation of the Melancholy from the Sanguine, the possibility of frequent mood shifts may occur. Mood shifts may also occur in Level 1 and Level 2.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the I (Influence) and the C (Compliance). In this alignment, the C (Compliance) is separated enough that this person will show a lot of I (Influence) tendencies most of the time. They will be open and friendly and will smile a lot. The greater the separation of the C (Compliance) from the I (Influence), the possibility of frequent mood shifts may occur. Mood shifts may also occur in Level 1 and Level 2.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24582,7 +24596,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "S" && $Top_two == "D"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 540px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 480px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24596,11 +24610,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Phlegmatic to the Choleric. In this alignment, the softness of the Phlegmatic tendencies are more easily seen when interacting with others. The spread between the Phlegmatic and Choleric is enough to allow the Choleric tendencies to be expressed when communicating with others like being brief and matter-of-fact.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the S (Steadiness) to the D (Dominance). In this alignment, the softness of the S (Steadiness) tendencies are more easily seen when interacting with others. The spread between the S (Steadiness) and D (Dominance) is enough to allow the D (Dominance) tendencies to be expressed when communicating with others like being brief and matter-of-fact.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24619,11 +24633,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Phlegmatic and the Choleric. When the Choleric is separated from the Phlegmatic, it produces a person who is less blunt and direct, but can still be insensitive, cold, and sarcastic. Having more than a few close relationships is still difficult for this alignment. The Phlegmatic temperament will be more intensely expressed the greater separation from the Choleric (second) temperament.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the S (Steadiness) and the D (Dominance). When the D (Dominance) is separated from the S (Steadiness), it produces a person who is less blunt and direct, but can still be insensitive, cold, and sarcastic. Having more than a few close relationships is still difficult for this alignment. The S (Steadiness) temperament will be more intensely expressed the greater separation from the D (Dominance) (second) temperament.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24631,7 +24645,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "S" && $Top_two == "I"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 520px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 480px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24645,11 +24659,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Phlegmatic to the Sanguine. In this alignment, the Sanguine tendencies of gentle friendliness are easily seen when interacting with others. The spread between the Phlegmatic and Sanguine is enough to allow the Sanguine tendencies to be expressed easily in interactions with others.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the S (Steadiness) to the I (Influence). In this alignment, the I (Influence) tendencies of gentle friendliness are easily seen when interacting with others. The spread between the S (Steadiness) and I (Influence) is enough to allow the I (Influence) tendencies to be expressed easily in interactions with others.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24668,11 +24682,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Phlegmatic and the Sanguine. When the Sanguine is widely separated from the Phlegmatic, it produces a person who takes more time to warm up before they become friendly and talkative. Once they start talking, they will talk excessively. The primary Phlegmatic temperament will be more intensely expressed the greater the separation from the Sanguine (second) temperament.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the S (Steadiness) and the I (Influence). When the I (Influence) is widely separated from the S (Steadiness), it produces a person who takes more time to warm up before they become friendly and talkative. Once they start talking, they will talk excessively. The primary S (Steadiness) temperament will be more intensely expressed the greater the separation from the I (Influence) (second) temperament.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24680,7 +24694,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "S" && $Top_two == "C"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top:0px; padding-bottom: 510px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 40px; padding-top:0px; padding-bottom: 480px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
@@ -24694,11 +24708,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Phlegmatic to the Melancholy. In this alignment, the Phlegmatic tendencies of being soft and gentle are easily seen when interacting with others. The spread between the Phlegmatic and Melancholy is enough to allow the Melancholy tendencies of being cautious and concerned to be easily expressed.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the S (Steadiness) to the C (Compliance). In this alignment, the S (Steadiness) tendencies of being soft and gentle are easily seen when interacting with others. The spread between the S (Steadiness) and C (Compliance) is enough to allow the C (Compliance) tendencies of being cautious and concerned to be easily expressed.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24717,11 +24731,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Phlegmatic and the Melancholy. When the Melancholy is widely separated from the Phlegmatic, it produces a person who has a very stoic expression, who is very routine, stubborn, and shows the least emotion. The primary Phlegmatic temperament will be more intensely expressed the greater the separation from the Melancholy (second) temperament.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the S (Steadiness) and the C (Compliance). When the C (Compliance) is widely separated from the S (Steadiness), it produces a person who has a very stoic expression, who is very routine, stubborn, and shows the least emotion. The primary S (Steadiness) temperament will be more intensely expressed the greater the separation from the C (Compliance) (second) temperament.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24729,7 +24743,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "C" && $Top_two == "D"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 520px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 480px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24743,11 +24757,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Choleric to the Melancholy. In this alignment, the Choleric tendency to push to get a task completed is easily seen when interacting with others. The spread between the Melancholy and Choleric is enough to allow Choleric tendencies to be expressed easily in interactions with others. This alignment produces one is likely to have perfectionist tendencies.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the D (Dominance) to the C (Compliance). In this alignment, the D (Dominance) tendency to push to get a task completed is easily seen when interacting with others. The spread between the C (Compliance) and D (Dominance) is enough to allow D (Dominance) tendencies to be expressed easily in interactions with others. This alignment produces one is likely to have perfectionist tendencies.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24766,11 +24780,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Melancholy and the Choleric. When the Choleric is separated from the Melancholy, it produces a person who is less direct and blunt, but still pushy. The primary Melancholy temperament will be more intensely expressed the greater the separation from the Choleric (second) temperament.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the C (Compliance) and the D (Dominance). When the D (Dominance) is separated from the C (Compliance), it produces a person who is less direct and blunt, but still pushy. The primary C (Compliance) temperament will be more intensely expressed the greater the separation from the D (Dominance) (second) temperament.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24792,11 +24806,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Sanguine to the Melancholy. In this alignment, the spread between the Melancholy and Sanguine is enough to allow the Sanguine tendencies to be expressed easily in interactions with others. This person will show a controlled openness and warmth when around others.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the I (Influence) to the C (Compliance). In this alignment, the spread between the C (Compliance) and I (Influence) is enough to allow the I (Influence) tendencies to be expressed easily in interactions with others. This person will show a controlled openness and warmth when around others.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24815,11 +24829,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Melancholy and the Sanguine. When the Sanguine is separated from the Melancholy, it produces a person who is friendly in selective situations. That is, the Sanguine smile and friendliness will not appear quickly; it takes some warm-up time. The primary Melancholy temperament will be more intensely expressed the greater the separation from the Sanguine (second) temperament.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the C (Compliance) and the I (Influence). When the I (Influence) is separated from the C (Compliance), it produces a person who is friendly in selective situations. That is, the I (Influence) smile and friendliness will not appear quickly; it takes some warm-up time. The primary C (Compliance) temperament will be more intensely expressed the greater the separation from the I (Influence) (second) temperament.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24827,7 +24841,7 @@ $the_report_pattern = "The ".$report_pattern;
             </tr>
         </table>
     <?php }else if($Top_one == "C" && $Top_two == "S"){ ?>
-        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 480px; background: #ffffff;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; margin-left: 0px; margin-right: 0px; margin-left: 0px; margin-top: 35px; display: inline-block; padding-left: 80px; padding-right: 95px; padding-top:0px; padding-bottom: 430px; background: #ffffff;" cellpadding="0" cellspacing="0">
 
             <tr>
                 <td align="left" style="width: 620px; display: inline-block;">
@@ -24841,11 +24855,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the Phlegmatic to the Melancholy. The spread between the Melancholy and Phlegmatic is enough to allow the Melancholy tendencies of caution and concern but politeness to be expressed easily when interacting with others. This person will show a controlled kindness when around others. In this alignment, the Phlegmatic tendency to be accommodating is easily seen.
+                                Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">moderate</b> (classic) proximity of the S (Steadiness) to the C (Compliance). The spread between the C (Compliance) and S (Steadiness) is enough to allow the C (Compliance) tendencies of caution and concern but politeness to be expressed easily when interacting with others. This person will show a controlled kindness when around others. In this alignment, the S (Steadiness) tendency to be accommodating is easily seen.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-2.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-2.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24864,11 +24878,11 @@ $the_report_pattern = "The ".$report_pattern;
                         <tr>
                             <td align="left" style="width: 72%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the Melancholy and the Phlegmatic. When the Phlegmatic is widely separated from the Melancholy, the Melancholy tendencies are more apparent. This person will be very detailed, organized, and will quietly persist in finding out “what is right.” This person will plan in specific details.
+                                    Represents a <b style="color: #231f20; font-size: 12pt; line-height: 22px;">wide</b> separation between the C (Compliance) and the S (Steadiness). When the S (Steadiness) is widely separated from the C (Compliance), the C (Compliance) tendencies are more apparent. This person will be very detailed, organized, and will quietly persist in finding out “what is right.” This person will plan in specific details.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-3.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-3.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24877,7 +24891,7 @@ $the_report_pattern = "The ".$report_pattern;
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                        The primary Melancholy temperament will be more intensely expressed the greater the separation from the Phlegmatic (second) temperament.
+                        The primary C (Compliance) temperament will be more intensely expressed the greater the separation from the S (Steadiness) (second) temperament.
                     </p>
                 </td>
             </tr>
@@ -24888,7 +24902,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -24914,19 +24928,19 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Choleric is first and the Sanguine is second. <?=$the_report_pattern?> has a strong resistance to the Sanguine on behavior from the Phlegmatic and the <br/>Melancholy tendencies. There will, therefore, be only slight Sanguine from traits of these two temperaments based on their third and fourth positions.
+                    <?=$the_report_pattern?> pattern is produced when the D (Dominance) is first and the I (Influence) is second. <?=$the_report_pattern?> has a strong resistance to the influence on behavior from the S (Steadiness) and the <br/>C (Compliance) tendencies. There will, therefore, be only slight influence from traits of these two temperaments based on their third and fourth positions.
                     </p>
                 </td>
             </tr>
         </table>
 
-        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:240px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:220px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
                     <table style="width: 100%; display: inline-block;" cellpadding=" 0" cellspacing="0">
@@ -24936,11 +24950,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                    When the Phlegmatic is third, this person will be slightly more steady but less compliant due to the Melancholy being the fourth (and least) tendency. They will firmly resist doing details or planning that is not directly related to getting their desired results.
+                                    When the S (Steadiness) is third, this person will be slightly more steady but less compliant due to the C (Compliance) being the fourth (and least) tendency. They will firmly resist doing details or planning that is not directly related to getting their desired results.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24955,11 +24969,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                    When the Melancholy is third, this person will be slightly more attentive to details, less willing to be loyal to others, and more impulsive due to the Phlegmatic being the fourth (and least) tendency.
+                                    When the C (Compliance) is third, this person will be slightly more attentive to details, less willing to be loyal to others, and more impulsive due to the S (Steadiness) being the fourth (and least) tendency.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -24983,7 +24997,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     As you read through this report, you may find a natural weakness that you have worked to control/overcome, and it is no longer a part of your behavior. It may not represent you now, but if it did at one time, then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                    The proximity (closeness) of the second temperament, Sanguine, to the primary temperament, Choleric, makes the most significant difference and determines how this combination is expressed in normal, natural behavior.
+                                    The proximity (closeness) of the second temperament, I (Influence), to the primary temperament, D (Dominance), makes the most significant difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -24995,19 +25009,19 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Choleric is first and the Phlegmatic is second. <?=$the_report_pattern?> has a strong resistance to the Sanguine on behavior from the Sanguine and Phlegmatic tendencies. There will, therefore, be only slight Sanguine from these two temperaments based on their third and fourth positions.
+                    <?=$the_report_pattern?> pattern is produced when the D (Dominance) is first and the S (Steadiness) is second. <?=$the_report_pattern?> has a strong resistance to the influence on behavior from the I (Influence) and C (Steadiness) tendencies. There will, therefore, be only slight influence from these two temperaments based on their third and fourth positions.
                     </p>
                 </td>
             </tr>
         </table>
 
-        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:250px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:220px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
                     <table style="width: 100%; display: inline-block;" cellpadding=" 0" cellspacing="0">
@@ -25017,11 +25031,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Sanguine is third, the person will be slightly more friendly, slightly less stoic, and slightly more accommodating. They may even smile on occasion. The Phlegmatic being last means they will more likely challenge rules and regulation.
+                                When the I (Influence) is third, the person will be slightly more friendly, slightly less stoic, and slightly more accommodating. They may even smile on occasion. The C (Steadiness) being last means they will more likely challenge rules and regulation.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25036,11 +25050,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                    When the Phlegmatic is third, the person will be slightly attentive to details, but still uncaring about people’s feelings or opinions. They will be less friendly, and more impatient with others. This is due to the Sanguine being the fourth (and least) tendency.
+                                    When the C (Steadiness) is third, the person will be slightly attentive to details, but still uncaring about people’s feelings or opinions. They will be less friendly, and more impatient with others. This is due to the I (Influence) being the fourth (and least) tendency.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25064,7 +25078,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Phlegmatic, to the primary temperament, Choleric, makes the biggest difference and determines how this combination is expressed in normal, natural, and daily behavior.
+                                The proximity (closeness) of the second temperament, S (Steadiness), to the primary temperament, D (Dominance), makes the biggest difference and determines how this combination is expressed in normal, natural, and daily behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25076,13 +25090,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Choleric is first and the Melancholy is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
+                    <?=$the_report_pattern?> pattern is produced when the D (Dominance) is first and the C (Compliance) is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
                     </p>
                 </td>
             </tr>
@@ -25098,11 +25112,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Sanguine is third, the person will be somewhat friendly at times. They may even smile on occasion. The Sanguine being third will also soften the directness (sometimes) that comes with the <?=$report_pattern?> combination. The Phlegmatic being last temperament means they may show more decisive, impulsive behavior, and less loyalty toward others
+                                When the I (Influence) is third, the person will be somewhat friendly at times. They may even smile on occasion. The I (Influence) being third will also soften the directness (sometimes) that comes with the <?=$report_pattern?> combination. The S (Steadiness) being last temperament means they may show more decisive, impulsive behavior, and less loyalty toward others
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25117,11 +25131,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Phlegmatic is third, the person will somewhat soften their directness, but will have less interest in people’s opinions and feelings. This is due to the Sanguine being the fourth (and least) tendency. When the Sanguine is the least tendency, this person will not desire or need contact with people socially or in the work environment.
+                                When the S (Steadiness) is third, the person will somewhat soften their directness, but will have less interest in people’s opinions and feelings. This is due to the I (Influence) being the fourth (and least) tendency. When the I (Influence) is the least tendency, this person will not desire or need contact with people socially or in the work environment.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25145,7 +25159,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Melancholy, to the primary temperament, Choleric, makes the most significant and determines how this combination is expressed in normal, natural behavior.
+                                The proximity (closeness) of the second temperament, C (Compliance), to the primary temperament, D (Dominance), makes the most significant and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25157,13 +25171,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Sanguine is first and the Choleric is second. <?=$the_report_pattern?> has a strong resistance to the Sanguine on behavior from the Phlegmatic and Melancholy tendencies. There will, therefore, be only slight Sanguine from these two temperaments based on their position
+                    <?=$the_report_pattern?> pattern is produced when the I (Influence) is first and the D (Dominance) is second. <?=$the_report_pattern?> has a strong resistance to the influence on behavior from the S (Steadiness) and C (Compliance) tendencies. There will, therefore, be only slight influence from these two temperaments based on their position
                     </p>
                 </td>
             </tr>
@@ -25179,11 +25193,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Phlegmatic is third, the person will be somewhat more steady, but less compliant due to the Melancholy being the fourth (and least) tendency.
+                                When the S (Steadiness) is third, the person will be somewhat more steady, but less compliant due to the C (Compliance) being the fourth (and least) tendency.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25198,11 +25212,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Melancholy is third, the person will be somewhat more attentive to details, but less willing to be loyal to others, more impulsive, and less dependable due to the Phlegmatic being the fourth (and least) tendency.
+                                When the C (Compliance) is third, the person will be somewhat more attentive to details, but less willing to be loyal to others, more impulsive, and less dependable due to the S (Steadiness) being the fourth (and least) tendency.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25226,7 +25240,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Choleric, to the primary temperament, Sanguine, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                The proximity (closeness) of the second temperament, D (Dominance), to the primary temperament, I (Influence), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25238,13 +25252,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Sanguine is first and the Phlegmatic  is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
+                    <?=$the_report_pattern?> pattern is produced when the I (Influence) is first and the S (Steadiness)  is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
                     </p>
                 </td>
             </tr>
@@ -25260,7 +25274,7 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
-                                When the Choleric is third, the person will be more direct in conversation. They may often be suddenly direct when communicating with others without being offensive. Since the Melancholy is fourth, they will have more difficulty with details and complying with authority.
+                                When the D (Dominance) is third, the person will be more direct in conversation. They may often be suddenly direct when communicating with others without being offensive. Since the C (Compliance) is fourth, they will have more difficulty with details and complying with authority.
                                 </p>
                                 
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
@@ -25268,7 +25282,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 </p>                                
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25283,11 +25297,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Melancholy is third, the person will be more attentive to details, and more compliant. Since the Choleric is the fourth (and least) tendency, this person will have difficult confronting others.
+                                When the C (Compliance) is third, the person will be more attentive to details, and more compliant. Since the D (Dominance) is the fourth (and least) tendency, this person will have difficult confronting others.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25311,7 +25325,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Phlegmatic, to the primary temperament, Sanguine, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                The proximity (closeness) of the second temperament, S (Steadiness), to the primary temperament, I (Influence), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25323,175 +25337,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Sanguine is first and the Melancholy is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
-                    </p>
-                </td>
-            </tr>
-        </table>
-
-        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:250px;" cellpadding="0" cellspacing="0">
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
-                    <table style="width: 100%; display: inline-block;" cellpadding=" 0" cellspacing="0">
-                        <tr>
-                            <td align="right" style="width:4%; display: inline-block; padding-left:15px;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">A.</p>
-                            </td>
-                            <td align="left" style="width: 68%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
-                                When the Choleric is third, the person will be more direct in conversation. When suddenly direct or blunt, they may be offensive to others. Since the Phlegmatic is the fourth (and least) tendency, this person will also be less predictable, more impulsive, and less stable emotionally.
-                                </p>                               
-                            </td>
-                            <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
-                    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
-                        <tr>
-                            <td align="right" style="width:4%; display: inline-block; padding-left:15px; ">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">B.</p>
-                            </td>
-                            <td align="left" style="width: 68%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Phlegmatic is third, this person will be less direct and more pleasant. This is the most frequently occurring alignment of the <?=$report_pattern?> combination.
-                                </p>
-                            </td>
-                            <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block;">
-                    <table style="width: 620px; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
-                        <tr>
-                            <td align="left" style="width: 100%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                                    <b>Remember</b>
-                                </p>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td align="left" style="width: 100%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:10px;">
-                                As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
-                                </p>
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Melancholy, to the primary temperament, Sanguine, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
-                                </p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    <?php }else if($Top_one == "S" && $Top_two == "D"){ ?>
-        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
-                </td>
-            </tr>
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Phlegmatic is first and the Choleric is second. <?=$the_report_pattern?> has a strong resistance to the influence from the Sanguine and Melancholy tendencies. There will, therefore, be only slight influence from these two temperaments based on their third and fourth positions.
-                    </p>
-                </td>
-            </tr>
-        </table>
-
-        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:240px;" cellpadding="0" cellspacing="0">
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
-                    <table style="width: 100%; display: inline-block;" cellpadding=" 0" cellspacing="0">
-                        <tr>
-                            <td align="right" style="width:4%; display: inline-block; padding-left:15px;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">A.</p>
-                            </td>
-                            <td align="left" style="width: 68%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
-                                When the Sanguine is third, the person will be slightly more friendly, but less compliant due to the Melancholy being the fourth (and least) tendency. The combination of the Phlegmatic and Choleric produces a barrier that prevents the presence of the Sanguine to make a significant impact on behavior.
-                                </p>                               
-                            </td>
-                            <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
-                    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
-                        <tr>
-                            <td align="right" style="width:4%; display: inline-block; padding-left:15px; ">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">B.</p>
-                            </td>
-                            <td align="left" style="width: 68%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                    When the Melancholy is third, the person will be slightly more attentive to details, but very resistant to being social due to the Sanguine being the fourth (and least) tendency. With the Sanguine being fourth, it would be very difficult for this person to show warmth in relationships.
-                                </p>
-                            </td>
-                            <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block;">
-                    <table style="width: 620px; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
-                        <tr>
-                            <td align="left" style="width: 100%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
-                                    <b>Remember</b>
-                                </p>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td align="left" style="width: 100%; display: inline-block;">
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:10px;">
-                                As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
-                                </p>
-                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Choleric, to the primary temperament, Phlegmatic, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
-                                </p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    <?php }else if($Top_one == "S" && $Top_two == "I"){ ?>
-        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
-                </td>
-            </tr>
-            <tr>
-                <td align="left" style="width: 100%; display: inline-block;">
-                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Phlegmatic is first and the Sanguine is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
+                    <?=$the_report_pattern?> pattern is produced when the I (Influence) is first and the C (Compliance) is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
                     </p>
                 </td>
             </tr>
@@ -25507,11 +25359,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
-                                It is rare for the Choleric to be third with this combination. When this does occur, the person will be slightly more pushy, especially when wanting to talk to others and will not easily allow the other person to walk away. They will use an excessive amount of words when telling a story. They have a strong interest in one-on-one conversations.
+                                When the D (Dominance) is third, the person will be more direct in conversation. When suddenly direct or blunt, they may be offensive to others. Since the S (Steadiness) is the fourth (and least) tendency, this person will also be less predictable, more impulsive, and less stable emotionally.
                                 </p>                               
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25526,11 +25378,173 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Melancholy is third, the person will be slightly more attentive to details but more resistant to change. Since the Choleric is the fourth (and least) tendency, it will be extremely difficult for this person to put the slightest pressure on others.
+                                When the S (Steadiness) is third, this person will be less direct and more pleasant. This is the most frequently occurring alignment of the <?=$report_pattern?> combination.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block;">
+                    <table style="width: 620px; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
+                        <tr>
+                            <td align="left" style="width: 100%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
+                                    <b>Remember</b>
+                                </p>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td align="left" style="width: 100%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:10px;">
+                                As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
+                                </p>
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
+                                The proximity (closeness) of the second temperament, C (Compliance), to the primary temperament, I (Influence), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    <?php }else if($Top_one == "S" && $Top_two == "D"){ ?>
+        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block;">
+                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
+                    <?=$the_report_pattern?> pattern is produced when the S (Steadiness) is first and the D (Dominance) is second. <?=$the_report_pattern?> has a strong resistance to the influence from the I (Influence) and C (Compliance) tendencies. There will, therefore, be only slight influence from these two temperaments based on their third and fourth positions.
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:200px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
+                    <table style="width: 100%; display: inline-block;" cellpadding=" 0" cellspacing="0">
+                        <tr>
+                            <td align="right" style="width:4%; display: inline-block; padding-left:15px;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">A.</p>
+                            </td>
+                            <td align="left" style="width: 68%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
+                                When the I (Influence) is third, the person will be slightly more friendly, but less compliant due to the C (Compliance) being the fourth (and least) tendency. The combination of the S (Steadiness) and D (Dominance) produces a barrier that prevents the presence of the I (Influence) to make a significant impact on behavior.
+                                </p>                               
+                            </td>
+                            <td align="left" style="width: 28%; display: inline-block;">
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
+                    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
+                        <tr>
+                            <td align="right" style="width:4%; display: inline-block; padding-left:15px; ">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">B.</p>
+                            </td>
+                            <td align="left" style="width: 68%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
+                                    When the C (Compliance) is third, the person will be slightly more attentive to details, but very resistant to being social due to the I (Influence) being the fourth (and least) tendency. With the I (Influence) being fourth, it would be very difficult for this person to show warmth in relationships.
+                                </p>
+                            </td>
+                            <td align="left" style="width: 28%; display: inline-block;">
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block;">
+                    <table style="width: 620px; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
+                        <tr>
+                            <td align="left" style="width: 100%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:0px;">
+                                    <b>Remember</b>
+                                </p>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td align="left" style="width: 100%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:10px;">
+                                As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
+                                </p>
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
+                                The proximity (closeness) of the second temperament, D (Dominance), to the primary temperament, S (Steadiness), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    <?php }else if($Top_one == "S" && $Top_two == "I"){ ?>
+        <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block;">
+                    <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
+                    <?=$the_report_pattern?> pattern is produced when the S (Steadiness) is first and the I (Influence) is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:230px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
+                    <table style="width: 100%; display: inline-block;" cellpadding=" 0" cellspacing="0">
+                        <tr>
+                            <td align="right" style="width:4%; display: inline-block; padding-left:15px;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">A.</p>
+                            </td>
+                            <td align="left" style="width: 68%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
+                                It is rare for the D (Dominance) to be third with this combination. When this does occur, the person will be slightly more pushy, especially when wanting to talk to others and will not easily allow the other person to walk away. They will use an excessive amount of words when telling a story. They have a strong interest in one-on-one conversations.
+                                </p>                               
+                            </td>
+                            <td align="left" style="width: 28%; display: inline-block;">
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
+                    <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px;" cellpadding=" 0" cellspacing="0">
+                        <tr>
+                            <td align="right" style="width:4%; display: inline-block; padding-left:15px; ">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:2px;">B.</p>
+                            </td>
+                            <td align="left" style="width: 68%; display: inline-block;">
+                                <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
+                                When the C (Compliance) is third, the person will be slightly more attentive to details but more resistant to change. Since the D (Dominance) is the fourth (and least) tendency, it will be extremely difficult for this person to put the slightest pressure on others.
+                                </p>
+                            </td>
+                            <td align="left" style="width: 28%; display: inline-block;">
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25554,7 +25568,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                    The proximity (closeness) of the second temperament, Sanguine, to the primary temperament, Phlegmatic, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                    The proximity (closeness) of the second temperament, I (Influence), to the primary temperament, S (Steadiness), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25566,19 +25580,19 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Phlegmatic is first and the Melancholy is second. The combination of the Phlegmatic and Melancholy temperaments produces a strong lack of emotional expression. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
+                    <?=$the_report_pattern?> pattern is produced when the S (Steadiness) is first and the C (Compliance) is second. The combination of the S (Steadiness) and C (Compliance) temperaments produces a strong lack of emotional expression. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
                     </p>
                 </td>
             </tr>
         </table>
 
-        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:200px;" cellpadding="0" cellspacing="0">
+        <table style="width: 100%; display: inline-block; margin:0px; padding:0px; padding-left: 80px; padding-right: 40px; padding-top:20px;padding-bottom:190px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:20px;">
                     <table style="width: 100%; display: inline-block;" cellpadding=" 0" cellspacing="0">
@@ -25588,11 +25602,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                    When the Choleric is third, the person will be more stubborn when resisting change. They will resist being social due to the Sanguine being the fourth (and least) tendency. With the Sanguine being the least, it would be difficult for this person to show warmth in relationships.
+                                    When the D (Dominance) is third, the person will be more stubborn when resisting change. They will resist being social due to the I (Influence) being the fourth (and least) tendency. With the I (Influence) being the least, it would be difficult for this person to show warmth in relationships.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25607,11 +25621,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                    When the Sanguine is third, the person will be somewhat more friendly, but not much. They will be more compliant and accommodating due to the Choleric temperament being the fourth (and least) tendency. The combination of the Phlegmatic and Melancholy temperaments produces a barrier that prevents the presence of the Sanguine to make a significant impact on behavior.
+                                    When the I (Influence) is third, the person will be somewhat more friendly, but not much. They will be more compliant and accommodating due to the D (Dominance) temperament being the fourth (and least) tendency. The combination of the S (Steadiness) and C (Compliance) temperaments produces a barrier that prevents the presence of the I (Influence) to make a significant impact on behavior.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25635,7 +25649,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                    The proximity (closeness) of the second temperament, Melancholy, to the primary temperament, Phlegmatic, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                    The proximity (closeness) of the second temperament, C (Compliance), to the primary temperament, S (Steadiness), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25647,13 +25661,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Melancholy is first and the Choleric is second. The Melancholy and Choleric in combination produces a strong resistance to the influence on behavior from the Phlegmatic and Sanguine tendencies. There will, therefore, be only slight influence from traits of these two temperaments based on their third and fourth positions.
+                    <?=$the_report_pattern?> pattern is produced when the C (Compliance) is first and the D (Dominance) is second. The C (Compliance) and D (Dominance) in combination produces a strong resistance to the influence on behavior from the S (Steadiness) and I (Influence) tendencies. There will, therefore, be only slight influence from traits of these two temperaments based on their third and fourth positions.
                     </p>
                 </td>
             </tr>
@@ -25669,11 +25683,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
-                                When the Sanguine is third, this person will be somewhat softer when relating to others, but not much. This person will still resist social activity.
+                                When the I (Influence) is third, this person will be somewhat softer when relating to others, but not much. This person will still resist social activity.
                                 </p>                               
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25688,14 +25702,14 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                    When the Phlegmatic is third, the person will be more stubborn and less flexible. They will resist being social due to the Sanguine being the fourth (and least) tendency.
+                                    When the S (Steadiness) is third, the person will be more stubborn and less flexible. They will resist being social due to the I (Influence) being the fourth (and least) tendency.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px; padding-right:10px;">
-                                    When the Sanguine plotting point is very low the person may appear detached toward others. It suggests that the individual does not trust people. They do not desire or need much contact with people socially or in the work environment. They need to be shown how to relate to others. It will take time to establish a trusting relationship with this person. With the Sanguine being fourth, it would be difficult for this person to show warmth in relationships.
+                                    When the I (Influence) plotting point is very low the person may appear detached toward others. It suggests that the individual does not trust people. They do not desire or need much contact with people socially or in the work environment. They need to be shown how to relate to others. It will take time to establish a trusting relationship with this person. With the I (Influence) being fourth, it would be difficult for this person to show warmth in relationships.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25719,7 +25733,7 @@ $the_report_pattern = "The ".$report_pattern;
                                     As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                    The proximity (closeness) of the second temperament, Choleric, to the primary temperament, Melancholy, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                    The proximity (closeness) of the second temperament, D (Dominance), to the primary temperament, C (Compliance), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25731,13 +25745,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 20px; margin-top: 15px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Melancholy is first and the Sanguine is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
+                    <?=$the_report_pattern?> pattern is produced when the C (Compliance) is first and the I (Influence) is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
                     </p>
                 </td>
             </tr>
@@ -25753,14 +25767,14 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:15px;">
-                                When the Choleric is third, this person will be more direct when responding to others. Routinely, this person will become suddenly direct, and even blunt, when talking to others. The sudden abruptness may be abrasive and offensive.
+                                When the D (Dominance) is third, this person will be more direct when responding to others. Routinely, this person will become suddenly direct, and even blunt, when talking to others. The sudden abruptness may be abrasive and offensive.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px; margin-bottom:15px;">
                                 The direct response is usually triggered by the conversation not going as desired, or the other person makes a negative comment. This combination does occur, but it is not the most common. This alignment is usually very productive and effective in life.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25775,11 +25789,11 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px;">
-                                When the Phlegmatic is third, the person will be easy to be around and very pleasant. The Phlegmatic being third is the most frequently found alignment.
+                                When the S (Steadiness) is third, the person will be easy to be around and very pleasant. The S (Steadiness) being third is the most frequently found alignment.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25803,7 +25817,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 20px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Sanguine, to the primary temperament, Melancholy, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                The proximity (closeness) of the second temperament, I (Influence), to the primary temperament, C (Compliance), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25815,13 +25829,13 @@ $the_report_pattern = "The ".$report_pattern;
         <table style="width: 100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; padding-bottom: 10px; margin-top: 10px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="left" style="width: 100%; display: inline-block; padding-bottom:10px;">
-                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The Influence of the Third and Fourth Temperaments</h2>
+                    <h2 class="text-center" style="color: #231f20; margin:0px; font-size: 20pt; text-align: left; padding: 0px; margin: 0px; line-height: 34px; margin-top: 0px; text-align: left; width: 100%; text-transform:uppercase;">The influence of the Third and Fourth Temperaments</h2>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="width: 100%; display: inline-block;">
                     <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 15px;">
-                    <?=$the_report_pattern?> pattern is produced when the Melancholy is first and the Phlegmatic is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
+                    <?=$the_report_pattern?> pattern is produced when the C (Compliance) is first and the S (Steadiness) is second. The behavior of the <?=$report_pattern?> is expressed differently based on the position of the third and fourth temperaments.
                     </p>
                 </td>
             </tr>
@@ -25837,17 +25851,17 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:10px;">
-                                When the Choleric is third, this person can be direct when responding to others, often with a bite in their voice. The Choleric temperament exerts a strong influence pushing this person to seek perfection in most everything they do.
+                                When the D (Dominance) is third, this person can be direct when responding to others, often with a bite in their voice. The D (Dominance) temperament exerts a strong influence pushing this person to seek perfection in most everything they do.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px; margin-bottom:10px;">
                                 This person may become suddenly direct, or blunt, when talking to others. This is usually triggered by the conversation not going as desired, or the other person makes a negative comment, or their work has been criticized. This will be viewed by the receiving person as being offensive.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                When the Sanguine plotting point is very low the person may appear detached and suggests that the individual will have a difficulty trusting others. They do not desire or need much contact with people socially or in the work environment. They need to be taught how to effectively relate to others. It will take time to establish a trusting relationship with this person.
+                                When the I (Influence) plotting point is very low the person may appear detached and suggests that the individual will have a difficulty trusting others. They do not desire or need much contact with people socially or in the work environment. They need to be taught how to effectively relate to others. It will take time to establish a trusting relationship with this person.
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-4.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-4.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25862,14 +25876,14 @@ $the_report_pattern = "The ".$report_pattern;
                             </td>
                             <td align="left" style="width: 68%; display: inline-block;">
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-left:10px; padding-right:10px; margin-bottom:10px;">
-                                When the Sanguine is third, the person will be easy to be around, pleasant, and more flexible. The Sanguine being third is the most frequently found alignment.
+                                When the I (Influence) is third, the person will be easy to be around, pleasant, and more flexible. The I (Influence) being third is the most frequently found alignment.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 22px;margin-top: 0px; padding-right:10px;">
-                                This means that the Choleric will be last causing this person to have a difficult time stating their opinion, being assertive, making a decision, or being direct. To state their opinion usually comes after being pushed by someone or becoming upset (especially if their work is criticized).
+                                This means that the D (Dominance) will be last causing this person to have a difficult time stating their opinion, being assertive, making a decision, or being direct. To state their opinion usually comes after being pushed by someone or becoming upset (especially if their work is criticized).
                                 </p>
                             </td>
                             <td align="left" style="width: 28%; display: inline-block;">
-                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/<?=$Top_one.$Top_two?>-5.jpg" />
+                                <img style="width:100%; text-align: right;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/<?=$Top_one.$Top_two?>-5.jpg" />
                             </td>
                         </tr>
                     </table>
@@ -25893,7 +25907,7 @@ $the_report_pattern = "The ".$report_pattern;
                                 As you read through this report, you may find a natural weakness that you have worked to control/overcome and it is no longer a part of your behavior. It may not represent you now, but if it did at one time then consider it as part of describing you.
                                 </p>
                                 <p style="color: #231f20; font-size: 12pt; margin: 0px; line-height: 20px;margin-top: 10px; padding-right:10px;">
-                                The proximity (closeness) of the second temperament, Phlegmatic, to the primary temperament, Melancholy, makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
+                                The proximity (closeness) of the second temperament, S (Steadiness), to the primary temperament, C (Compliance), makes the biggest difference and determines how this combination is expressed in normal, natural behavior.
                                 </p>
                             </td>
                         </tr>
@@ -25907,7 +25921,7 @@ $the_report_pattern = "The ".$report_pattern;
     <table style="width:100%; display: inline-block; margin: 0px; padding: 0px; padding-left: 80px; padding-right: 40px; " cellpadding="0" cellspacing="0">
         <tr>
             <td align="left" style="padding-top:10px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>
@@ -25925,8 +25939,8 @@ $the_report_pattern = "The ".$report_pattern;
             </td>
         </tr>
         <tr>
-            <td align="left" style="padding-top: 420px;">
-                <img style="width: 230px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/4T-logo.png" />
+            <td align="left" style="padding-top: 400px;">
+                <img style="width: 180px; text-align: left;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/v2/page-3-logo.png" />
             </td>
         </tr>
     </table>

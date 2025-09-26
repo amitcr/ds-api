@@ -60,7 +60,9 @@ class GenerateAssessmentReport implements CommandInterface
             return;
         }
 
-        $participantName   = $assessment->first_name . ' ' . $assessment->last_name;
+        $participantName = get_assessment_participant_name($assessment);
+        $participantFirstName = get_assessment_participant_name($assessment, 'first');
+
         $personalReportName = $assessment->assessment_id . "-" . 
             trim(str_replace(" ", "-", $participantName)) . '-' . 
             date("m-d-Y", strtotime($assessment->created_at)) . ".pdf";
@@ -137,7 +139,9 @@ class GenerateAssessmentReport implements CommandInterface
 
     protected function handleEmails($assessment, $personalFilePath, $personalReportName)
     {
-        $participantName = $assessment->first_name . ' ' . $assessment->last_name;
+        $participantName = get_assessment_participant_name($assessment);
+        $participantFirstName = get_assessment_participant_name($assessment, 'first');
+        
         $holdReport = false;
         $managerFilePath = $managerReportName = '';
 
