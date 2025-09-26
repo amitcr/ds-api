@@ -34,6 +34,6 @@ class GenerateAssessmentReport implements CommandInterface
         if($assessments->isEmpty())
             return;
 
-        $this->assessmentReportService->generateReport($assessments);
+        $this->assessmentReportService->generateReport($assessments, 'collection');
     }
 }

@@ -37,7 +37,7 @@ class AssessmentReportService
         $this->needsAssessmentChoicesService = new NeedsAssessmentChoicesService();
     }
 
-    public function generateReport($assessments){
+    public function generateReport($assessments, $type = 'collection'){
         $chartImageMissingAssessments = [];
         foreach($assessments as $assessment){
             $participantName = get_assessment_participant_name($assessment);
@@ -292,7 +292,16 @@ class AssessmentReportService
             }
         }
 
-        if(!empty($chartImageMissingAssessments) && (date("i", strtotime("+2 minutes ".$modifiedAt)) == '00') ){
+        if(!empty($chartImageMissingAssessments)){
+            $sendEmail = false;
+            if($type == "single"){
+                $sendEmail = true;
+            }else if(date("i") == '00'){
+                $sendEmail = true;
+            }
+            if($sendEmail == false)
+                return;
+
             $sendTo = Config::get('app.env') == "local" ? Config::get('app.email') : get_settings_option('admin_email');
             if(!empty($sendTo)){
                 Mail::send($sendTo, 'Urgent: Assessment Charts are missing', 'assessment-images-missing', ['assessments' => $chartImageMissingAssessments]);
