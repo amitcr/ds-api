@@ -231,8 +231,8 @@
                                     </tbody>
                                 </table>
 
-                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">If you have any questions, please email <a href="mailto:support@fourtemperaments.com">support@fourtemperaments.com</a></p>
-                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">Thank you for choosing The Four Temperaments — we appreciate your business!</p>
+                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">If you have any questions, please email <a href="mailto:support@discstrengths.com">support@discstrengths.com</a></p>
+                                <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">Thank you for choosing The DISC Strengths — we appreciate your business!</p>
                             </td>
                         </tr>
                         <!-- END MAIN CONTENT AREA -->

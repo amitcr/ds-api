@@ -116,7 +116,7 @@ class CouponAutoRecharge implements CommandInterface
                             }
 
                             // use $coupon->user->user_email
-                            Mail::send($coupon->user->user_email, 'Your Prepaid Code at FourTemperaments Has Been Auto-Recharged', 'coupon-auto-recharged', ['coupon' => $coupon, 'transaction' => $transaction, 'paymentMethod' => $paymentMethod, 'paymentIntent' => $paymentIntent]);
+                            Mail::send($coupon->user->user_email, 'Your Prepaid Code at DISC Strengths Has Been Auto-Recharged', 'coupon-auto-recharged', ['coupon' => $coupon, 'transaction' => $transaction, 'paymentMethod' => $paymentMethod, 'paymentIntent' => $paymentIntent]);
                         }
                     }
                 }

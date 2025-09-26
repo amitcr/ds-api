@@ -137,7 +137,7 @@
 
 
                                 <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; color:#000;">
-                                    If you have any questions, please email <a href="mailto:support@fourtemperaments.com">support@fourtemperaments.com</a>
+                                    If you have any questions, please email <a href="mailto:support@discstrengths.com">support@discstrengths.com</a>
                                 </p>
                             </td>
                         </tr>

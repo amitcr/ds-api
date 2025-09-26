@@ -24,7 +24,7 @@ class CouponExpiryReminderEmail implements CommandInterface
         
         foreach($coupons as $coupon){   
             if(!empty($coupon->user) && !empty($coupon->user->user_email)){
-                Mail::send($coupon->user->user_email, 'Your Prepaid Code at FourTemperaments Is About to Expire', 'coupon-expiry-reminder', ['coupon' => $coupon]);
+                Mail::send($coupon->user->user_email, 'Your Prepaid Code at DISC Strengths is about to Expire', 'coupon-expiry-reminder', ['coupon' => $coupon]);
             }
         }
         // Logger::info('Cron emails:coupon-expire-reminder completed');

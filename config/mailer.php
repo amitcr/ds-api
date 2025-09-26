@@ -10,8 +10,8 @@ return [
         'password' => getenv('MAIL_PASSWORD') ?: null,
         'encryption' => getenv('MAIL_ENCRYPTION') ?: 'tls',
         'from' => [
-            'address' => getenv('MAIL_FROM_ADDRESS') ?: 'support@fourtemperaments.com',
-            'name' => getenv('MAIL_FROM_NAME') ?: 'Four Temperaments',
+            'address' => getenv('MAIL_FROM_ADDRESS') ?: 'support@discstrengths.com',
+            'name' => getenv('MAIL_FROM_NAME') ?: 'DISC Strengths',
         ],
     ],
 
@@ -20,8 +20,8 @@ return [
         'secret' => getenv('AWS_SECRET_ACCESS_KEY') ?: null,
         'region' => getenv('AWS_REGION') ?: 'us-east-1',
         'from' => [
-            'address' => getenv('MAIL_FROM_ADDRESS') ?:'support@fourtemperaments.com',
-            'name' => getenv('MAIL_FROM_NAME') ?:'Four Temperaments',
+            'address' => getenv('MAIL_FROM_ADDRESS') ?:'support@discstrengths.com',
+            'name' => getenv('MAIL_FROM_NAME') ?:'DISC Strengths',
         ],
     ],
 ];

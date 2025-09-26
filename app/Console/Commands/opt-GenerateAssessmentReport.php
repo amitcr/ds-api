@@ -141,7 +141,7 @@ class GenerateAssessmentReport implements CommandInterface
     {
         $participantName = get_assessment_participant_name($assessment);
         $participantFirstName = get_assessment_participant_name($assessment, 'first');
-        
+
         $holdReport = false;
         $managerFilePath = $managerReportName = '';
 
@@ -197,7 +197,7 @@ class GenerateAssessmentReport implements CommandInterface
         if (!$holdReport) {
             $sendTo = $this->getEmail($assessment->user->user_email);
             if ($sendTo) {
-                Mail::send($sendTo, 'Your MyTemperament Assessment Profile', 'participant-assessment-notification', [
+                Mail::send($sendTo, 'Your DISC Assessment Profile', 'participant-assessment-notification', [
                     'assessment' => $assessment,
                     'personalFilePath' => $personalFilePath,
                     'personalReportName' => $personalReportName
