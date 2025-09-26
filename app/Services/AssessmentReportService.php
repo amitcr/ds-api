@@ -38,6 +38,7 @@ class AssessmentReportService
     }
 
     public function generateReport($assessments, $type = 'collection'){
+        Logger::info("generateReport Request came from  " . $type . " source");
         $chartImageMissingAssessments = [];
         foreach($assessments as $assessment){
             $participantName = get_assessment_participant_name($assessment);
