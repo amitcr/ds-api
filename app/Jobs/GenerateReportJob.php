@@ -20,7 +20,7 @@ class GenerateReportJob implements JobInterface
         if(isset($data['assessment_id']) && !empty($data['assessment_id'])){
             $assessment = AssessmentModel::with('user', 'payment')->find($data['assessment_id']);
             if(!empty($assessment)){
-                $this->assessmentReportService->generateReport(collect([$assessment]), 'single');
+                $this->assessmentReportService->generateReport([$assessment], 'single');
             }
         }
     }
