@@ -3,9 +3,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CouponTrackingModel extends BaseModel
+class AssessmentRelationshipModel extends BaseModel
 {
-    protected $table = 'affcp_coupons_tracking'; // NO prefix here!
+    protected $table = 'affcp_assessment_relationship'; // NO prefix here!
     protected $primaryKey = 'id';
     public $timestamps = false;
 
@@ -14,9 +14,14 @@ class CouponTrackingModel extends BaseModel
         return $this->belongsTo(AssessmentModel::class, 'assessment_id', 'assessment_id');
     }
     
-    public function coupon(): BelongsTo
+    public function affiliate(): BelongsTo
     {
-        return $this->belongsTo(CouponModel::class, 'coupon_id', 'coupon_id');
+        return $this->belongsTo(AffiliateModel::class, 'affiliate_id', 'affiliate_id');
+    }
+    
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(CompanyModel::class, 'company_id', 'company_id');
     }
     
     public function participant(): BelongsTo

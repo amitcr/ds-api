@@ -10,7 +10,9 @@ use App\Console\Commands\CouponExpiryReminderEmail;
 use App\Console\Commands\CouponAutoRecharge;
 use App\Console\Commands\UpcomingAutoRechargeReminder;
 use App\Console\Commands\AbandonedAssessmentFollowUp;
-use App\Console\Commands\ExportAssessmentStats;
+use App\Console\Commands\GenerateAssessmentReport;
+use App\Console\Commands\DeleteDuplicateAssessments;
+use App\Console\QueueWorkerCommand;
 
 class Kernel extends CronKernel
 {
@@ -23,14 +25,15 @@ class Kernel extends CronKernel
         // $schedule->command('emails:send-reminders')->everyMinute();
 
         // Active Commands
-        // $schedule->command('emails:coupon-expire-reminder')->dailyAt('16:00')->timezone('UTC');
-        // $schedule->command('emails:auto-recharge-reminder')->everyMinute();
+        $schedule->command('emails:coupon-expire-reminder')->dailyAt('16:00')->timezone('UTC');
+        $schedule->command('emails:auto-recharge-reminder')->everyMinute();
 
-        // $schedule->command('coupons:coupon-auto-recharge')->everyMinute();
-        // $schedule->command('coupons:expire-status')->dailyAt('06:00')->timezone('UTC');
+        $schedule->command('coupons:coupon-auto-recharge')->everyMinute();
+        $schedule->command('coupons:expire-status')->dailyAt('06:00')->timezone('UTC');
 
-        // $schedule->command('assessments:abandoned-folloup')->everyTwoMinutes();
-        $schedule->command('assessments:sync-stats')->dailyAt('06:00')->timezone('UTC');
+        $schedule->command('assessments:abandoned-followup')->everyMinute();
+        $schedule->command('assessments:generate-report')->everyMinute();
+        $schedule->command('assessments:delete-duplicates')->dailyAt('06:00')->timezone('UTC');
 
     }
 
@@ -40,11 +43,15 @@ class Kernel extends CronKernel
         // $this->register(SendReminderEmails::class);
 
         // Active Commands
-        // $this->register(ValidateCoupons::class);
-        // $this->register(CouponExpiryReminderEmail::class);
-        // $this->register(CouponAutoRecharge::class);
-        // $this->register(UpcomingAutoRechargeReminder::class);
-        // $this->register(AbandonedAssessmentFollowUp::class);
-        $this->register(ExportAssessmentStats::class);
+        $this->register(ValidateCoupons::class);
+        $this->register(CouponExpiryReminderEmail::class);
+        $this->register(CouponAutoRecharge::class);
+        $this->register(UpcomingAutoRechargeReminder::class);
+        $this->register(AbandonedAssessmentFollowUp::class);
+        $this->register(GenerateAssessmentReport::class);
+        $this->register(DeleteDuplicateAssessments::class);
+
+        // QueueWorker can be registered here
+        $this->register(QueueWorkerCommand::class);
     }
 }
