@@ -22,7 +22,7 @@ class Kernel extends CronKernel
         // $schedule->command(SendReminderEmails::class)->everyMinute();
         // $schedule->command(ValidateCoupons::class)->dailyAt('00:00')->timezone('UTC');
 
-        $schedule->command('emails:send-reminders')->everyMinute();
+        $schedule->command('emails:send-reminders')->dailyAt('16:00')->timezone('UTC');
 
         // Active Commands
         $schedule->command('emails:coupon-expire-reminder')->dailyAt('16:00')->timezone('UTC');

@@ -67,6 +67,7 @@ class SESMailer implements MailerInterface
                     'email_message' => $body,
                     'email_status' => 'sent',
                     'email_headers' => $headers,
+                    'email_attachments' =>  serialize(['']),
                     'email_created' => Carbon::now(),
                     'email_sent' => Carbon::now()
                 ]); // Log email sent in OffloadSES
