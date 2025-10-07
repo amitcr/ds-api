@@ -56,11 +56,17 @@ class SESMailer implements MailerInterface
             ]);
 
             if(!empty($result['MessageId'])){
+                $headers = "Content-Type: text/html;
+                From: DISC Strengths <support@discstrengths.com>
+                Reply-To: support@discstrengths.com
+                Content-Type: text/html; charset=utf-8";
+                
                 OffloadSESModel::create([
                     'email_to' => $to,
                     'email_subject' => $subject,
                     'email_message' => $body,
                     'email_status' => 'sent',
+                    'email_headers' => $headers,
                     'email_created' => Carbon::now(),
                     'email_sent' => Carbon::now()
                 ]); // Log email sent in OffloadSES
