@@ -159,7 +159,7 @@ p{color:#555655; font-family: 'proxima_novaregular';font-size: 1.5em;line-height
 			</td>
 		</tr>
 		<tr>
-			<td align="center"> <img style="width: 500px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>templates/report/images/border-line-02.png"> </td>
+			<td align="center"> <img style="width: 500px;" src="<?=MYTEMPERAMENT_PLUGIN_DIR?>/templates/report/images/border-line-02.png"> </td>
 		</tr>
 		<tr style="width: 100%; display:inline-block;">
 			<td align="center" style="width: 100%; display:inline-block; ">
